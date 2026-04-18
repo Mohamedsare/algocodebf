@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Héritage PHP / assets non-Next — ne pas lint avec la stack App Router
+    "algocodebf-php/**",
+    "public/js/**",
   ]),
 ]);
 

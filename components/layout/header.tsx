@@ -65,17 +65,33 @@ export function Header({ profile }: HeaderProps) {
     return () => document.removeEventListener('mousedown', handler)
   }, [dropdownActive])
 
-  // Scroll: masquer/afficher la navbar (comme main.js PHP)
+  // Scroll: masquer/afficher la barre du haut (desktop uniquement).
+  // Sur mobile le dock bas est en position: fixed : ne jamais appliquer .navbar.hidden,
+  // sinon la barre entière peut bouger et le tab bar ne reste plus correctement fixe.
   useEffect(() => {
-    const onScroll = () => {
+    const mq = window.matchMedia('(max-width: 768px)')
+    const applyScroll = () => {
       const y = window.scrollY
       setScrolled(y > 10)
-      if (y > lastScrollRef.current && y > 100) setNavbarHidden(true)
-      else setNavbarHidden(false)
+      if (mq.matches) {
+        setNavbarHidden(false)
+      } else if (y > lastScrollRef.current && y > 100) {
+        setNavbarHidden(true)
+      } else {
+        setNavbarHidden(false)
+      }
       lastScrollRef.current = y
     }
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const onMq = () => {
+      if (mq.matches) setNavbarHidden(false)
+    }
+    applyScroll()
+    window.addEventListener('scroll', applyScroll, { passive: true })
+    mq.addEventListener('change', onMq)
+    return () => {
+      window.removeEventListener('scroll', applyScroll)
+      mq.removeEventListener('change', onMq)
+    }
   }, [])
 
   // Focus sur le champ de recherche à l'ouverture
