@@ -1,0 +1,917 @@
+/* ============================================================
+   JOBS — SaaS-grade (Linear / Wellfound / Welcome to the Jungle)
+   Palette Burkina : rouge, vert, or — mobile first
+   Scope : .job-saas
+   ============================================================ */
+
+.job-saas {
+  --js-red: #C8102E;
+  --js-red-dark: #A00C24;
+  --js-red-soft: #FCE4E8;
+  --js-green: #006A4E;
+  --js-green-soft: #DCF4EB;
+  --js-gold: #FCD116;
+  --js-gold-soft: #FFF8D6;
+  --js-ink: #0A0B0F;
+  --js-text: #2E2F36;
+  --js-muted: #64656C;
+  --js-subtle: #8B8C93;
+  --js-border: #E7E8EE;
+  --js-bg: #FAFBFC;
+  --js-card: #FFFFFF;
+  --js-shadow: 0 4px 20px rgba(10, 11, 15, 0.06);
+  --js-shadow-lg: 0 16px 48px rgba(10, 11, 15, 0.1);
+  --js-r: 14px;
+  --js-r-lg: 20px;
+  --js-full: 999px;
+  --js-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  color: var(--js-text);
+  background: var(--js-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.job-saas *,
+.job-saas *::before,
+.job-saas *::after {
+  box-sizing: border-box;
+}
+
+.job-saas .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Hero ---------- */
+.job-saas .js-hero {
+  position: relative;
+  padding: clamp(32px, 8vw, 72px) 0 clamp(28px, 5vw, 48px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.job-saas .js-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 520px 280px at 15% 20%, rgba(200, 16, 46, 0.07), transparent 65%),
+    radial-gradient(ellipse 560px 300px at 85% 30%, rgba(0, 106, 78, 0.07), transparent 65%),
+    radial-gradient(ellipse 400px 200px at 50% 100%, rgba(252, 209, 22, 0.09), transparent 70%);
+  z-index: -1;
+}
+
+.job-saas .js-hero-inner {
+  max-width: 720px;
+}
+
+.job-saas .js-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: var(--js-card);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--js-muted);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+
+.job-saas .js-eyebrow i {
+  color: var(--js-red);
+}
+
+.job-saas .js-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.75rem, 5vw, 2.65rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--js-ink);
+}
+
+.job-saas .js-hero h1 span {
+  background: linear-gradient(95deg, var(--js-red), var(--js-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.job-saas .js-hero p {
+  margin: 0 0 20px;
+  font-size: clamp(1rem, 2.2vw, 1.125rem);
+  line-height: 1.55;
+  color: var(--js-muted);
+  max-width: 560px;
+}
+
+.job-saas .js-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  background: linear-gradient(135deg, var(--js-red), var(--js-red-dark));
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.94rem;
+  border-radius: var(--js-full);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(200, 16, 46, 0.28);
+  transition: transform 0.18s var(--js-ease), box-shadow 0.18s var(--js-ease);
+}
+
+.job-saas .js-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(200, 16, 46, 0.35);
+  color: #fff !important;
+}
+
+.job-saas .js-btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* ---------- Search card ---------- */
+.job-saas .js-search {
+  margin-top: -8px;
+  padding-bottom: clamp(20px, 4vw, 36px);
+}
+
+.job-saas .js-search-card {
+  background: var(--js-card);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-r-lg);
+  padding: clamp(16px, 3vw, 24px);
+  box-shadow: var(--js-shadow);
+}
+
+.job-saas .js-search-form {
+  display: grid;
+  gap: 12px;
+}
+
+@media (min-width: 900px) {
+  .job-saas .js-search-form {
+    grid-template-columns: 1.4fr 1fr 1fr auto;
+    align-items: end;
+    gap: 14px;
+  }
+}
+
+.job-saas .js-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.job-saas .js-field label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--js-subtle);
+}
+
+.job-saas .js-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.job-saas .js-input-wrap > i {
+  position: absolute;
+  left: 14px;
+  color: var(--js-subtle);
+  font-size: 0.95rem;
+  pointer-events: none;
+}
+
+.job-saas .js-input-wrap input,
+.job-saas .js-input-wrap select {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px 0 42px;
+  border: 1.5px solid var(--js-border);
+  border-radius: var(--js-r);
+  font-size: 0.95rem;
+  font-family: inherit;
+  color: var(--js-text);
+  background: #fff;
+  transition: border-color 0.15s var(--js-ease), box-shadow 0.15s var(--js-ease);
+}
+
+.job-saas .js-input-wrap select {
+  padding-left: 42px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364656C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right 14px center;
+}
+
+.job-saas .js-input-wrap input:focus,
+.job-saas .js-input-wrap select:focus {
+  outline: none;
+  border-color: var(--js-red);
+  box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.12);
+}
+
+.job-saas .js-search-submit {
+  min-height: 48px;
+  padding: 0 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--js-ink);
+  color: #fff;
+  border: none;
+  border-radius: var(--js-r);
+  font-weight: 600;
+  font-size: 0.92rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s var(--js-ease), transform 0.15s var(--js-ease);
+}
+
+.job-saas .js-search-submit:hover {
+  background: var(--js-red);
+}
+
+.job-saas .js-search-submit:active {
+  transform: scale(0.98);
+}
+
+@media (max-width: 899px) {
+  .job-saas .js-search-submit {
+    width: 100%;
+    border-radius: var(--js-full);
+  }
+}
+
+/* ---------- Stats ---------- */
+.job-saas .js-stats {
+  padding: 8px 0 28px;
+}
+
+.job-saas .js-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .job-saas .js-stats-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+.job-saas .js-stat {
+  background: var(--js-card);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-r);
+  padding: 16px 14px;
+  text-align: center;
+  transition: border-color 0.15s var(--js-ease), box-shadow 0.15s var(--js-ease);
+}
+
+.job-saas .js-stat:hover {
+  border-color: rgba(200, 16, 46, 0.25);
+  box-shadow: var(--js-shadow);
+}
+
+.job-saas .js-stat i {
+  font-size: 1.25rem;
+  color: var(--js-red);
+  margin-bottom: 8px;
+  display: block;
+}
+
+.job-saas .js-stat:nth-child(2) i {
+  color: var(--js-green);
+}
+.job-saas .js-stat:nth-child(3) i {
+  color: #9b6700;
+}
+.job-saas .js-stat:nth-child(4) i {
+  color: var(--js-gold);
+}
+
+.job-saas .js-stat strong {
+  display: block;
+  font-size: clamp(1.35rem, 4vw, 1.75rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--js-ink);
+  line-height: 1.1;
+}
+
+.job-saas .js-stat span {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--js-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* ---------- Tabs (types) ---------- */
+.job-saas .js-tabs-wrap {
+  margin-bottom: 20px;
+}
+
+.job-saas .js-tabs {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-x: contain;
+  scrollbar-width: none;
+  padding: 4px 0 10px;
+  margin: 0 -4px;
+  scroll-snap-type: x proximity;
+  touch-action: pan-x pan-y;
+}
+
+.job-saas .js-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.job-saas .js-tab {
+  flex: 0 0 auto;
+  scroll-snap-align: start;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: var(--js-full);
+  border: 1.5px solid var(--js-border);
+  background: var(--js-card);
+  color: var(--js-text);
+  font-size: 0.86rem;
+  font-weight: 600;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: all 0.15s var(--js-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.job-saas .js-tab i {
+  font-size: 0.85rem;
+  opacity: 0.85;
+}
+
+.job-saas .js-tab:hover {
+  border-color: var(--js-red);
+  color: var(--js-red);
+}
+
+.job-saas .js-tab.active {
+  background: var(--js-ink);
+  color: #fff;
+  border-color: var(--js-ink);
+}
+
+.job-saas .js-tab.active i {
+  color: var(--js-gold);
+  opacity: 1;
+}
+
+/* ---------- Layout list + sidebar ---------- */
+.job-saas .js-layout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 28px;
+  padding-bottom: clamp(40px, 8vw, 72px);
+}
+
+@media (min-width: 1024px) {
+  .job-saas .js-layout {
+    grid-template-columns: 1fr 320px;
+    align-items: start;
+    gap: 32px;
+  }
+}
+
+.job-saas .js-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+@media (min-width: 1024px) {
+  .job-saas .js-aside {
+    position: sticky;
+    top: 88px;
+  }
+}
+
+/* ---------- Job cards ---------- */
+.job-saas .js-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.job-saas .js-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 14px 16px;
+  background: var(--js-card);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-r-lg);
+  padding: clamp(14px, 3vw, 20px);
+  box-shadow: 0 1px 3px rgba(10, 11, 15, 0.04);
+  transition: border-color 0.2s var(--js-ease), box-shadow 0.2s var(--js-ease), transform 0.2s var(--js-ease);
+  align-items: start;
+}
+
+@media (min-width: 640px) {
+  .job-saas .js-card {
+    grid-template-columns: 64px 1fr auto;
+    align-items: center;
+  }
+}
+
+.job-saas .js-card:hover {
+  border-color: rgba(200, 16, 46, 0.22);
+  box-shadow: var(--js-shadow);
+  transform: translateY(-2px);
+}
+
+.job-saas .js-card-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--js-r);
+  overflow: hidden;
+  background: linear-gradient(135deg, var(--js-red-soft), var(--js-green-soft));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 0.85rem;
+  color: var(--js-red);
+  flex-shrink: 0;
+  border: 1px solid var(--js-border);
+}
+
+@media (min-width: 640px) {
+  .job-saas .js-card-logo {
+    width: 64px;
+    height: 64px;
+  }
+}
+
+.job-saas .js-card-logo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.job-saas .js-card-body {
+  min-width: 0;
+  grid-column: 2 / -1;
+}
+
+@media (min-width: 640px) {
+  .job-saas .js-card-body {
+    grid-column: 2;
+  }
+}
+
+.job-saas .js-card-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 8px 12px;
+  margin-bottom: 6px;
+}
+
+.job-saas .js-card-title {
+  margin: 0;
+  font-size: clamp(1.02rem, 2.5vw, 1.15rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.job-saas .js-card-title a {
+  color: var(--js-ink);
+  text-decoration: none;
+  transition: color 0.15s var(--js-ease);
+}
+
+.job-saas .js-card-title a:hover {
+  color: var(--js-red);
+}
+
+.job-saas .js-type {
+  flex-shrink: 0;
+  padding: 4px 10px;
+  border-radius: var(--js-full);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  background: var(--js-bg);
+  border: 1px solid var(--js-border);
+  color: var(--js-muted);
+}
+
+.job-saas .js-type.type-stage {
+  background: var(--js-green-soft);
+  color: var(--js-green);
+  border-color: transparent;
+}
+.job-saas .js-type.type-emploi {
+  background: var(--js-red-soft);
+  color: var(--js-red);
+  border-color: transparent;
+}
+.job-saas .js-type.type-freelance {
+  background: #ede9fe;
+  color: #5b21b6;
+  border-color: transparent;
+}
+.job-saas .js-type.type-hackathon {
+  background: var(--js-gold-soft);
+  color: #7c5e00;
+  border-color: transparent;
+}
+.job-saas .js-type.type-formation {
+  background: #e0f2fe;
+  color: #0369a1;
+  border-color: transparent;
+}
+
+.job-saas .js-company {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--js-muted);
+  margin-bottom: 8px;
+}
+
+.job-saas .js-company i {
+  color: var(--js-subtle);
+  font-size: 0.82rem;
+}
+
+.job-saas .js-desc {
+  margin: 0 0 10px;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--js-muted);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.job-saas .js-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  margin-bottom: 10px;
+}
+
+.job-saas .js-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.8rem;
+  color: var(--js-subtle);
+}
+
+.job-saas .js-meta i {
+  color: var(--js-muted);
+  font-size: 0.78rem;
+}
+
+.job-saas .js-skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.job-saas .js-skill {
+  padding: 4px 10px;
+  background: var(--js-bg);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--js-muted);
+}
+
+.job-saas .js-card-cta {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .job-saas .js-card-cta {
+    grid-column: 3;
+    align-items: flex-end;
+    justify-content: center;
+    width: auto;
+  }
+}
+
+.job-saas .js-card-cta-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+@media (max-width: 639px) {
+  .job-saas .js-card-cta-inner {
+    justify-content: flex-start;
+  }
+}
+
+.job-saas .js-btn-view {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 18px;
+  background: var(--js-ink);
+  color: #fff !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  border-radius: var(--js-full);
+  text-decoration: none;
+  transition: background 0.15s var(--js-ease), transform 0.15s var(--js-ease);
+  white-space: nowrap;
+}
+
+.job-saas .js-btn-view:hover {
+  background: var(--js-red);
+  color: #fff !important;
+}
+
+.job-saas .js-badge-new {
+  padding: 4px 10px;
+  background: linear-gradient(135deg, var(--js-red), var(--js-red-dark));
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  border-radius: var(--js-full);
+  text-transform: uppercase;
+}
+
+/* ---------- Empty ---------- */
+.job-saas .js-empty {
+  text-align: center;
+  padding: 56px 24px;
+  background: var(--js-card);
+  border: 2px dashed var(--js-border);
+  border-radius: var(--js-r-lg);
+}
+
+.job-saas .js-empty i {
+  font-size: 2.5rem;
+  color: var(--js-subtle);
+  margin-bottom: 16px;
+  display: block;
+}
+
+.job-saas .js-empty h3 {
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  color: var(--js-ink);
+}
+
+.job-saas .js-empty p {
+  margin: 0;
+  color: var(--js-muted);
+  font-size: 0.95rem;
+}
+
+/* ---------- Pagination ---------- */
+.job-saas .js-pagination {
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--js-border);
+}
+
+.job-saas .js-pagination-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.job-saas .js-page-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0 14px;
+  border-radius: var(--js-r);
+  border: 1px solid var(--js-border);
+  background: var(--js-card);
+  color: var(--js-text);
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: all 0.15s var(--js-ease);
+}
+
+.job-saas .js-page-link:hover {
+  border-color: var(--js-red);
+  color: var(--js-red);
+}
+
+.job-saas .js-page-link.active {
+  background: var(--js-ink);
+  color: #fff;
+  border-color: var(--js-ink);
+}
+
+.job-saas .js-page-dots {
+  padding: 0 6px;
+  color: var(--js-subtle);
+  font-weight: 700;
+}
+
+.job-saas .js-pagination-info {
+  text-align: center;
+  font-size: 0.86rem;
+  color: var(--js-muted);
+}
+
+.job-saas .js-pagination-info strong {
+  color: var(--js-ink);
+}
+
+/* ---------- Sidebar widgets ---------- */
+.job-saas .js-widget {
+  background: var(--js-card);
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-r-lg);
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(10, 11, 15, 0.04);
+}
+
+.job-saas .js-widget h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 14px;
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--js-muted);
+}
+
+.job-saas .js-widget h3 i {
+  color: var(--js-gold);
+}
+
+.job-saas .js-tips {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.job-saas .js-tips li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--js-border);
+  font-size: 0.9rem;
+  color: var(--js-text);
+  line-height: 1.45;
+}
+
+.job-saas .js-tips li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.job-saas .js-tips i {
+  color: var(--js-green);
+  margin-top: 3px;
+  flex-shrink: 0;
+}
+
+/* Newsletter (thème job) */
+.job-saas .js-newsletter {
+  background: linear-gradient(145deg, var(--js-red-soft) 0%, var(--js-gold-soft) 100%);
+  border: 1px solid rgba(200, 16, 46, 0.15);
+  text-align: center;
+}
+
+.job-saas .js-nl-icon {
+  width: 48px;
+  height: 48px;
+  margin: 0 auto 12px;
+  border-radius: 14px;
+  background: var(--js-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--js-red);
+  font-size: 1.15rem;
+  box-shadow: var(--js-shadow);
+}
+
+.job-saas .js-newsletter h3 {
+  justify-content: center;
+  text-transform: none;
+  letter-spacing: -0.02em;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--js-ink);
+}
+
+.job-saas .js-newsletter > p {
+  margin: 0 0 14px;
+  font-size: 0.86rem;
+  color: var(--js-muted);
+  line-height: 1.5;
+}
+
+.job-saas .js-newsletter form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-saas .js-newsletter input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1px solid var(--js-border);
+  border-radius: var(--js-r);
+  font-size: 0.92rem;
+  font-family: inherit;
+}
+
+.job-saas .js-newsletter input:focus {
+  outline: none;
+  border-color: var(--js-red);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.12);
+}
+
+.job-saas .js-newsletter button {
+  min-height: 48px;
+  border: 0;
+  border-radius: var(--js-r);
+  background: var(--js-red);
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s var(--js-ease);
+}
+
+.job-saas .js-newsletter button:hover:not(:disabled) {
+  background: var(--js-red-dark);
+}
+
+.job-saas .js-newsletter button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .job-saas *,
+  .job-saas *::before,
+  .job-saas *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "name": "AlgoCodeBF - Hub tech du Burkina Faso",
+  "short_name": "AlgoCodeBF",
+  "description": "Plateforme communautaire pour les développeurs, étudiants et innovateurs du Burkina Faso",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#3498db",
+  "lang": "fr",
+  "dir": "ltr",
+  "scope": "/",
+  "categories": ["education", "social", "productivity"],
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Forum",
+      "short_name": "Forum",
+      "description": "Discussions de la communauté",
+      "url": "/forum"
+    },
+    {
+      "name": "Formations",
+      "short_name": "Tutos",
+      "description": "Apprendre avec la communauté",
+      "url": "/formations"
+    },
+    {
+      "name": "Opportunités",
+      "short_name": "Jobs",
+      "description": "Emplois et stages tech",
+      "url": "/job"
+    }
+  ]
+}

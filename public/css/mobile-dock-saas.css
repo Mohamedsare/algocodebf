@@ -1,0 +1,171 @@
+/* Bottom nav mobile — tab bar fixe type app native (compact, edge-to-edge)
+   Chargé en fin de chaîne pour surclasser mobile-nav-fix + style.css. */
+
+@media (max-width: 768px) {
+  :root {
+    /* Partie fixe de la tab bar : padding haut + ligne tactile 44px + marge au-dessus du safe-area */
+    --mobile-dock-bar: 56px;
+  }
+
+  /* Blog : dock bas uniquement ; header desktop + burger inchangés */
+  .navbar .nav-menu > li.nav-dock-exclude,
+  nav.navbar .nav-menu > li.nav-dock-exclude,
+  #navMenu > li.nav-dock-exclude {
+    display: none !important;
+  }
+
+  body {
+    padding-bottom: calc(var(--mobile-dock-bar) + var(--safe-bottom)) !important;
+  }
+
+  /* Tab bar : fixed au viewport (pas seulement à la navbar), pleine largeur, 0 arrondi bas */
+  .navbar .nav-menu,
+  nav.navbar .nav-menu,
+  nav.navbar ul.nav-menu,
+  .navbar > .container > .nav-menu,
+  #navMenu {
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    top: auto !important;
+    inset-inline: 0 !important;
+    inset-block-end: 0 !important;
+
+    width: 100% !important;
+    max-width: 100vw !important;
+    margin: 0 !important;
+    box-sizing: border-box !important;
+
+    height: auto !important;
+    padding: 4px 6px calc(8px + var(--safe-bottom)) !important;
+    gap: 0 !important;
+
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    align-content: center !important;
+    justify-content: space-around !important;
+
+    background: rgba(252, 252, 253, 0.94) !important;
+    -webkit-backdrop-filter: saturate(200%) blur(20px) !important;
+    backdrop-filter: saturate(200%) blur(20px) !important;
+
+    border-top: 0.5px solid rgba(10, 11, 15, 0.1) !important;
+    border-radius: 0 !important;
+    box-shadow: 0 -1px 0 rgba(255, 255, 255, 0.8) inset !important;
+
+    z-index: 9999 !important;
+    transform: translate3d(0, 0, 0) !important;
+    -webkit-transform: translate3d(0, 0, 0) !important;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation !important;
+    overscroll-behavior: none !important;
+    backface-visibility: hidden !important;
+    -webkit-backface-visibility: hidden !important;
+  }
+
+  .nav-menu > li {
+    flex: 1 1 0 !important;
+    min-width: 0 !important;
+    max-width: none !important;
+    display: flex !important;
+    justify-content: center !important;
+    align-items: center !important;
+  }
+
+  .nav-menu > li > a {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 1px !important;
+    min-height: 44px !important;
+    padding: 1px 2px !important;
+    margin: 0 !important;
+    border-radius: 10px !important;
+    font-family:
+      Inter,
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif !important;
+    font-size: 8px !important;
+    font-weight: 600 !important;
+    letter-spacing: -0.03em !important;
+    line-height: 1.05 !important;
+    color: #6e6f76 !important;
+    text-decoration: none !important;
+    text-align: center !important;
+    background: transparent !important;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease,
+      transform 0.1s ease !important;
+  }
+
+  .nav-menu > li > a i {
+    font-size: 18px !important;
+    line-height: 1 !important;
+    margin: 0 !important;
+    color: #8b8c93 !important;
+    transition:
+      color 0.15s ease,
+      transform 0.15s cubic-bezier(0.2, 0.8, 0.2, 1) !important;
+  }
+
+  .nav-menu > li > a .dock-label {
+    display: block !important;
+    max-width: 100% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    white-space: nowrap !important;
+    font-size: 8px !important;
+    font-weight: 600 !important;
+    color: inherit !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: 1.1 !important;
+  }
+
+  /* Actif — palette BF */
+  .nav-menu > li > a.active,
+  .nav-menu > li > a[aria-current='page'] {
+    color: #0a0b0f !important;
+    background: linear-gradient(
+      135deg,
+      rgba(200, 16, 46, 0.1),
+      rgba(0, 106, 78, 0.07)
+    ) !important;
+    box-shadow: inset 0 0 0 1px rgba(200, 16, 46, 0.12) !important;
+  }
+
+  .nav-menu > li > a.active i,
+  .nav-menu > li > a[aria-current='page'] i {
+    color: #c8102e !important;
+    transform: translateY(-0.5px) !important;
+  }
+
+  .nav-menu > li > a:active {
+    transform: scale(0.96) !important;
+    opacity: 0.92 !important;
+  }
+
+  .nav-menu > li > a:focus-visible {
+    outline: 2px solid rgba(200, 16, 46, 0.45) !important;
+    outline-offset: 1px !important;
+  }
+
+  .forum-saas {
+    padding-bottom: calc(var(--mobile-dock-bar) + var(--safe-bottom)) !important;
+  }
+
+  .scroll-to-top,
+  .btn-scroll-top {
+    bottom: calc(var(--mobile-dock-bar) + 14px + var(--safe-bottom)) !important;
+  }
+}
+
+/* Desktop : #navMenu reste dans le flux du header (.navbar .container) — pas de barre flottante fixed. */

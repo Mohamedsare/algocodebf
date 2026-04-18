@@ -1,0 +1,520 @@
+/* ============================================================
+   FORMATIONS — Catalogue + fiche parcours (niveau pro, palette BF)
+   Scope : .formation-saas
+   ============================================================ */
+
+.formation-saas {
+  --ft-red: #c8102e;
+  --ft-red-dark: #a00c24;
+  --ft-red-soft: #fce4e8;
+  --ft-green: #006a4e;
+  --ft-green-soft: #dcf4eb;
+  --ft-gold: #fcd116;
+  --ft-gold-soft: #fff8d6;
+  --ft-ink: #0a0b0f;
+  --ft-text: #2e2f36;
+  --ft-muted: #64656c;
+  --ft-subtle: #8b8c93;
+  --ft-border: #e7e8ee;
+  --ft-bg: #fafbfc;
+  --ft-card: #ffffff;
+  --ft-shadow: 0 4px 20px rgba(10, 11, 15, 0.06);
+  --ft-shadow-lg: 0 20px 50px rgba(10, 11, 15, 0.1);
+  --ft-r: 14px;
+  --ft-r-lg: 20px;
+  --ft-full: 999px;
+  --ft-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  color: var(--ft-text);
+  background: var(--ft-bg);
+  -webkit-font-smoothing: antialiased;
+}
+
+.formation-saas *,
+.formation-saas *::before,
+.formation-saas *::after {
+  box-sizing: border-box;
+}
+
+.formation-saas .container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Catalogue hero ---------- */
+.formation-saas .ft-cat-hero {
+  position: relative;
+  padding: clamp(28px, 5vw, 48px) 0 clamp(20px, 3vw, 32px);
+  background: linear-gradient(135deg, var(--ft-red) 0%, var(--ft-green) 52%, #06352a 100%);
+  overflow: hidden;
+}
+
+.formation-saas .ft-cat-hero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 480px 240px at 15% 40%, rgba(252, 209, 22, 0.15), transparent 65%),
+    radial-gradient(ellipse 400px 200px at 85% 20%, rgba(255, 255, 255, 0.08), transparent 60%);
+  pointer-events: none;
+}
+
+.formation-saas .ft-cat-hero-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 720px;
+}
+
+.formation-saas .ft-cat-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: var(--ft-full);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+
+.formation-saas .ft-cat-eyebrow i {
+  color: var(--ft-gold);
+}
+
+.formation-saas .ft-cat-hero h1 {
+  margin: 0 0 12px;
+  font-size: clamp(1.65rem, 4.5vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: #fff;
+}
+
+.formation-saas .ft-cat-hero h1 em {
+  font-style: normal;
+  background: linear-gradient(90deg, var(--ft-gold), #fff8b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.formation-saas .ft-cat-lead {
+  margin: 0;
+  font-size: clamp(0.95rem, 2vw, 1.08rem);
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.9);
+  max-width: 38rem;
+}
+
+.formation-saas .ft-cat-body {
+  padding: clamp(20px, 3vw, 28px) 0 48px;
+}
+
+/* Catalog: polish existing tutorial listing */
+.formation-saas .tutorials-page {
+  background: transparent;
+}
+
+.formation-saas .tutorials-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
+}
+
+.formation-saas .tutorials-search-bar {
+  margin-bottom: 16px;
+}
+
+.formation-saas .search-form-tutorials .search-input-wrapper {
+  border-radius: var(--ft-full);
+  border: 1px solid var(--ft-border);
+  box-shadow: var(--ft-shadow);
+  overflow: hidden;
+  background: var(--ft-card);
+}
+
+.formation-saas .search-form-tutorials input {
+  border: none !important;
+  background: transparent;
+}
+
+.formation-saas .tutorials-filters .filter-chip {
+  border-radius: var(--ft-full);
+  font-weight: 600;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
+}
+
+.formation-saas .tutorials-filters .filter-chip.active {
+  background: linear-gradient(95deg, var(--ft-red), #d42840);
+  border-color: transparent;
+  color: #fff;
+}
+
+.formation-saas .tutorials-sort-bar {
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  box-shadow: var(--ft-shadow);
+}
+
+.formation-saas .btn-create-tutorial {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  background: linear-gradient(95deg, var(--ft-green), #00805c);
+  color: #fff !important;
+  border-radius: var(--ft-full);
+  font-weight: 600;
+  text-decoration: none;
+  box-shadow: 0 4px 16px rgba(0, 106, 78, 0.25);
+}
+
+.formation-saas .btn-create-tutorial:hover {
+  filter: brightness(1.06);
+}
+
+.formation-saas .tutorial-card-youtube {
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  overflow: hidden;
+  box-shadow: var(--ft-shadow);
+  transition:
+    box-shadow 0.2s,
+    transform 0.2s var(--ft-ease),
+    border-color 0.2s;
+}
+
+.formation-saas .tutorial-card-youtube:hover {
+  box-shadow: var(--ft-shadow-lg);
+  transform: translateY(-3px);
+  border-color: rgba(200, 16, 46, 0.15);
+}
+
+.formation-saas .empty-tutorials {
+  border: 1px dashed var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  background: var(--ft-card);
+}
+
+/* ---------- Fiche formation (LMS-style) ---------- */
+.formation-saas.ft-course .tutorial-show-section {
+  padding: 0 0 56px;
+  background: var(--ft-bg);
+}
+
+.formation-saas .ft-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 0;
+  font-size: 0.8125rem;
+  color: var(--ft-muted);
+}
+
+.formation-saas .ft-breadcrumb a {
+  color: var(--ft-muted);
+  text-decoration: none;
+}
+
+.formation-saas .ft-breadcrumb a:hover {
+  color: var(--ft-red);
+}
+
+.formation-saas .ft-breadcrumb > i {
+  font-size: 0.65rem;
+  opacity: 0.6;
+}
+
+.formation-saas .ft-breadcrumb span:last-child {
+  color: var(--ft-ink);
+  font-weight: 600;
+  max-width: 100%;
+}
+
+.formation-saas.ft-course .tutorial-layout {
+  display: grid;
+  gap: 24px;
+  align-items: start;
+}
+
+@media (min-width: 1024px) {
+  .formation-saas.ft-course .tutorial-layout {
+    grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 28px;
+  }
+}
+
+.formation-saas.ft-course .tutorial-main {
+  min-width: 0;
+}
+
+.formation-saas.ft-course .tutorial-header {
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  padding: clamp(20px, 3vw, 28px);
+  box-shadow: var(--ft-shadow);
+  margin-bottom: 20px;
+}
+
+.formation-saas .ft-type-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--ft-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: var(--ft-red-soft);
+  color: var(--ft-red-dark);
+}
+
+.formation-saas .ft-type-pill i {
+  font-size: 0.85em;
+}
+
+.formation-saas .ft-cat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
+  border-radius: var(--ft-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  background: var(--ft-bg);
+  border: 1px solid var(--ft-border);
+  color: var(--ft-muted);
+}
+
+.formation-saas.ft-course .tutorial-meta-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.formation-saas.ft-course .tutorial-title {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: var(--ft-ink);
+  margin: 0 0 12px;
+}
+
+.formation-saas.ft-course .tutorial-description {
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: var(--ft-muted);
+  margin: 0 0 20px;
+}
+
+.formation-saas.ft-course .author-section {
+  border-top: 1px solid var(--ft-border);
+  padding-top: 18px;
+  margin-top: 4px;
+}
+
+.formation-saas.ft-course .tutorial-chapters-section,
+.formation-saas.ft-course .tutorial-videos-section {
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  padding: 22px;
+  margin-bottom: 20px;
+  box-shadow: var(--ft-shadow);
+}
+
+.formation-saas.ft-course .chapters-title,
+.formation-saas.ft-course .videos-section-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  margin: 0 0 16px;
+  color: var(--ft-ink);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.formation-saas.ft-course .chapters-title i,
+.formation-saas.ft-course .videos-section-title i {
+  color: var(--ft-green);
+}
+
+.formation-saas.ft-course .chapter-item {
+  border-radius: var(--ft-r);
+  border: 1px solid var(--ft-border);
+  transition:
+    border-color 0.2s,
+    background 0.2s;
+}
+
+.formation-saas.ft-course .chapter-item:hover {
+  border-color: rgba(0, 106, 78, 0.35);
+  background: var(--ft-green-soft);
+}
+
+.formation-saas.ft-course .video-item-card {
+  border-radius: var(--ft-r-lg);
+  border: 1px solid var(--ft-border);
+  overflow: hidden;
+  background: var(--ft-bg);
+}
+
+.formation-saas.ft-course .video-player-container {
+  border-radius: 0 0 var(--ft-r-lg) var(--ft-r-lg);
+  overflow: hidden;
+  background: #000;
+}
+
+.formation-saas.ft-course .tutorial-video-player,
+.formation-saas.ft-course .tutorial-video {
+  width: 100%;
+  display: block;
+  max-height: 72vh;
+}
+
+.formation-saas.ft-course .tutorial-content .content-wrapper {
+  font-size: 1.02rem;
+  line-height: 1.7;
+}
+
+.formation-saas.ft-course .tutorial-sidebar {
+  position: static;
+}
+
+@media (min-width: 1024px) {
+  .formation-saas.ft-course .tutorial-sidebar {
+    position: sticky;
+    top: 88px;
+  }
+}
+
+.formation-saas.ft-course .sidebar-card {
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  box-shadow: var(--ft-shadow);
+  margin-bottom: 16px;
+}
+
+.formation-saas.ft-course .sidebar-card h4 {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: var(--ft-ink);
+}
+
+/* Carte inscription (roadmap produit) */
+.formation-saas .ft-enroll-card {
+  padding: 20px;
+  border-radius: var(--ft-r-lg);
+  border: 1px solid rgba(0, 106, 78, 0.22);
+  background: linear-gradient(165deg, var(--ft-green-soft) 0%, var(--ft-card) 55%);
+  margin-bottom: 16px;
+}
+
+.formation-saas .ft-enroll-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--ft-green);
+  margin-bottom: 10px;
+}
+
+.formation-saas .ft-enroll-card h4 {
+  margin: 0 0 8px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ft-ink);
+}
+
+.formation-saas .ft-enroll-card > p {
+  margin: 0 0 14px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ft-muted);
+}
+
+.formation-saas .ft-enroll-points {
+  margin: 0 0 16px;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8125rem;
+  color: var(--ft-text);
+}
+
+.formation-saas .ft-enroll-points li {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.formation-saas .ft-enroll-points i {
+  color: var(--ft-green);
+  margin-top: 2px;
+}
+
+.formation-saas .ft-enroll-cta {
+  width: 100%;
+  min-height: 48px;
+  border: none;
+  border-radius: var(--ft-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: not-allowed;
+  background: var(--ft-border);
+  color: var(--ft-subtle);
+}
+
+.formation-saas .ft-enroll-note {
+  margin: 10px 0 0;
+  font-size: 0.75rem;
+  color: var(--ft-subtle);
+  line-height: 1.45;
+}
+
+/* Création / édition */
+.formation-saas .create-tutorial-section {
+  background: var(--ft-bg);
+  padding-bottom: 48px;
+}
+
+.formation-saas .page-header-create h1 {
+  font-size: clamp(1.35rem, 3vw, 1.75rem);
+  font-weight: 800;
+  color: var(--ft-ink);
+}
+
+.formation-saas .page-header-create .btn-back {
+  border-radius: var(--ft-full);
+  border: 1px solid var(--ft-border);
+  padding: 10px 18px;
+  font-weight: 600;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .formation-saas .tutorial-card-youtube,
+  .formation-saas .chapter-item {
+    transition: none;
+  }
+}

@@ -1,0 +1,194 @@
+/* Recherche asynchrone (suggestions pendant la frappe) */
+
+.live-url-search {
+  position: relative;
+  width: 100%;
+}
+
+.search-overlay-content {
+  position: relative;
+}
+
+.search-form-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.ss-panel {
+  text-align: left;
+  background: #fff;
+  border: 1px solid #e4e6ec;
+  border-radius: 14px;
+  box-shadow: 0 10px 40px rgba(10, 11, 15, 0.12);
+  max-height: min(70vh, 420px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+}
+
+.ss-panel--overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(100% + 10px);
+  z-index: 3;
+  animation: ss-in 0.18s ease;
+}
+
+.ss-panel--inline {
+  margin-top: 10px;
+  max-height: min(50vh, 360px);
+}
+
+@keyframes ss-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.ss-panel-loading,
+.ss-panel-empty {
+  padding: 16px 18px;
+  font-size: 0.9rem;
+  color: #64656c;
+  margin: 0;
+}
+
+.ss-panel-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ss-dot-pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #006a4e;
+  animation: ss-pulse 0.9s ease-in-out infinite;
+}
+
+@keyframes ss-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.ss-section {
+  padding: 10px 0;
+  border-bottom: 1px solid #f0f1f4;
+}
+
+.ss-section:last-of-type {
+  border-bottom: none;
+}
+
+.ss-section-title {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b8d95;
+  margin: 0 0 6px 14px;
+}
+
+.ss-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.ss-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: inherit;
+  transition: background 0.12s ease;
+}
+
+.ss-item:hover,
+.ss-item:focus-visible {
+  background: rgba(0, 106, 78, 0.07);
+  outline: none;
+}
+
+.ss-item-title {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #0a0b0f;
+  line-height: 1.25;
+}
+
+.ss-item-sub {
+  font-size: 0.78rem;
+  color: #64656c;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.ss-panel-all {
+  display: block;
+  padding: 12px 14px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #006a4e;
+  text-decoration: none;
+  border-top: 1px solid #f0f1f4;
+}
+
+.ss-panel-all:hover {
+  background: rgba(0, 106, 78, 0.06);
+}
+
+.ss-panel--loading {
+  position: relative;
+}
+
+.ss-panel-refresh {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  opacity: 0.7;
+}
+
+/* Blog hero search : conteneur live */
+.bs-search--live {
+  position: relative;
+}
+
+/* Forum toolbar : suggestions sous le champ */
+.forum-toolbar-saas .search-wrap {
+  position: relative;
+}
+
+.forum-toolbar-saas .ss-panel--inline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 100%;
+  margin-top: 6px;
+  z-index: 50;
+}
+
+/* Membres / jobs / projets / formations : carte filtres */
+.mem-search.live-url-search .ss-panel--inline,
+.js-input-wrap.live-url-search .ss-panel--inline,
+.pr-search-card .live-url-search .ss-panel--inline,
+.tutorials-search-bar .live-url-search .ss-panel--inline {
+  margin-top: 8px;
+}

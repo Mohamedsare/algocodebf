@@ -1,0 +1,66 @@
+# Configuration Apache pour HubTech
+# Redirection de toutes les requêtes vers index.php
+
+RewriteEngine On
+
+# Empêcher l'accès direct aux fichiers sensibles
+<FilesMatch "(\.env|\.htaccess|\.htpasswd|config\.php)$">
+    Order Allow,Deny
+    Deny from all
+</FilesMatch>
+
+# Ajouter .php automatiquement si le fichier existe (pour scrape_jobs, etc.)
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME}.php -f
+RewriteRule ^(scrape_jobs|setup_php_upload|fix_upload_limits|config_php_upload_500mb|check_video_config|create_admin)$ $1.php [L]
+
+# Permettre l'accès direct aux fichiers PHP qui existent
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteCond %{REQUEST_FILENAME} \.php$
+RewriteRule ^(scrape_jobs|setup_php_upload|fix_upload_limits|config_php_upload_500mb|check_video_config|create_admin)\.php$ - [L]
+
+# Rediriger vers index.php si le fichier n'existe pas
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+
+# Désactiver l'affichage des erreurs en production
+# php_flag display_errors off
+
+# Protection contre le clickjacking
+Header always append X-Frame-Options SAMEORIGIN
+
+# Protection XSS
+Header set X-XSS-Protection "1; mode=block"
+
+# Empêcher le sniffing MIME
+Header set X-Content-Type-Options nosniff
+
+# ================================================================
+# Configuration PHP pour uploads de vidéos jusqu'à 500MB
+# ================================================================
+# Note: Ces paramètres fonctionnent uniquement si PHP est en mode mod_php (Apache)
+# Pour XAMPP, cela devrait fonctionner par défaut
+# Si ces paramètres ne s'appliquent pas, modifiez php.ini directement
+
+# Taille maximale d'upload de fichier
+php_value upload_max_filesize 500M
+
+# Taille maximale des données POST
+php_value post_max_size 510M
+
+# Temps d'exécution maximum (1 heure)
+php_value max_execution_time 3600
+
+# Temps maximum pour recevoir les données POST
+php_value max_input_time 3600
+
+# Limite de mémoire
+php_value memory_limit 512M
+
+# Augmenter la limite de taille pour les requêtes Apache (si nécessaire)
+LimitRequestBody 536870912
+
+# ================================================================
+

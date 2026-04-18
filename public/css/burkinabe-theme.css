@@ -1,0 +1,1135 @@
+/**
+ * Thème Patriotique Burkinabè 🇧🇫
+ * Classes utilitaires et styles spéciaux
+ * Pour AlgoCodeBF - Innovation & Patriotisme
+ * 
+ * NOTE: Ce fichier est chargé UNIQUEMENT sur le front-end (pas dans l'admin)
+ * Voir app/Views/layouts/header.php pour la logique de chargement conditionnel
+ */
+
+/* ========================================
+   Classes Utilitaires Burkinabè
+   ======================================== */
+
+/* Couleurs patriotiques */
+.text-burkinabe-red { color: #C8102E !important; }
+.text-burkinabe-green { color: #006A4E !important; }
+.text-burkinabe-yellow { color: #FFD100 !important; }
+.text-tech-blue { color: #007BFF !important; }
+.text-tech-purple { color: #6C63FF !important; }
+
+.bg-burkinabe-red { background-color: #C8102E !important; }
+.bg-burkinabe-green { background-color: #006A4E !important; }
+.bg-burkinabe-yellow { background-color: #FFD100 !important; }
+.bg-tech-blue { background-color: #007BFF !important; }
+.bg-tech-purple { background-color: #6C63FF !important; }
+
+/* Dégradés patriotiques */
+.bg-gradient-burkinabe { 
+    background: linear-gradient(135deg, #C8102E 0%, #FFD100 50%, #006A4E 100%) !important; 
+}
+.bg-gradient-action { 
+    background: linear-gradient(135deg, #C8102E 0%, #FF4655 100%) !important; 
+}
+.bg-gradient-innovation { 
+    background: linear-gradient(135deg, #006A4E 0%, #00A86B 100%) !important; 
+}
+.bg-gradient-tech { 
+    background: linear-gradient(135deg, #007BFF 0%, #6C63FF 100%) !important; 
+}
+
+/* Bordures patriotiques */
+.border-burkinabe-red { border-color: #C8102E !important; }
+.border-burkinabe-green { border-color: #006A4E !important; }
+.border-burkinabe-yellow { border-color: #FFD100 !important; }
+
+/* Bouton CTA spécial jaune or (optimisme & action) */
+.btn-cta-yellow {
+    background: #FFD100;
+    color: #2E2E2E;
+    font-weight: 700;
+    padding: 14px 32px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(255, 209, 0, 0.4);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.btn-cta-yellow:hover {
+    background: #FFDB33;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(255, 209, 0, 0.5);
+    color: #2E2E2E;
+}
+
+/* Badge patriotique */
+.badge-burkinabe {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    color: white;
+    box-shadow: 0 2px 8px rgba(200, 16, 46, 0.3);
+}
+
+/* Carte avec accent burkinabè */
+.card-burkinabe {
+    border-top: 4px solid #C8102E;
+    transition: all 0.3s ease;
+}
+
+.card-burkinabe:hover {
+    border-top-color: #006A4E;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(200, 16, 46, 0.15);
+}
+
+/* Lien avec soulignement patriotique */
+.link-burkinabe {
+    color: #2E2E2E;
+    position: relative;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.link-burkinabe::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    transition: width 0.3s ease;
+}
+
+.link-burkinabe:hover::after {
+    width: 100%;
+}
+
+/* Section avec fond patriotique subtil */
+.section-burkinabe {
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.05) 0%, rgba(255, 209, 0, 0.05) 50%, rgba(0, 106, 78, 0.05) 100%);
+    padding: 80px 0;
+}
+
+/* Icône avec couleur burkinabè (gradient text) */
+.icon-burkinabe {
+    background: linear-gradient(135deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: bold;
+    display: inline-block;
+}
+
+/* Titre patriotique avec accent */
+.title-burkinabe {
+    position: relative;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.title-burkinabe::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 80px;
+    height: 4px;
+    background: linear-gradient(90deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    border-radius: 2px;
+}
+
+/* Bouton outline patriotique */
+.btn-outline-burkinabe {
+    background: transparent;
+    border: 2px solid #C8102E;
+    color: #C8102E;
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-outline-burkinabe:hover {
+    background: linear-gradient(135deg, #C8102E 0%, #FF4655 100%);
+    border-color: #C8102E;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+}
+
+/* Alerte patriotique */
+.alert-burkinabe {
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.1) 0%, rgba(0, 106, 78, 0.1) 100%);
+    border-left: 4px solid #C8102E;
+    padding: 16px 20px;
+    border-radius: 8px;
+    color: #2E2E2E;
+    margin: 20px 0;
+}
+
+.alert-burkinabe strong {
+    color: #C8102E;
+}
+
+/* Séparateur patriotique */
+.separator-burkinabe {
+    height: 3px;
+    background: linear-gradient(90deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    border: none;
+    margin: 40px 0;
+    border-radius: 2px;
+}
+
+/* Compteur/Stat patriotique */
+.stat-burkinabe {
+    text-align: center;
+    padding: 30px 20px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.stat-burkinabe:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(200, 16, 46, 0.15);
+}
+
+.stat-burkinabe .stat-number {
+    font-size: 3rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+}
+
+.stat-burkinabe .stat-label {
+    color: #2E2E2E;
+    font-weight: 500;
+    font-size: 1.1rem;
+}
+
+/* Animation patriotique au survol */
+@keyframes pulse-burkinabe {
+    0%, 100% {
+        box-shadow: 0 0 0 0 rgba(200, 16, 46, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 10px rgba(200, 16, 46, 0);
+    }
+}
+
+.pulse-burkinabe {
+    animation: pulse-burkinabe 2s infinite;
+}
+
+/* Timeline patriotique */
+.timeline-burkinabe {
+    position: relative;
+    padding-left: 40px;
+}
+
+.timeline-burkinabe::before {
+    content: '';
+    position: absolute;
+    left: 10px;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: linear-gradient(180deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 30px;
+}
+
+.timeline-item::before {
+    content: '';
+    position: absolute;
+    left: -35px;
+    top: 5px;
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    background: #C8102E;
+    border: 3px solid #F5F5F5;
+}
+
+/* Tag/Chip patriotique */
+.chip-burkinabe {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    background: white;
+    border: 2px solid #C8102E;
+    border-radius: 20px;
+    color: #C8102E;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.chip-burkinabe:hover {
+    background: #C8102E;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Switch patriotique */
+.switch-burkinabe {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 26px;
+}
+
+.switch-burkinabe input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-burkinabe {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #E0E0E0;
+    transition: .4s;
+    border-radius: 26px;
+}
+
+.slider-burkinabe:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider-burkinabe {
+    background: linear-gradient(135deg, #C8102E 0%, #006A4E 100%);
+}
+
+input:checked + .slider-burkinabe:before {
+    transform: translateX(24px);
+}
+
+/* Section CTA avec drapeau du Burkina Faso 🇧🇫 */
+.cta-section {
+    position: relative;
+    padding: 120px 0;
+    background: linear-gradient(180deg, #C8102E 0%, #C8102E 50%, #006A4E 50%, #006A4E 100%);
+    color: white;
+    text-align: center;
+    overflow: hidden;
+}
+
+/* Étoile jaune au centre (comme sur le drapeau) */
+.cta-section::before {
+    content: '★';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 200px;
+    color: #FFD100;
+    opacity: 0.3;
+    z-index: 1;
+    text-shadow: 0 0 40px rgba(255, 209, 0, 0.5);
+}
+
+/* Motif subtil en arrière-plan */
+.cta-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            rgba(255, 255, 255, 0.03) 10px,
+            rgba(255, 255, 255, 0.03) 20px
+        );
+    z-index: 1;
+}
+
+.cta-section .container {
+    position: relative;
+    z-index: 2;
+}
+
+.cta-content {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.cta-section h2 {
+    font-size: 3rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    color: white;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    line-height: 1.2;
+}
+
+.cta-section p {
+    font-size: 1.3rem;
+    margin-bottom: 35px;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.2);
+    line-height: 1.6;
+}
+
+.cta-section .btn {
+    background: #FFD100 !important;
+    color: #2E2E2E !important;
+    font-size: 1.2rem;
+    padding: 18px 45px;
+    border: none;
+    box-shadow: 0 8px 25px rgba(255, 209, 0, 0.4);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.cta-section .btn:hover {
+    background: #FFDB33 !important;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 12px 35px rgba(255, 209, 0, 0.6);
+}
+
+/* Animations pour l'étoile */
+@keyframes pulse-star {
+    0%, 100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+    }
+    50% {
+        transform: translate(-50%, -50%) scale(1.1);
+        opacity: 0.4;
+    }
+}
+
+.cta-section::before {
+    animation: pulse-star 4s ease-in-out infinite;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .cta-section {
+        padding: 80px 0;
+    }
+    
+    .cta-section h2 {
+        font-size: 2rem;
+    }
+    
+    .cta-section p {
+        font-size: 1.1rem;
+    }
+    
+    .cta-section::before {
+        font-size: 120px;
+    }
+    
+    .cta-section .btn {
+        font-size: 1rem;
+        padding: 15px 35px;
+    }
+}
+
+/* Footer avec style burkinabè */
+.footer-burkinabe {
+    background: linear-gradient(135deg, #2E2E2E 0%, #1a1a1a 100%);
+    color: #F5F5F5;
+    padding: 60px 0 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+.footer-burkinabe::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+}
+
+/* ========================================
+   Fix z-index pour les sections
+   ======================================== */
+
+/* S'assurer que les sections après le carousel ne le cachent pas */
+.stats-section,
+.content-section,
+section {
+    position: relative;
+    z-index: 1;
+}
+
+/* Le carousel doit rester en dessous des modals */
+.hero-carousel {
+    z-index: 10 !important;
+}
+
+.navbar {
+    z-index: 1000 !important;
+}
+
+.hero-carousel,
+.carousel-container,
+.carousel-slide,
+.slide-content,
+.slide-left,
+.slide-text,
+.slide-buttons {
+    overflow: visible !important;
+}
+
+.carousel-nav,
+.carousel-indicators {
+    z-index: 20 !important;
+}
+
+/* Styles pour la section stats */
+.stats-section {
+    padding: 60px 0;
+    background: white;
+    margin-top: 0;
+    position: relative;
+    z-index: 1;
+}
+
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.stat-card {
+    background: white;
+    padding: 40px 30px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-top: 4px solid transparent;
+}
+
+.stat-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 30px rgba(200, 16, 46, 0.15);
+    border-top-color: var(--primary-color);
+}
+
+.stat-card .stat-icon {
+    width: 70px;
+    height: 70px;
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.1) 0%, rgba(0, 106, 78, 0.1) 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 32px;
+}
+
+.stat-card:nth-child(1) .stat-icon {
+    color: var(--primary-color);
+}
+
+.stat-card:nth-child(2) .stat-icon {
+    color: var(--secondary-color);
+}
+
+.stat-card:nth-child(3) .stat-icon {
+    color: var(--accent-color);
+}
+
+.stat-card:nth-child(4) .stat-icon {
+    color: var(--tech-blue);
+}
+
+.stat-card .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: var(--gradient-burkinabe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+    line-height: 1;
+}
+
+.stat-card .stat-label {
+    color: var(--dark-color);
+    font-size: 1rem;
+    font-weight: 500;
+    opacity: 0.8;
+}
+
+/* Optimisation mobile pour carousel */
+@media (max-width: 768px) {
+    .hero-carousel {
+        min-height: auto !important;
+    }
+    
+    .carousel-container {
+        min-height: auto !important;
+        padding-bottom: 60px !important;
+    }
+    
+    .carousel-slide {
+        min-height: auto !important;
+        position: static !important;
+    }
+    
+    .carousel-slide:not(.active) {
+        display: none !important;
+    }
+    
+    .carousel-slide.active {
+        display: block !important;
+    }
+    
+    .slide-content {
+        padding: 20px 15px 15px !important;
+        gap: 15px !important;
+        min-height: auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .slide-left {
+        padding-bottom: 0;
+        width: 100%;
+    }
+    
+    .slide-right {
+        width: 100%;
+    }
+}
+
+/* Responsive pour stats - Exactement 2 colonnes sur mobile */
+@media (max-width: 768px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 15px;
+        padding: 0 15px;
+    }
+    
+    .stat-card {
+        padding: 25px 15px;
+    }
+    
+    .stat-card .stat-icon {
+        width: 60px;
+        height: 60px;
+        font-size: 28px;
+        margin-bottom: 15px;
+    }
+    
+    .stat-card .stat-number {
+        font-size: 1.8rem;
+    }
+    
+    .stat-card .stat-label {
+        font-size: 0.9rem;
+    }
+    
+    .stats-section {
+        padding: 40px 0 !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px;
+        padding: 0 10px;
+    }
+    
+    .stat-card {
+        padding: 20px 12px;
+    }
+    
+    .stat-card .stat-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+        margin-bottom: 12px;
+    }
+    
+    .stat-card .stat-number {
+        font-size: 1.6rem;
+    }
+    
+    .stat-card .stat-label {
+        font-size: 0.85rem;
+    }
+    
+    /* Carousel ultra-compact pour petits écrans */
+    .slide-content {
+        padding: 15px 12px 10px !important;
+    }
+    
+    .slide-left {
+        padding-bottom: 5px;
+    }
+    
+    .stats-section {
+        padding: 30px 0 !important;
+    }
+}
+
+/* ========================================
+   Overrides pour appliquer le thème partout
+   ======================================== */
+
+/* Forcer les boutons primaires avec gradient burkinabè */
+.btn.btn-primary,
+button.btn-primary,
+a.btn-primary {
+    background: var(--gradient-action) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3) !important;
+}
+
+.btn.btn-primary:hover,
+button.btn-primary:hover,
+a.btn-primary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 25px rgba(200, 16, 46, 0.4) !important;
+    color: white !important;
+}
+
+/* Boutons secondaires avec vert burkinabè */
+.btn.btn-secondary,
+button.btn-secondary,
+a.btn-secondary {
+    background: var(--gradient-innovation) !important;
+    color: white !important;
+    box-shadow: 0 4px 15px rgba(0, 106, 78, 0.3) !important;
+}
+
+.btn.btn-secondary:hover,
+button.btn-secondary:hover,
+a.btn-secondary:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 6px 25px rgba(0, 106, 78, 0.4) !important;
+    color: white !important;
+}
+
+/* Boutons outline */
+.btn-outline,
+.btn.btn-outline {
+    border: 2px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+.btn-outline:hover,
+.btn.btn-outline:hover {
+    background: var(--primary-color) !important;
+    color: white !important;
+}
+
+/* Badges patriotiques */
+.badge,
+.badge-primary {
+    background: var(--gradient-action) !important;
+    color: white !important;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-weight: 600;
+    box-shadow: 0 2px 8px rgba(200, 16, 46, 0.3);
+}
+
+.badge-success {
+    background: var(--gradient-innovation) !important;
+}
+
+.badge-warning {
+    background: var(--accent-color) !important;
+    color: var(--dark-color) !important;
+}
+
+/* Liens dans le contenu */
+.content a:not(.btn),
+article a:not(.btn),
+.post-body a:not(.btn) {
+    color: var(--primary-color);
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.content a:not(.btn):hover,
+article a:not(.btn):hover,
+.post-body a:not(.btn):hover {
+    color: var(--secondary-color);
+}
+
+/* Icônes colorées */
+.fa-heart,
+.fa-thumbs-up,
+.fa-star {
+    color: var(--primary-color);
+}
+
+.fa-check,
+.fa-check-circle {
+    color: var(--secondary-color);
+}
+
+.fa-exclamation,
+.fa-exclamation-triangle {
+    color: var(--accent-color);
+}
+
+/* Stat numbers avec gradient */
+.stat-number,
+.stats-number,
+.counter {
+    background: var(--gradient-burkinabe);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Formulaires */
+input[type="submit"],
+button[type="submit"] {
+    background: var(--gradient-action) !important;
+    color: white !important;
+    font-weight: 600;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(200, 16, 46, 0.3);
+}
+
+input[type="submit"]:hover,
+button[type="submit"]:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(200, 16, 46, 0.4);
+}
+
+/* Focus states patriotiques */
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--primary-color) !important;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.1);
+}
+
+/* Navigation active */
+.nav-menu .active a,
+.nav-menu li.active > a,
+.nav-menu a.active {
+    color: var(--primary-color) !important;
+    background-color: rgba(200, 16, 46, 0.1) !important;
+}
+
+/* Tabs patriotiques */
+.tabs .tab.active,
+.nav-tabs .active {
+    border-bottom: 3px solid var(--primary-color) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Progress bars */
+.progress-bar,
+.progress {
+    background: var(--gradient-burkinabe) !important;
+}
+
+/* Pagination */
+.pagination .active,
+.pagination .current {
+    background: var(--gradient-action) !important;
+    color: white !important;
+}
+
+.pagination a:hover {
+    background: rgba(200, 16, 46, 0.1) !important;
+    color: var(--primary-color) !important;
+}
+
+/* Notifications/Alerts */
+.alert-success,
+.notification-success {
+    border-left: 4px solid var(--secondary-color);
+    background: rgba(0, 106, 78, 0.1);
+}
+
+.alert-danger,
+.notification-error {
+    border-left: 4px solid var(--primary-color);
+    background: rgba(200, 16, 46, 0.1);
+}
+
+.alert-warning,
+.notification-warning {
+    border-left: 4px solid var(--accent-color);
+    background: rgba(255, 209, 0, 0.1);
+}
+
+/* Cards avec effet hover */
+.card,
+.post-card,
+.tutorial-card,
+.project-card {
+    transition: all 0.3s ease;
+    border-top: 3px solid transparent;
+}
+
+.card:hover,
+.post-card:hover,
+.tutorial-card:hover,
+.project-card:hover {
+    border-top-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(200, 16, 46, 0.15);
+}
+
+/* Scrollbar patriotique (Chrome/Safari) */
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--light-color);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-burkinabe);
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #FF4655 0%, #00A86B 50%, #FFDB33 100%);
+}
+
+/* Sélection de texte patriotique */
+::selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+::-moz-selection {
+    background: var(--primary-color);
+    color: white;
+}
+
+/* Loading spinners */
+.spinner,
+.loader {
+    border-color: var(--primary-color);
+    border-right-color: transparent;
+}
+
+/* ========================================
+   Bouton Retour en Haut 🇧🇫
+   ======================================== */
+.scroll-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(135deg, #C8102E 0%, #FF4655 100%);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    z-index: 999;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(100px);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 8px 25px rgba(200, 16, 46, 0.4);
+    overflow: hidden;
+}
+
+.scroll-to-top::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, #006A4E 0%, #00A86B 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+}
+
+.scroll-to-top:hover::before {
+    opacity: 1;
+}
+
+.scroll-to-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-to-top i {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.scroll-to-top .scroll-text {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: -2px;
+}
+
+.scroll-to-top:hover {
+    transform: translateY(-5px) scale(1.1);
+    box-shadow: 0 12px 35px rgba(200, 16, 46, 0.5);
+}
+
+.scroll-to-top:hover i {
+    transform: translateY(-3px);
+    animation: bounce-arrow 0.6s ease-in-out infinite;
+}
+
+.scroll-to-top:active {
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Animation de la flèche */
+@keyframes bounce-arrow {
+    0%, 100% {
+        transform: translateY(-3px);
+    }
+    50% {
+        transform: translateY(-8px);
+    }
+}
+
+/* Effet d'étoiles au survol */
+.scroll-to-top::after {
+    content: '★';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 30px;
+    color: #FFD100;
+    opacity: 0;
+    transition: all 0.3s ease;
+    pointer-events: none;
+}
+
+.scroll-to-top:hover::after {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0.3;
+}
+
+/* Badge de progression du scroll */
+.scroll-to-top .progress-ring {
+    position: absolute;
+    top: -3px;
+    left: -3px;
+    width: 66px;
+    height: 66px;
+    transform: rotate(-90deg);
+}
+
+.scroll-to-top .progress-ring-circle {
+    stroke: #FFD100;
+    stroke-width: 3;
+    fill: transparent;
+    stroke-dasharray: 207.345;
+    stroke-dashoffset: 207.345;
+    transition: stroke-dashoffset 0.1s linear;
+}
+
+/* Responsive pour mobile */
+@media (max-width: 768px) {
+    .scroll-to-top {
+        width: 50px;
+        height: 50px;
+        bottom: 90px;
+        right: 20px;
+    }
+    
+    .scroll-to-top i {
+        font-size: 18px;
+    }
+    
+    .scroll-to-top .scroll-text {
+        font-size: 9px;
+    }
+    
+    .scroll-to-top .progress-ring {
+        width: 56px;
+        height: 56px;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .stat-burkinabe .stat-number {
+        font-size: 2rem;
+    }
+    
+    .btn-cta-yellow {
+        padding: 12px 24px;
+        font-size: 0.95rem;
+    }
+    
+    .timeline-burkinabe {
+        padding-left: 30px;
+    }
+}
+

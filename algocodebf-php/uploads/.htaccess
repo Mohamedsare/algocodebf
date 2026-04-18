@@ -1,0 +1,6 @@
+# Configuration pour permettre l'upload de fichiers volumineux
+php_value upload_max_filesize 51M
+php_value post_max_size 52M
+php_value max_execution_time 300
+php_value max_input_time 300
+

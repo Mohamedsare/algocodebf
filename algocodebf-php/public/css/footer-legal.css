@@ -1,0 +1,42 @@
+/* ===================================
+   FOOTER LEGAL LINKS
+   =================================== */
+
+.footer-legal {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+.legal-links {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.legal-links a {
+    color: #6c757d;
+    text-decoration: none;
+    font-size: 0.85rem;
+    transition: color 0.3s ease;
+    padding: 5px 10px;
+    border-radius: 5px;
+}
+
+.legal-links a:hover {
+    color: var(--primary-color);
+    background: rgba(200, 16, 46, 0.1);
+}
+
+@media (max-width: 768px) {
+    .legal-links {
+        gap: 15px;
+    }
+    
+    .legal-links a {
+        font-size: 0.8rem;
+        padding: 4px 8px;
+    }
+}

@@ -1,0 +1,305 @@
+/* Menu burger — drawer SaaS (palette BF), mobile
+   Requiert : .burger-menu.nav-burger-saas */
+
+@media (max-width: 768px) {
+  .nb-backdrop {
+    position: fixed;
+    inset: 0;
+    /* Au-dessus du contenu / dock (9999) et de l’overlay recherche (99999), sous le panneau */
+    z-index: 100280;
+    background: rgba(10, 11, 15, 0.45);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    animation: nb-fade-in 0.2s ease;
+  }
+
+  @keyframes nb-fade-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .burger-menu.nav-burger-saas {
+    /* Obligatoire : les règles .burger-menu mobile dans style.css sont réservées au menu legacy (:not(.nav-burger-saas)). */
+    position: fixed !important;
+    display: flex !important;
+    flex-direction: column;
+    top: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    left: auto !important;
+    width: min(100vw - 32px, 400px) !important;
+    max-width: 400px !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    border-left: 1px solid #e7e8ee;
+    box-shadow: -12px 0 48px rgba(10, 11, 15, 0.12) !important;
+    /* Fond opaque : pas de backdrop-filter sur le panneau (texte net sur tous les navigateurs) */
+    background: #fafbfc !important;
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+    filter: none !important;
+    -webkit-font-smoothing: antialiased;
+    isolation: isolate;
+    transform: translateX(100%) !important;
+    transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) !important;
+    overflow: hidden !important;
+    z-index: 100290 !important;
+    pointer-events: none !important;
+  }
+
+  .burger-menu.nav-burger-saas.active {
+    transform: translateX(0) !important;
+    pointer-events: auto !important;
+  }
+
+  .nav-burger-saas .nb-scroll {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 0 calc(24px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .nav-burger-saas .nb-panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: calc(14px + env(safe-area-inset-top, 0px)) 18px 14px;
+    background: #fff;
+    border-bottom: 1px solid #e7e8ee;
+    flex-shrink: 0;
+  }
+
+  .nav-burger-saas .nb-panel-brand {
+    font-family:
+      'Inter',
+      -apple-system,
+      BlinkMacSystemFont,
+      'Segoe UI',
+      Roboto,
+      sans-serif;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: #0a0b0f;
+  }
+
+  .nav-burger-saas .nb-panel-brand em {
+    font-style: normal;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #c8102e, #006a4e);
+    display: inline-block;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .nav-burger-saas .nb-panel-close {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+    border: 1px solid #e7e8ee;
+    border-radius: 12px;
+    background: #fafbfc;
+    color: #64656c;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition:
+      background 0.2s,
+      color 0.2s,
+      border-color 0.2s;
+  }
+
+  .nav-burger-saas .nb-panel-close:hover {
+    background: #fce4e8;
+    color: #c8102e;
+    border-color: rgba(200, 16, 46, 0.2);
+  }
+
+  .nav-burger-saas .nb-section {
+    padding: 16px 16px 8px;
+  }
+
+  .nav-burger-saas .nb-section-label {
+    display: block;
+    font-family:
+      'Inter',
+      -apple-system,
+      sans-serif;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8b8c93;
+    margin-bottom: 10px;
+    padding-left: 4px;
+  }
+
+  .nav-burger-saas .nb-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    background: #fff;
+    border: 1px solid #e7e8ee;
+    border-radius: 16px;
+    padding: 6px;
+    box-shadow: 0 4px 20px rgba(10, 11, 15, 0.04);
+  }
+
+  .nav-burger-saas .nb-link {
+    display: flex !important;
+    align-items: center;
+    gap: 14px !important;
+    padding: 14px 14px !important;
+    border-radius: 12px !important;
+    font-family:
+      'Inter',
+      -apple-system,
+      sans-serif !important;
+    font-size: 0.9375rem !important;
+    font-weight: 600 !important;
+    color: #2e2f36 !important;
+    text-decoration: none !important;
+    border: none !important;
+    width: 100%;
+    text-align: left;
+    background: transparent !important;
+    cursor: pointer;
+    transition:
+      background 0.15s ease,
+      color 0.15s ease !important;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .nav-burger-saas .nb-link:hover {
+    background: #f4f6f8 !important;
+    color: #0a0b0f !important;
+  }
+
+  .nav-burger-saas .nb-link--active {
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.08), rgba(0, 106, 78, 0.06)) !important;
+    color: #0a0b0f !important;
+    box-shadow: inset 0 0 0 1px rgba(200, 16, 46, 0.12);
+  }
+
+  .nav-burger-saas .nb-link--active .nb-ico {
+    color: #c8102e !important;
+  }
+
+  .nav-burger-saas .nb-ico {
+    width: 40px !important;
+    height: 40px !important;
+    min-width: 40px !important;
+    border-radius: 12px !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem !important;
+    background: #f4f6f8 !important;
+    /* Vert BF — style.css impose #007AFF sur .burger-menu a i ; les <i> héritent ici */
+    color: #006a4e !important;
+  }
+
+  .nav-burger-saas .nb-ico i {
+    color: inherit !important;
+  }
+
+  .nav-burger-saas .nb-link--muted .nb-ico {
+    background: #fff8d6 !important;
+    color: #8a6d00 !important;
+  }
+
+  .nav-burger-saas .nb-link--danger {
+    color: #a00c24 !important;
+  }
+
+  .nav-burger-saas .nb-link--danger .nb-ico {
+    background: #fce4e8 !important;
+    color: #c8102e !important;
+  }
+
+  .nav-burger-saas .nb-link--cta {
+    background: linear-gradient(95deg, #c8102e, #d42840) !important;
+    color: #fff !important;
+    justify-content: center;
+    margin-top: 4px;
+    box-shadow: 0 6px 20px rgba(200, 16, 46, 0.25);
+  }
+
+  .nav-burger-saas .nb-link--cta .nb-ico {
+    background: rgba(255, 255, 255, 0.2) !important;
+    color: #fff !important;
+  }
+
+  .nav-burger-saas .nb-link--cta:hover {
+    filter: brightness(1.05);
+    color: #fff !important;
+  }
+
+  .nav-burger-saas .nb-link--secondary {
+    border: 1px solid #e7e8ee !important;
+    background: #fff !important;
+  }
+
+  .nav-burger-saas hr,
+  .nav-burger-saas .nb-hr {
+    display: none;
+  }
+
+  .nav-burger-saas .nb-search-btn {
+    margin: 8px 16px 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: calc(100% - 32px);
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px dashed #c5c6cc;
+    background: #fff;
+    color: #64656c;
+    font-family:
+      'Inter',
+      -apple-system,
+      sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition:
+      border-color 0.2s,
+      background 0.2s;
+  }
+
+  .nav-burger-saas .nb-search-btn i {
+    color: #c8102e;
+  }
+
+  .nav-burger-saas .nb-search-btn:hover {
+    border-color: rgba(200, 16, 46, 0.35);
+    background: #fff5f6;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nb-backdrop,
+  .burger-menu.nav-burger-saas {
+    animation: none !important;
+    transition: none !important;
+  }
+}

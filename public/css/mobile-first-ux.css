@@ -1,0 +1,1114 @@
+/* ========================================================================
+   AlgoCodeBF — Polish Mobile-First + UX
+   Chargé APRÈS style.css / burkinabe-theme.css / pages.css
+   → remplace/surclasse quelques règles critiques pour la perception UX
+   ======================================================================== */
+
+/* --- Variables UX partagées --- */
+:root {
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --touch-target: 44px;
+    --radius-xs: 8px;
+    --radius-sm: 12px;
+    --radius-md: 16px;
+    --radius-lg: 22px;
+    --radius-xl: 28px;
+    --shadow-soft: 0 2px 8px rgba(16, 24, 40, 0.05),
+                   0 12px 24px -12px rgba(16, 24, 40, 0.08);
+    --shadow-lift: 0 4px 14px rgba(16, 24, 40, 0.06),
+                   0 20px 40px -20px rgba(16, 24, 40, 0.12);
+    --motion-quick: 180ms cubic-bezier(.2,.8,.2,1);
+    --motion-smooth: 320ms cubic-bezier(.2,.8,.2,1);
+    --motion-spring: 420ms cubic-bezier(.18,1.2,.25,1);
+}
+
+/* --- Reset UX + perf --- */
+html {
+    -webkit-text-size-adjust: 100%;
+    -moz-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    scroll-behavior: smooth;
+    text-rendering: optimizeLegibility;
+}
+
+body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    /* NE PAS mettre de règle qui bloque le scroll (overflow: hidden, height: 100vh, etc.) */
+}
+
+/* Respect du "reduce motion" */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* --- Focus accessible (clavier only) --- */
+:focus { outline: none; }
+:focus-visible {
+    outline: 2px solid var(--primary-color, #3498db);
+    outline-offset: 2px;
+    border-radius: 6px;
+}
+
+/* --- Sélection texte aux couleurs de la marque --- */
+::selection {
+    background: rgba(52, 152, 219, 0.25);
+    color: inherit;
+}
+
+/* --- Images : jamais qui débordent --- */
+img, picture, video, svg {
+    max-width: 100%;
+    height: auto;
+}
+
+/* ========================================================================
+   INPUTS : empêcher le zoom iOS sur focus (input < 16px déclenche le zoom)
+   ======================================================================== */
+@media (max-width: 768px) {
+    input,
+    select,
+    textarea,
+    .form-control,
+    .form-input,
+    .form-input-edit,
+    .search-input,
+    .filter-select {
+        font-size: 16px !important;
+    }
+}
+
+/* ========================================================================
+   TOUCH TARGETS 44x44 min sur mobile (WCAG 2.5.5 / Apple HIG)
+   ======================================================================== */
+@media (max-width: 768px) {
+    button,
+    a.btn,
+    .btn,
+    .btn-primary,
+    .btn-secondary,
+    .btn-outline,
+    .nav-menu > li > a,
+    .action-btn,
+    .icon-btn {
+        min-height: var(--touch-target);
+    }
+
+    /* Boutons icon-only */
+    .icon-only,
+    .btn-icon {
+        min-width: var(--touch-target);
+        min-height: var(--touch-target);
+    }
+}
+
+/* ========================================================================
+   SAFE AREA : iOS notch / home-indicator / Android gestures
+   ======================================================================== */
+body {
+    padding-left: var(--safe-left);
+    padding-right: var(--safe-right);
+}
+
+/* Header déjà fixé — on ajoute safe-top */
+.navbar {
+    padding-top: var(--safe-top);
+}
+
+/* Navigation bottom mobile — safe-bottom déjà géré partiellement, on renforce */
+@media (max-width: 768px) {
+    .navbar .nav-menu,
+    nav.navbar .nav-menu {
+        padding-bottom: calc(8px + var(--safe-bottom)) !important;
+    }
+
+    /* Le body a déjà padding-bottom: 80px !important pour le dock.
+       On ajoute le safe-area. */
+    body {
+        padding-bottom: calc(80px + var(--safe-bottom)) !important;
+    }
+
+    /* Le footer doit respirer au-dessus du dock */
+    .footer {
+        margin-bottom: 20px;
+    }
+}
+
+/* ========================================================================
+   CONTAINER : padding horizontal plus généreux sur mobile
+   ======================================================================== */
+@media (max-width: 768px) {
+    .container {
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+}
+
+/* ========================================================================
+   TYPOGRAPHIE FLUIDE (clamp) — plus de ruptures brutales au resize
+   ======================================================================== */
+.hero-title,
+.hero-carousel h1,
+.hero-carousel h2 {
+    font-size: clamp(1.75rem, 4vw + 0.5rem, 3rem) !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em;
+}
+
+.hero-carousel p,
+.hero-description {
+    font-size: clamp(0.95rem, 0.5vw + 0.85rem, 1.1rem) !important;
+    line-height: 1.55 !important;
+}
+
+/* ========================================================================
+   CAROUSEL HERO — transition ultra pro (inspirée Apple / Linear / Stripe)
+   Philosophie : cross-fade PUR + micro-parallax image + texte qui respire.
+   Aucun mouvement sur le bloc slide lui-même (évite l'effet "saccade").
+   Les trois calques (slide, texte, image) sont orchestrés avec des délais
+   et easings différents pour une sensation organique, pas robotique.
+
+   Easings utilisés :
+   - `--ease-out-expo`  cubic-bezier(.16, 1, .3, 1)   → décélération forte
+   - `--ease-out-quart` cubic-bezier(.25, 1, .5, 1)   → décélération douce
+   ======================================================================== */
+.hero-carousel {
+    --ease-out-expo: cubic-bezier(.16, 1, .3, 1);
+    --ease-out-quart: cubic-bezier(.25, 1, .5, 1);
+}
+
+@media (min-width: 769px) {
+    /* Conteneur carrousel : on force un stacking context propre */
+    .hero-carousel .carousel-container {
+        position: relative;
+        isolation: isolate;
+    }
+
+    /* Tous les slides empilés au même endroit, opacity: 0 = invisible */
+    .hero-carousel .carousel-slide {
+        position: absolute !important;
+        inset: 0 !important;
+        width: 100% !important;
+        opacity: 0;
+        visibility: visible !important;
+        transform: none;               /* AUCUN transform sur le bloc → pas de saut */
+        transition: opacity 900ms var(--ease-out-expo) !important;
+        pointer-events: none;
+        z-index: 0;
+        will-change: opacity;
+    }
+
+    /* Slide actif : simple opacity 1, reste en z-index pour recevoir les clics */
+    .hero-carousel .carousel-slide.active {
+        opacity: 1;
+        pointer-events: auto;
+        z-index: 2;
+    }
+
+    /* Le slide qui DISPARAÎT passe derrière pour ne pas bloquer les interactions */
+    .hero-carousel .carousel-slide:not(.active) {
+        z-index: 1;
+    }
+
+    /* ---- Calque texte : fade + translate subtile, ease-out-expo ---- */
+    .hero-carousel .carousel-slide .slide-text {
+        opacity: 0;
+        transform: translate3d(0, 18px, 0);
+        transition:
+            opacity 900ms var(--ease-out-expo) 150ms,
+            transform 1100ms var(--ease-out-expo) 150ms;
+        will-change: opacity, transform;
+    }
+
+    .hero-carousel .carousel-slide.active .slide-text {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    /* ---- Calque image : micro-parallax zoom-out (Ken Burns light) ---- */
+    .hero-carousel .carousel-slide .slide-image {
+        opacity: 0;
+        transform: scale(1.06);
+        transition:
+            opacity 1100ms var(--ease-out-expo) 80ms,
+            transform 1600ms var(--ease-out-quart) 80ms;
+        will-change: opacity, transform;
+    }
+
+    .hero-carousel .carousel-slide.active .slide-image {
+        opacity: 1;
+        transform: scale(1);
+    }
+
+    /* ---- Calque badge + boutons : léger stagger pour rythmer l'entrée ---- */
+    .hero-carousel .carousel-slide .slide-badge {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+        transition:
+            opacity 700ms var(--ease-out-expo) 200ms,
+            transform 900ms var(--ease-out-expo) 200ms;
+    }
+
+    .hero-carousel .carousel-slide.active .slide-badge {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .hero-carousel .carousel-slide .slide-buttons {
+        opacity: 0;
+        transform: translate3d(0, 14px, 0);
+        transition:
+            opacity 800ms var(--ease-out-expo) 350ms,
+            transform 1000ms var(--ease-out-expo) 350ms;
+    }
+
+    .hero-carousel .carousel-slide.active .slide-buttons {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    .hero-carousel .carousel-slide .slide-stats {
+        opacity: 0;
+        transform: translate3d(0, 10px, 0);
+        transition:
+            opacity 700ms var(--ease-out-expo) 450ms,
+            transform 900ms var(--ease-out-expo) 450ms;
+    }
+
+    .hero-carousel .carousel-slide.active .slide-stats {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+
+    /* Boutons prev/next et indicateurs : fluidifier leur propre hover */
+    .carousel-nav,
+    .carousel-indicators .indicator {
+        transition:
+            opacity 300ms var(--ease-out-quart),
+            transform 300ms var(--ease-out-quart),
+            background 300ms var(--ease-out-quart),
+            box-shadow 300ms var(--ease-out-quart) !important;
+    }
+}
+
+/* ---- Mobile : mêmes principes, durées réduites + une seule couche animée ---- */
+@media (max-width: 768px) {
+    .carousel-slide.active {
+        animation: carousel-mobile-in 600ms cubic-bezier(.16, 1, .3, 1) both;
+    }
+
+    .carousel-slide.active .slide-image {
+        animation: carousel-mobile-image-in 900ms cubic-bezier(.25, 1, .5, 1) both;
+    }
+
+    /* Boutons CTA du carousel : responsive propre, ne débordent jamais */
+    .slide-buttons {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+        width: 100% !important;
+        gap: 10px !important;
+        padding: 0 8px;
+    }
+
+    .slide-buttons .btn {
+        width: 100% !important;
+        max-width: 100% !important;       /* override le `max-width: 215px/180px` d'origine */
+        min-width: 0 !important;
+        padding: 13px 20px !important;
+        font-size: 15px !important;
+        white-space: normal !important;   /* autorise le wrap si besoin */
+        text-align: center !important;
+        justify-content: center !important;
+        line-height: 1.3 !important;
+    }
+
+    .slide-buttons .btn i {
+        flex-shrink: 0;
+    }
+}
+
+/* Très petits écrans — ajustement fin */
+@media (max-width: 400px) {
+    .slide-buttons .btn {
+        padding: 12px 14px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* ========================================================================
+   FOOTER — logo "AlgoCodeBF" en gradient Burkinabè (match header)
+   ======================================================================== */
+.footer .footer-section h3 {
+    background: linear-gradient(135deg, #C8102E 0%, #FFD100 50%, #006A4E 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent !important;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    display: inline-block;
+}
+
+/* ========================================================================
+   FOOTER — 4 colonnes strictes sur desktop (AlgoCodeBF / Navigation / Communauté / Contact)
+   L'origine style.css utilisait `auto-fit minmax(250px, 1fr)` qui faisait
+   passer Contact à la ligne quand le viewport était étroit (~1020px).
+   ======================================================================== */
+@media (min-width: 769px) {
+    .footer-grid {
+        grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+        gap: 32px !important;
+    }
+}
+
+/* Tablette (481–768px) : 2 colonnes */
+@media (min-width: 481px) and (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 24px !important;
+    }
+}
+
+/* ========================================================================
+   CAROUSEL — reset PROPRE des boutons (indicateurs + flèches)
+   Sans ça, les règles `min-height: 44px` + styles natifs button étirent
+   les indicateurs en ovales verticaux disgracieux sur mobile.
+   ======================================================================== */
+.hero-carousel .carousel-indicators,
+.carousel-indicators {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 20;
+    padding: 0;
+    margin: 0;
+    list-style: none;
+}
+
+/* Reset button natif + taille FORCÉE sur les indicateurs, toutes plateformes */
+.hero-carousel .carousel-indicators .indicator,
+.carousel-indicators .indicator,
+.carousel-indicators button.indicator {
+    appearance: none;
+    -webkit-appearance: none;
+    background: rgba(255, 255, 255, 0.4);
+    border: 0;
+    margin: 0;
+    padding: 0;
+    cursor: pointer;
+    width: 8px !important;
+    height: 8px !important;
+    min-width: 8px !important;
+    min-height: 8px !important;
+    max-height: 8px !important;
+    border-radius: 50% !important;
+    display: inline-block;
+    transition:
+        width 350ms cubic-bezier(.16, 1, .3, 1),
+        background 300ms cubic-bezier(.16, 1, .3, 1),
+        transform 300ms cubic-bezier(.16, 1, .3, 1);
+    flex-shrink: 0;
+}
+
+.hero-carousel .carousel-indicators .indicator:hover,
+.carousel-indicators .indicator:hover {
+    background: rgba(255, 255, 255, 0.7);
+    transform: scale(1.2);
+}
+
+.hero-carousel .carousel-indicators .indicator.active,
+.carousel-indicators .indicator.active,
+.carousel-indicators button.indicator.active {
+    width: 28px !important;
+    height: 8px !important;
+    min-width: 28px !important;
+    min-height: 8px !important;
+    max-height: 8px !important;
+    background: white !important;
+    border-radius: 999px !important;
+    transform: none;
+}
+
+/* Reset button natif sur les flèches prev/next — taille conservée */
+.carousel-nav,
+button.carousel-nav {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 0;
+    margin: 0;
+    min-height: 0 !important; /* écrase notre règle `min-height: 44px` */
+    min-width: 0 !important;
+}
+
+/* Sur mobile, rendre les indicateurs un peu plus espacés et les flèches cachées
+   (on a déjà le swipe tactile) */
+@media (max-width: 768px) {
+    .hero-carousel .carousel-indicators,
+    .carousel-indicators {
+        gap: 6px;
+        bottom: 14px;
+    }
+
+    .hero-carousel .carousel-indicators .indicator,
+    .carousel-indicators .indicator {
+        width: 7px !important;
+        height: 7px !important;
+        min-width: 7px !important;
+        min-height: 7px !important;
+        max-height: 7px !important;
+    }
+
+    .hero-carousel .carousel-indicators .indicator.active,
+    .carousel-indicators .indicator.active {
+        width: 22px !important;
+        height: 7px !important;
+        min-height: 7px !important;
+        max-height: 7px !important;
+    }
+
+    /* Flèches prev/next : on les masque sur mobile (swipe géré par le composant) */
+    .carousel-nav {
+        display: none !important;
+    }
+}
+
+@keyframes carousel-mobile-in {
+    from { opacity: 0; transform: translate3d(0, 12px, 0); }
+    to   { opacity: 1; transform: translate3d(0, 0, 0); }
+}
+
+@keyframes carousel-mobile-image-in {
+    from { opacity: 0; transform: scale(1.05); }
+    to   { opacity: 1; transform: scale(1); }
+}
+
+/* Respect strict de prefers-reduced-motion : aucune transition ni animation */
+@media (prefers-reduced-motion: reduce) {
+    .hero-carousel .carousel-slide,
+    .hero-carousel .carousel-slide .slide-text,
+    .hero-carousel .carousel-slide .slide-image,
+    .hero-carousel .carousel-slide .slide-badge,
+    .hero-carousel .carousel-slide .slide-buttons,
+    .hero-carousel .carousel-slide .slide-stats {
+        transition: none !important;
+        transform: none !important;
+        animation: none !important;
+        opacity: 1 !important;
+    }
+    .hero-carousel .carousel-slide:not(.active) {
+        opacity: 0 !important;
+    }
+}
+
+.section-header h2,
+.section-title {
+    font-size: clamp(1.5rem, 2.5vw + 0.5rem, 2rem) !important;
+    line-height: 1.2 !important;
+}
+
+/* ========================================================================
+   MOBILE NAV BOTTOM — polish (backdrop, indicateur actif)
+   ======================================================================== */
+@media (max-width: 768px) {
+    .navbar .nav-menu,
+    nav.navbar .nav-menu {
+        background: rgba(255, 255, 255, 0.85) !important;
+        -webkit-backdrop-filter: saturate(180%) blur(22px) !important;
+        backdrop-filter: saturate(180%) blur(22px) !important;
+        box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.06),
+                    0 -8px 24px rgba(16, 24, 40, 0.06) !important;
+    }
+
+    /* Item actif : accent couleur + scale */
+    .nav-menu > li > a.active,
+    .nav-menu > li > a[aria-current="page"] {
+        color: var(--primary-color, #3498db) !important;
+    }
+
+    .nav-menu > li > a.active i,
+    .nav-menu > li > a[aria-current="page"] i {
+        color: var(--primary-color, #3498db) !important;
+        transform: translateY(-1px) scale(1.08);
+        transition: transform var(--motion-quick);
+    }
+
+    .nav-menu > li > a {
+        transition: color var(--motion-quick),
+                    transform var(--motion-quick);
+        -webkit-user-select: none;
+        user-select: none;
+    }
+
+    .nav-menu > li > a:active {
+        transform: scale(0.94);
+    }
+}
+
+/* ========================================================================
+   CARDS : anti-"click flash" iOS + hover fluide desktop + press feedback mobile
+   ======================================================================== */
+.post-card,
+.tutorial-card,
+.project-card,
+.blog-card,
+.job-card,
+.user-card,
+.stat-card-admin,
+.podium-card,
+.leaderboard-row,
+.edit-card {
+    -webkit-tap-highlight-color: transparent;
+    transition: transform var(--motion-smooth),
+                box-shadow var(--motion-smooth);
+}
+
+@media (hover: hover) {
+    .post-card:hover,
+    .tutorial-card:hover,
+    .project-card:hover,
+    .blog-card:hover,
+    .job-card:hover,
+    .user-card:hover {
+        transform: translateY(-3px);
+        box-shadow: var(--shadow-lift);
+    }
+}
+
+@media (hover: none) {
+    .post-card:active,
+    .tutorial-card:active,
+    .project-card:active,
+    .blog-card:active,
+    .job-card:active,
+    .user-card:active {
+        transform: scale(0.985);
+        transition: transform 120ms ease-out;
+    }
+}
+
+/* ========================================================================
+   BOUTONS : feedback press (mobile-friendly) + transitions fluides
+   ======================================================================== */
+button,
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-outline,
+.btn-save-changes,
+.btn-cancel-changes,
+.btn-back {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    transition: transform var(--motion-quick),
+                box-shadow var(--motion-quick),
+                background var(--motion-quick),
+                color var(--motion-quick) !important;
+}
+
+button:active:not(:disabled),
+.btn:active:not(:disabled) {
+    transform: scale(0.97);
+}
+
+button:disabled,
+.btn:disabled {
+    opacity: 0.55;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* ========================================================================
+   SKELETON — utilitaire loading state
+   ======================================================================== */
+.skeleton {
+    background: linear-gradient(
+        90deg,
+        #eef0f3 0%,
+        #f7f8fa 50%,
+        #eef0f3 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.4s ease-in-out infinite;
+    border-radius: 8px;
+}
+
+.skeleton-text { height: 14px; margin-bottom: 8px; }
+.skeleton-title { height: 22px; margin-bottom: 12px; width: 60%; }
+.skeleton-avatar { width: 48px; height: 48px; border-radius: 50%; }
+.skeleton-card { height: 200px; border-radius: var(--radius-md); }
+
+@keyframes skeleton-shimmer {
+    0%   { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ========================================================================
+   SCROLL-TO-TOP : style + safe-area
+   ======================================================================== */
+#scrollToTop,
+.scroll-to-top,
+.btn-scroll-top {
+    position: fixed;
+    right: calc(20px + var(--safe-right));
+    bottom: calc(20px + var(--safe-bottom));
+    z-index: 900;
+}
+
+@media (max-width: 768px) {
+    #scrollToTop,
+    .scroll-to-top,
+    .btn-scroll-top {
+        bottom: calc(90px + var(--safe-bottom)); /* au-dessus du dock mobile */
+        right: 16px;
+    }
+}
+
+/* ========================================================================
+   FADE-IN au chargement — léger, subtile
+   ======================================================================== */
+@keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-up       { animation: fade-up var(--motion-smooth) both; }
+.fade-up.delay-1 { animation-delay: 80ms;  }
+.fade-up.delay-2 { animation-delay: 160ms; }
+.fade-up.delay-3 { animation-delay: 240ms; }
+.fade-up.delay-4 { animation-delay: 320ms; }
+
+/* ========================================================================
+   HEADER mobile : padding horizontal plus compact + logo mieux centré
+   ======================================================================== */
+@media (max-width: 768px) {
+    .navbar .container {
+        padding: 10px 16px !important;
+        min-height: 60px !important;
+    }
+
+    .nav-brand .logo {
+        font-size: 22px !important;
+    }
+
+    body {
+        padding-top: 60px !important;
+    }
+}
+
+/* ========================================================================
+   HEADER desktop : version compacte (~50px) — matche le design de référence.
+   Logo 22px / liens 13.5px / icônes auth & recherche 38px — tout rentre
+   même sur viewport étroit (~1020px) sans couper l'icône de recherche.
+   ======================================================================== */
+@media (min-width: 769px) {
+    .navbar .container {
+        /* padding-right plus généreux pour que la loupe ne soit pas collée à la scrollbar */
+        padding: 14px 40px 14px 24px !important;
+        min-height: 64px !important;
+        gap: 18px !important;
+        min-width: 0 !important;
+    }
+
+    .nav-brand {
+        flex-shrink: 0 !important;
+    }
+
+    .nav-brand .logo {
+        font-size: 22px !important;
+        letter-spacing: -0.3px !important;
+    }
+
+    .nav-menu {
+        gap: 10px !important;
+        min-width: 0 !important;
+    }
+
+    .nav-menu > li > a {
+        padding: 8px 14px !important;
+        font-size: 13.5px !important;
+        font-weight: 500 !important;
+        border-radius: 8px !important;
+        white-space: nowrap !important;
+    }
+
+    /* Pas de translation au survol — seul le background change */
+    .nav-menu > li > a:hover,
+    .nav-menu > li > a:focus-visible {
+        transform: none !important;
+    }
+
+    /* Icône de recherche : carré 34x34 fixe, ne rétrécit pas */
+    .search-toggle {
+        flex-shrink: 0 !important;
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+        padding: 0 !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 15px !important;
+    }
+
+    /* Pack d'icônes auth non-connecté : carrés 38px */
+    .desktop-auth-icons {
+        flex-shrink: 0 !important;
+        display: flex !important;
+        gap: 10px !important;
+        align-items: center !important;
+        margin-right: 6px !important;
+    }
+
+    .desktop-auth-icons a {
+        width: 34px !important;
+        height: 34px !important;
+        min-width: 34px !important;
+        min-height: 34px !important;
+        max-height: 34px !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        border-radius: 8px !important;
+    }
+
+    /* Dropdown user (connecté) compact */
+    .dropdown-toggle {
+        padding: 8px 12px !important;
+        font-size: 14px !important;
+    }
+
+    /* body padding-top matche la nouvelle hauteur de la navbar */
+    body {
+        padding-top: 64px;
+    }
+}
+
+/* Desktop étroit (769-1099px) : on resserre encore pour garantir que
+   les 7 liens + icônes rentrent sans couper la recherche */
+@media (min-width: 769px) and (max-width: 1099px) {
+    .navbar .container {
+        padding: 14px 28px 14px 16px !important;
+        gap: 8px !important;
+    }
+
+    .nav-menu > li > a {
+        padding: 8px 10px !important;
+        font-size: 13px !important;
+    }
+
+    .nav-menu {
+        gap: 6px !important;
+    }
+}
+
+/* Grand écran (≥1200px) : on laisse un peu plus d'air mais on garde compact */
+@media (min-width: 1200px) {
+    .navbar .container {
+        max-width: 1320px !important;
+        padding: 14px 48px 14px 32px !important;
+        min-height: 64px !important;
+    }
+
+    .nav-menu {
+        gap: 14px !important;
+    }
+
+    .nav-menu > li > a {
+        padding: 8px 16px !important;
+        font-size: 14px !important;
+    }
+}
+
+/* ========================================================================
+   GRID responsives : pas de colonnes serrées sur mobile
+   ======================================================================== */
+@media (max-width: 768px) {
+    .stats-grid,
+    .posts-grid,
+    .tutorials-grid,
+    .projects-grid,
+    .jobs-grid,
+    .users-grid,
+    .blog-grid,
+    .footer-grid {
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
+    }
+
+    /* Stats : afficher en 2x2 sur téléphones moyens, 1x4 sur petits */
+    .stats-grid,
+    .stats-grid-admin {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+
+@media (max-width: 380px) {
+    .stats-grid,
+    .stats-grid-admin {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* ========================================================================
+   DESKTOP : meilleur rendu sur écrans larges
+   ======================================================================== */
+@media (min-width: 1280px) {
+    .container {
+        max-width: 1240px;
+    }
+}
+
+/* ========================================================================
+   ADMIN SHELL : mobile collapse (sidebar en drawer)
+   Le sidebar fait 280px — sur mobile on bascule en stack vertical
+   ======================================================================== */
+@media (max-width: 900px) {
+    .admin-dashboard-ultra {
+        grid-template-columns: 1fr !important;
+    }
+
+    .admin-sidebar-ultra {
+        position: relative !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    .admin-nav-ultra {
+        display: flex !important;
+        overflow-x: auto;
+        padding: 10px !important;
+        gap: 8px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav-item-ultra {
+        flex-shrink: 0;
+        margin: 0 !important;
+        padding: 10px 14px !important;
+        font-size: 0.9rem;
+    }
+
+    .nav-item-ultra span {
+        font-size: 0.9rem;
+    }
+
+    .sidebar-footer {
+        display: none;
+    }
+
+    .admin-topbar {
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+}
+
+/* ========================================================================
+   TABLES : wrapper horizontal-scroll propre sur mobile
+   ======================================================================== */
+@media (max-width: 768px) {
+    .table-responsive {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: var(--radius-sm);
+        border: 1px solid #f0f0f0;
+    }
+}
+
+/* ========================================================================
+   CONTENU éditorial (blog, tutorial show) : largeur de lecture optimale
+   ======================================================================== */
+.article-content-mobile,
+.post-content,
+.tutorial-description,
+.blog-post-content,
+.article-content {
+    max-width: 68ch;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* ========================================================================
+   SUPPRIMER les ombres de focus laides par défaut sur Chrome (inputs)
+   ======================================================================== */
+input:focus,
+textarea:focus,
+select:focus {
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
+    border-color: var(--primary-color, #3498db) !important;
+}
+
+/* ========================================================================
+   MINI-POLISH : badges, tags, liens hover sur desktop only
+   ======================================================================== */
+@media (hover: hover) {
+    a:not(.btn):not(.nav-link):not(.podium-card a) {
+        transition: color var(--motion-quick), opacity var(--motion-quick);
+    }
+}
+
+/* ========================================================================
+   CTA — Drapeau burkinabè flottant (étoile qui brille + section qui flotte)
+   ======================================================================== */
+@keyframes flag-wave {
+    0%, 100% {
+        transform: perspective(1000px) rotateY(0deg);
+    }
+    25% {
+        transform: perspective(1000px) rotateY(2deg);
+    }
+    75% {
+        transform: perspective(1000px) rotateY(-2deg);
+    }
+}
+
+@keyframes star-glow {
+    0%, 100% {
+        color: #FFD100 !important;
+        filter: drop-shadow(0 0 30px #FFD100) drop-shadow(0 0 60px rgba(255, 209, 0, 0.6));
+        text-shadow:
+            0 0 20px #FFE55C,
+            0 0 60px rgba(255, 209, 0, 0.85),
+            0 0 120px rgba(255, 209, 0, 0.55),
+            0 0 200px rgba(255, 209, 0, 0.35);
+        transform: translate(-50%, -50%) rotate(0deg) scale(1);
+        opacity: 0.85;
+    }
+    50% {
+        color: #FFF3B0 !important;
+        filter: drop-shadow(0 0 60px #FFEA7A) drop-shadow(0 0 120px rgba(255, 209, 0, 0.9));
+        text-shadow:
+            0 0 30px #FFFFFF,
+            0 0 80px #FFEA7A,
+            0 0 160px rgba(255, 209, 0, 1),
+            0 0 260px rgba(255, 209, 0, 0.7);
+        transform: translate(-50%, -50%) rotate(180deg) scale(1.2);
+        opacity: 1;
+    }
+}
+
+@keyframes star-rays {
+    0%, 100% {
+        opacity: 0.35;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1.35);
+    }
+}
+
+.cta-section {
+    animation: flag-wave 6s ease-in-out infinite;
+    will-change: transform;
+}
+
+/* Halo radial brillant derrière l'étoile — lueur dorée qui pulse */
+.cta-section .star-halo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 720px;
+    height: 720px;
+    max-width: 95vw;
+    max-height: 95vw;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 2;
+    background: radial-gradient(
+        circle at center,
+        rgba(255, 235, 120, 0.55) 0%,
+        rgba(255, 209, 0, 0.35) 18%,
+        rgba(255, 209, 0, 0.18) 35%,
+        rgba(255, 209, 0, 0.07) 55%,
+        rgba(255, 209, 0, 0) 75%
+    );
+    filter: blur(12px);
+    animation: star-halo-pulse 4s ease-in-out infinite;
+    will-change: transform, opacity;
+    mix-blend-mode: screen;
+}
+
+@keyframes star-halo-pulse {
+    0%, 100% {
+        opacity: 0.75;
+        transform: translate(-50%, -50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.18);
+    }
+}
+
+@media (max-width: 768px) {
+    .cta-section .star-halo {
+        width: 420px;
+        height: 420px;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .cta-section .star-halo {
+        animation: none !important;
+    }
+}
+
+.cta-section::before {
+    animation: star-glow 4s ease-in-out infinite !important;
+    will-change: transform, filter, opacity, color;
+    /* boost de lisibilité : l'étoile doit dominer visuellement */
+    font-size: 240px !important;
+}
+
+@media (max-width: 768px) {
+    .cta-section::before {
+        font-size: 150px !important;
+    }
+}
+
+/* Le canvas d'étoiles/particules doit rester derrière le texte mais devant les motifs */
+.cta-section .flag-canvas {
+    z-index: 1;
+}
+
+.cta-section .container,
+.cta-section .cta-content {
+    position: relative;
+    z-index: 3;
+}
+
+/* L'étoile centrale reste visible au-dessus du canvas */
+.cta-section::before {
+    z-index: 2 !important;
+}
+
+/* Respecter les préférences utilisateur */
+@media (prefers-reduced-motion: reduce) {
+    .cta-section,
+    .cta-section::before {
+        animation: none !important;
+    }
+}

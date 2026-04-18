@@ -1,0 +1,348 @@
+<?php
+$pageTitle = 'Conditions d\'utilisation - AlgoCodeBF';
+require_once __DIR__ . '/../layouts/header.php';
+?>
+
+<section class="policy-section">
+    <div class="container">
+        <h1 class="policy-title">Conditions d'utilisation</h1>
+        <p class="policy-intro">
+            Dernière mise à jour : 15 mai 2024
+        </p>
+
+        <div class="policy-content">
+            <h2>1. Acceptation des conditions</h2>
+            <p>
+                Bienvenue sur AlgoCodeBF. Ces Conditions d'utilisation ("Conditions") régissent votre utilisation de notre site web AlgoCodeBF (le "Site") exploité par AlgoCodeBF ("nous", "notre", "nos"). En accédant et en utilisant notre Site, vous acceptez d'être lié par ces Conditions. Si vous n'acceptez pas ces Conditions, veuillez ne pas utiliser notre Site.
+            </p>
+
+            <h2>2. Description du service</h2>
+            <p>
+                AlgoCodeBF est une plateforme communautaire dédiée aux développeurs et étudiants en informatique du Burkina Faso. Notre Site offre les services suivants :
+            </p>
+            <ul>
+                <li>Forum de discussion pour échanger sur la programmation et les technologies</li>
+                <li>Publication et partage de tutoriels de programmation</li>
+                <li>Création et gestion de projets collaboratifs</li>
+                <li>Publication d'opportunités d'emploi et de stage</li>
+                <li>Profil utilisateur et réseau professionnel</li>
+                <li>Système de messagerie privée</li>
+                <li>Classements et récompenses communautaires</li>
+                <li>Blog et actualités technologiques</li>
+            </ul>
+
+            <h2>3. Compte utilisateur</h2>
+            <h3>3.1 Création de compte</h3>
+            <p>
+                Pour accéder à certaines fonctionnalités de notre Site, vous devez créer un compte. Vous acceptez de :
+            </p>
+            <ul>
+                <li>Fournir des informations exactes, complètes et à jour</li>
+                <li>Maintenir et mettre à jour vos informations de compte</li>
+                <li>Maintenir la sécurité de votre mot de passe</li>
+                <li>Accepter la responsabilité de toutes les activités sous votre compte</li>
+                <li>Nous notifier immédiatement toute utilisation non autorisée</li>
+            </ul>
+
+            <h3>3.2 Âge minimum</h3>
+            <p>
+                Vous devez avoir au moins 13 ans pour créer un compte. Si vous avez entre 13 et 18 ans, vous devez avoir l'autorisation de vos parents ou tuteurs légaux.
+            </p>
+
+            <h2>4. Code de conduite</h2>
+            <p>
+                En utilisant notre Site, vous vous engagez à respecter les règles suivantes :
+            </p>
+            <h3>4.1 Comportement acceptable</h3>
+            <ul>
+                <li>Respecter tous les utilisateurs, peu importe leur niveau d'expérience</li>
+                <li>Utiliser un langage approprié et professionnel</li>
+                <li>Partager du contenu constructif et utile</li>
+                <li>Respecter la propriété intellectuelle d'autrui</li>
+                <li>Maintenir un environnement d'apprentissage positif</li>
+            </ul>
+
+            <h3>4.2 Comportement interdit</h3>
+            <p>
+                Il est strictement interdit de :
+            </p>
+            <ul>
+                <li>Publier du contenu offensant, haineux, discriminatoire ou inapproprié</li>
+                <li>Harceler, intimider ou menacer d'autres utilisateurs</li>
+                <li>Spammer ou publier du contenu commercial non autorisé</li>
+                <li>Partager des informations personnelles d'autrui sans consentement</li>
+                <li>Utiliser le Site à des fins illégales ou malveillantes</li>
+                <li>Tenter de pirater ou compromettre la sécurité du Site</li>
+                <li>Créer de faux comptes ou usurper l'identité d'autrui</li>
+                <li>Publier du contenu violent, pornographique ou inapproprié</li>
+            </ul>
+
+            <h2>5. Propriété intellectuelle</h2>
+            <h3>5.1 Contenu utilisateur</h3>
+            <p>
+                Vous conservez tous les droits sur le contenu que vous publiez sur notre Site (tutoriels, projets, messages, etc.). En publiant du contenu, vous nous accordez une licence non exclusive pour :
+            </p>
+            <ul>
+                <li>Afficher, distribuer et promouvoir votre contenu sur notre Site</li>
+                <li>Modifier techniquement votre contenu pour l'adapter à notre plateforme</li>
+                <li>Utiliser votre contenu à des fins éducatives et de formation</li>
+            </ul>
+
+            <h3>5.2 Respect de la propriété intellectuelle</h3>
+            <p>
+                Vous vous engagez à ne pas publier de contenu qui viole les droits d'auteur, marques de commerce ou autres droits de propriété intellectuelle d'autrui. Si vous pensez que votre propriété intellectuelle a été violée, contactez-nous immédiatement.
+            </p>
+
+            <h2>6. Système de réputation et modération</h2>
+            <h3>6.1 Points et réputation</h3>
+            <p>
+                Notre Site utilise un système de points basé sur :
+            </p>
+            <ul>
+                <li>Qualité des contributions (tutoriels, réponses, projets)</li>
+                <li>Activité communautaire positive</li>
+                <li>Aide aux autres utilisateurs</li>
+                <li>Participation constructive aux discussions</li>
+            </ul>
+
+            <h3>6.2 Modération</h3>
+            <p>
+                Nous nous réservons le droit de :
+            </p>
+            <ul>
+                <li>Modérer, éditer ou supprimer tout contenu inapproprié</li>
+                <li>Avertir, suspendre ou bannir des utilisateurs</li>
+                <li>Retirer des points de réputation en cas de violation</li>
+                <li>Prendre des mesures disciplinaires appropriées</li>
+            </ul>
+
+            <h2>7. Contenu et responsabilités</h2>
+            <h3>7.1 Contenu utilisateur</h3>
+            <p>
+                Vous êtes entièrement responsable du contenu que vous publiez. Nous ne sommes pas responsables de :
+            </p>
+            <ul>
+                <li>L'exactitude, la légalité ou la qualité du contenu utilisateur</li>
+                <li>Les dommages résultant de l'utilisation de ce contenu</li>
+                <li>Les interactions entre utilisateurs</li>
+                <li>Les projets ou opportunités publiés par des tiers</li>
+            </ul>
+
+            <h3>7.2 Limitation de responsabilité</h3>
+            <p>
+                Dans la mesure permise par la loi, AlgoCodeBF ne sera pas responsable de :
+            </p>
+            <ul>
+                <li>Dommages indirects, consécutifs ou punitifs</li>
+                <li>Perte de profits, données ou opportunités</li>
+                <li>Interruption de service ou dysfonctionnements techniques</li>
+                <li>Actions de tiers ou contenu externe</li>
+            </ul>
+
+            <h2>8. Disponibilité du service</h2>
+            <p>
+                Nous nous efforçons de maintenir notre Site disponible 24h/24, 7j/7, mais nous ne garantissons pas une disponibilité ininterrompue. Nous nous réservons le droit de :
+            </p>
+            <ul>
+                <li>Effectuer des maintenances programmées</li>
+                <li>Modifier ou interrompre temporairement le service</li>
+                <li>Mettre à jour ou améliorer nos fonctionnalités</li>
+                <li>Résoudre des problèmes techniques</li>
+            </ul>
+
+            <h2>9. Modification des conditions</h2>
+            <p>
+                Nous nous réservons le droit de modifier ces Conditions à tout moment. Les modifications importantes seront notifiées via :
+            </p>
+            <ul>
+                <li>Notification sur notre Site</li>
+                <li>Email aux utilisateurs enregistrés</li>
+                <li>Annonce dans notre blog ou forum</li>
+            </ul>
+            <p>
+                Votre utilisation continue du Site après les modifications constitue votre acceptation des nouvelles Conditions.
+            </p>
+
+            <h2>10. Résiliation</h2>
+            <h3>10.1 Résiliation par l'utilisateur</h3>
+            <p>
+                Vous pouvez fermer votre compte à tout moment en nous contactant. Votre contenu public peut être conservé selon nos politiques de conservation des données.
+            </p>
+
+            <h3>10.2 Résiliation par AlgoCodeBF</h3>
+            <p>
+                Nous nous réservons le droit de suspendre ou résilier votre compte en cas de :
+            </p>
+            <ul>
+                <li>Violation de ces Conditions</li>
+                <li>Comportement inapproprié ou nuisible</li>
+                <li>Utilisation frauduleuse du service</li>
+                <li>Non-respect répété des règles communautaires</li>
+            </ul>
+
+            <h2>11. Droit applicable et juridiction</h2>
+            <p>
+                Ces Conditions sont régies par les lois du Burkina Faso. Tout litige sera soumis à la juridiction exclusive des tribunaux compétents du Burkina Faso.
+            </p>
+
+            <h2>12. Dispositions générales</h2>
+            <h3>12.1 Intégralité de l'accord</h3>
+            <p>
+                Ces Conditions, ainsi que notre Politique de Confidentialité, constituent l'intégralité de l'accord entre vous et AlgoCodeBF concernant l'utilisation de notre Site.
+            </p>
+
+            <h3>12.2 Divisibilité</h3>
+            <p>
+                Si une disposition de ces Conditions est jugée invalide ou inapplicable, les autres dispositions restent en vigueur.
+            </p>
+
+            <h3>12.3 Renonciation</h3>
+            <p>
+                Le fait de ne pas exercer un droit ne constitue pas une renonciation à ce droit.
+            </p>
+
+            <h2>13. Contact</h2>
+            <p>
+                Pour toute question concernant ces Conditions d'utilisation, vous pouvez nous contacter :
+            </p>
+            <ul>
+                <li>Email : <a href="mailto:<?= htmlspecialchars($GLOBALS['site_settings']['contact_email'] ?? 'contact@hubtech.bf') ?>"><?= htmlspecialchars($GLOBALS['site_settings']['contact_email'] ?? 'contact@hubtech.bf') ?></a></li>
+                <li>Via notre système de messagerie interne</li>
+                <li>Par le biais de notre forum communautaire</li>
+            </ul>
+
+            <div class="policy-footer">
+                <p>
+                    <strong>Merci d'utiliser AlgoCodeBF !</strong><br>
+                    Ensemble, construisons une communauté tech forte au Burkina Faso. 🇧🇫
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+/* Styles spécifiques pour les pages de politique */
+.policy-section {
+    padding: 40px 0 80px;
+    background: #f8f9fa;
+    min-height: 100vh;
+}
+
+.policy-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.policy-intro {
+    text-align: center;
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 40px;
+    font-style: italic;
+}
+
+.policy-content {
+    max-width: 800px;
+    margin: 0 auto;
+    background: white;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    line-height: 1.7;
+}
+
+.policy-content h2 {
+    font-size: 1.5rem;
+    color: var(--primary-color);
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid rgba(200, 16, 46, 0.1);
+}
+
+.policy-content h3 {
+    font-size: 1.2rem;
+    color: var(--secondary-color);
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.policy-content p {
+    margin-bottom: 15px;
+    color: #444;
+}
+
+.policy-content ul {
+    margin-bottom: 20px;
+    padding-left: 25px;
+}
+
+.policy-content li {
+    margin-bottom: 8px;
+    color: #555;
+}
+
+.policy-content a {
+    color: var(--primary-color);
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.policy-content a:hover {
+    color: var(--secondary-color);
+    text-decoration: underline;
+}
+
+.policy-footer {
+    margin-top: 40px;
+    padding: 30px;
+    background: linear-gradient(135deg, rgba(200, 16, 46, 0.05), rgba(0, 106, 78, 0.05));
+    border-radius: 12px;
+    text-align: center;
+    border: 2px solid rgba(200, 16, 46, 0.1);
+}
+
+.policy-footer p {
+    font-size: 1.1rem;
+    color: #333;
+    margin: 0;
+}
+
+.policy-footer strong {
+    color: var(--primary-color);
+    font-size: 1.2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .policy-section {
+        padding: 20px 0 60px;
+    }
+    
+    .policy-title {
+        font-size: 2rem;
+    }
+    
+    .policy-content {
+        padding: 20px;
+        margin: 0 15px;
+    }
+    
+    .policy-content h2 {
+        font-size: 1.3rem;
+    }
+    
+    .policy-content h3 {
+        font-size: 1.1rem;
+    }
+}
+</style>
+
+<?php require_once __DIR__ . '/../layouts/footer.php'; ?>

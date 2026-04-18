@@ -1,0 +1,27 @@
+/* Chrome du header : aucune scrollbar interne, liens à hauteur contenu (pas étirés sur toute la barre). */
+
+.site-header-root .navbar {
+  overflow: visible !important;
+}
+
+.site-header-root .navbar .container {
+  overflow: visible !important;
+}
+
+@media (min-width: 769px) {
+  .site-header-root .nav-menu {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .site-header-root .nav-menu > li {
+    height: auto !important;
+    align-self: center !important;
+  }
+
+  .site-header-root .nav-menu > li > a {
+    height: auto !important;
+    max-height: none !important;
+  }
+}

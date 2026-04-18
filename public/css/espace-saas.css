@@ -1,0 +1,646 @@
+/* Tableaux de bord « Mon Espace » — palette BF, lecture SaaS */
+
+/* App shell : sidebar + zone principale sous le header du site (navbar fixe ~64px) */
+.espace-app {
+  --es-header-offset: 64px;
+  display: flex;
+  align-items: stretch;
+  min-height: calc(100dvh - var(--es-header-offset));
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  background: #eef0f4;
+}
+
+.espace-app-backdrop {
+  display: none;
+}
+
+.espace-app-sidebar {
+  width: 268px;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, #ffffff 0%, #fafbfc 48%, #f4f6f8 100%);
+  border-right: 1px solid #e4e6ec;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: var(--es-header-offset);
+  align-self: flex-start;
+  max-height: calc(100dvh - var(--es-header-offset));
+  z-index: 50;
+  box-shadow: 4px 0 24px rgba(10, 11, 15, 0.04);
+}
+
+.espace-app-sidebar-brand {
+  padding: 20px 18px 16px;
+  border-bottom: 1px solid rgba(0, 106, 78, 0.12);
+}
+
+.espace-app-sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: 12px;
+  padding: 8px 10px;
+  margin: -8px -10px;
+  transition: background 0.15s ease;
+}
+
+.espace-app-sidebar-logo:hover {
+  background: rgba(0, 106, 78, 0.06);
+}
+
+.espace-app-sidebar-logo-mark {
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.12), rgba(0, 106, 78, 0.15));
+  color: #006a4e;
+  font-size: 1rem;
+}
+
+.espace-app-sidebar-logo-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1.2;
+}
+
+.espace-app-sidebar-logo-text strong {
+  font-size: 0.95rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a0b0f;
+}
+
+.espace-app-sidebar-logo-text small {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #006a4e;
+}
+
+.espace-app-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: 12px 12px 16px;
+  scrollbar-width: thin;
+}
+
+.espace-app-nav-group {
+  margin-bottom: 18px;
+}
+
+.espace-app-nav-title {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8b8d95;
+  margin: 0 0 8px 10px;
+}
+
+.espace-app-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.espace-app-nav-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  margin-bottom: 2px;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #3d3f46;
+  text-decoration: none;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  border: 1px solid transparent;
+}
+
+.espace-app-nav-link:hover {
+  background: rgba(0, 106, 78, 0.07);
+  color: #006a4e;
+}
+
+.espace-app-nav-link--active {
+  background: rgba(0, 106, 78, 0.11);
+  color: #004d38;
+  border-color: rgba(0, 106, 78, 0.2);
+  box-shadow: inset 3px 0 0 #c8102e;
+}
+
+.espace-app-nav-ico {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 11, 15, 0.04);
+  color: #006a4e;
+  font-size: 0.88rem;
+  flex-shrink: 0;
+}
+
+.espace-app-nav-link--active .espace-app-nav-ico {
+  background: rgba(200, 16, 46, 0.1);
+  color: #c8102e;
+}
+
+.espace-app-sidebar-footer {
+  padding: 12px 14px 16px;
+  border-top: 1px solid #e8e9ef;
+  margin-top: auto;
+  flex-shrink: 0;
+  background: linear-gradient(180deg, transparent, rgba(255, 255, 255, 0.9));
+}
+
+.espace-app-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #64656c;
+  text-decoration: none;
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.espace-app-exit:hover {
+  background: rgba(10, 11, 15, 0.05);
+  color: #0a0b0f;
+}
+
+.espace-app-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 10px;
+  border-radius: 12px;
+  border: 1px solid #e8e9ef;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(10, 11, 15, 0.04);
+}
+
+.espace-app-user-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.15), rgba(0, 106, 78, 0.12));
+  color: #006a4e;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.espace-app-user-meta {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.espace-app-user-name {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0a0b0f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.espace-app-user-meta a {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #006a4e;
+  text-decoration: none;
+}
+
+.espace-app-user-meta a:hover {
+  text-decoration: underline;
+}
+
+.espace-app-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  background: #eef0f4;
+}
+
+/* Barre contextuelle sous le header du site (complète la navbar) */
+.espace-app-topbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid #e4e6ec;
+  position: sticky;
+  top: var(--es-header-offset);
+  z-index: 40;
+  box-shadow: 0 1px 0 rgba(10, 11, 15, 0.04);
+}
+
+.espace-app-menu-btn {
+  display: none;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  border: 1px solid #e0e2e8;
+  background: #fff;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #0a0b0f;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.espace-app-menu-btn:hover {
+  border-color: rgba(0, 106, 78, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 106, 78, 0.08);
+}
+
+.espace-app-topbar-center {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.espace-app-topbar-kicker {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #c8102e;
+}
+
+.espace-app-topbar-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: #0a0b0f;
+}
+
+.espace-app-topbar-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(0, 106, 78, 0.1), rgba(200, 16, 46, 0.08));
+  border: 1px solid rgba(0, 106, 78, 0.2);
+  color: #006a4e;
+  font-size: 0.88rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.15s ease;
+}
+
+.espace-app-topbar-action:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(0, 106, 78, 0.12);
+}
+
+.espace-app-topbar-action-label {
+  display: inline;
+}
+
+.espace-app-body {
+  flex: 1;
+  min-width: 0;
+}
+
+@media (min-width: 1025px) {
+  .espace-app-body .espace-saas-hero {
+    margin: 18px 24px 0;
+    border-radius: 16px;
+    border: 1px solid #e4e6ec;
+    overflow: hidden;
+    box-shadow: var(--es-shadow);
+  }
+
+  .espace-app-body .espace-saas-main {
+    padding-top: 24px;
+  }
+}
+
+/* Masquer le footer marketing dans l’espace (rendu type produit SaaS) */
+main.main-content:has(.espace-app) ~ footer.footer {
+  display: none;
+}
+
+.espace-saas {
+  --es-bg: #f6f7f9;
+  --es-surface: #ffffff;
+  --es-border: #e8e9ef;
+  --es-text: #0a0b0f;
+  --es-muted: #64656c;
+  --es-red: #c8102e;
+  --es-green: #006a4e;
+  --es-radius: 14px;
+  --es-shadow: 0 1px 3px rgba(10, 11, 15, 0.06), 0 8px 24px rgba(10, 11, 15, 0.06);
+  background: transparent;
+  min-height: 0;
+  padding-bottom: 40px;
+}
+
+.espace-saas-hero {
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.06), rgba(0, 106, 78, 0.07));
+  border-bottom: 1px solid var(--es-border);
+  padding: 28px 0 32px;
+}
+
+.espace-saas-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.espace-saas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--es-green);
+  background: rgba(0, 106, 78, 0.1);
+  border: 1px solid rgba(0, 106, 78, 0.2);
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-bottom: 14px;
+}
+
+.espace-saas-badge i {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+.espace-saas h1 {
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
+  font-size: clamp(1.5rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--es-text);
+  margin: 0 0 8px;
+  line-height: 1.2;
+}
+
+.espace-saas-lead {
+  font-size: 1rem;
+  color: var(--es-muted);
+  max-width: 52ch;
+  margin: 0;
+  line-height: 1.55;
+}
+
+.espace-saas-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 28px 24px 0;
+}
+
+.espace-saas-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.espace-saas-card {
+  background: var(--es-surface);
+  border: 1px solid var(--es-border);
+  border-radius: var(--es-radius);
+  padding: 20px;
+  box-shadow: var(--es-shadow);
+  transition:
+    border-color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.espace-saas-card:hover {
+  border-color: rgba(200, 16, 46, 0.18);
+  box-shadow:
+    0 4px 12px rgba(10, 11, 15, 0.08),
+    0 16px 40px rgba(10, 11, 15, 0.06);
+}
+
+.espace-saas-card-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--es-muted);
+  margin: 0 0 6px;
+}
+
+.espace-saas-card-value {
+  font-size: 1.65rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--es-text);
+  margin: 0;
+  line-height: 1.1;
+}
+
+.espace-saas-card-hint {
+  font-size: 0.85rem;
+  color: var(--es-muted);
+  margin: 8px 0 0;
+}
+
+.espace-saas-section-title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--es-muted);
+  margin: 0 0 14px;
+}
+
+.espace-saas-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 12px;
+}
+
+.espace-saas-action {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px 18px;
+  background: var(--es-surface);
+  border: 1px solid var(--es-border);
+  border-radius: var(--es-radius);
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 1px 2px rgba(10, 11, 15, 0.04);
+  transition:
+    border-color 0.18s ease,
+    background 0.18s ease,
+    transform 0.15s ease;
+}
+
+.espace-saas-action:hover {
+  border-color: rgba(0, 106, 78, 0.35);
+  background: rgba(0, 106, 78, 0.04);
+  transform: translateY(-1px);
+}
+
+.espace-saas-action-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.1), rgba(0, 106, 78, 0.1));
+  color: var(--es-red);
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.espace-saas-action h3 {
+  font-size: 0.98rem;
+  font-weight: 700;
+  margin: 0 0 4px;
+  color: var(--es-text);
+}
+
+.espace-saas-action p {
+  font-size: 0.86rem;
+  color: var(--es-muted);
+  margin: 0;
+  line-height: 1.45;
+}
+
+/* Tablette / mobile : tiroir latéral + barre « secondaire » sous le header du site */
+@media (max-width: 1024px) {
+  .espace-app-menu-btn {
+    display: inline-flex;
+  }
+
+  .espace-app-backdrop {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: var(--es-header-offset);
+    z-index: 1090;
+    background: rgba(10, 11, 15, 0.4);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    border: none;
+    padding: 0;
+    margin: 0;
+    cursor: pointer;
+    animation: espace-backdrop-in 0.2s ease;
+  }
+
+  @keyframes espace-backdrop-in {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  .espace-app-sidebar {
+    position: fixed;
+    left: 0;
+    top: var(--es-header-offset);
+    height: calc(100dvh - var(--es-header-offset));
+    max-height: none;
+    transform: translateX(-104%);
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1100;
+    box-shadow: none;
+    align-self: stretch;
+  }
+
+  .espace-app-sidebar--open {
+    transform: translateX(0);
+    box-shadow: 12px 0 48px rgba(10, 11, 15, 0.18);
+  }
+
+  .espace-app-topbar-title {
+    font-size: 0.98rem;
+  }
+
+  .espace-app-topbar-action-label {
+    display: none;
+  }
+
+  .espace-app-topbar-action {
+    padding: 8px 12px;
+    min-width: 44px;
+    justify-content: center;
+  }
+}
+
+@media (min-width: 1025px) {
+  .espace-app-sidebar {
+    transform: none !important;
+  }
+
+  .espace-app-menu-btn {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .espace-saas {
+    min-height: auto;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+
+  .espace-saas-hero {
+    padding: 22px 0 26px;
+  }
+
+  .espace-saas-hero-inner,
+  .espace-saas-main {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  .espace-app-topbar {
+    padding: 8px 12px;
+  }
+}
