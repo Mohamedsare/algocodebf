@@ -3,7 +3,7 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { getForumPost, getComments } from '@/lib/queries/forum'
 import { getCurrentProfile } from '@/lib/auth'
-import { incrementPostViews } from '@/app/actions/forum'
+import { ForumThreadViewTracker } from '@/components/forum/forum-thread-view-tracker'
 import { buildAvatarUrl, buildFileUrl, timeAgo } from '@/lib/utils'
 import { ForumLikeButton } from '@/components/forum/forum-like-button'
 import { ForumCommentsLive } from '@/components/forum/forum-comments-live'
@@ -50,8 +50,6 @@ export default async function ForumShowPage({ params }: ForumShowPageProps) {
   const data = await getForumPost(numericId, profile?.id ?? null)
   if (!data) notFound()
 
-  await incrementPostViews(numericId)
-
   const comments = await getComments('post', numericId)
   const { post, author, attachments, likes_count, liked_by_user } = data
   const canEdit = profile?.id === post.user_id
@@ -69,6 +67,7 @@ export default async function ForumShowPage({ params }: ForumShowPageProps) {
 
   return (
     <div className="forum-thread-saas">
+      <ForumThreadViewTracker postId={numericId} />
       <div className="container-xl">
         {/* Breadcrumb */}
         <nav className="breadcrumb-saas" aria-label="Fil d'ariane">

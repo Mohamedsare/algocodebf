@@ -4,22 +4,22 @@ import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ui/toast-provider'
 
 export function LoginForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
+  const toast = useToast()
   const redirect = searchParams.get('redirect') ?? '/'
 
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrors({})
-    setServerError('')
 
     const errs: Record<string, string> = {}
     if (!email) errs.email = 'Email requis'
@@ -39,18 +39,18 @@ export function LoginForm() {
       })
       if (error) {
         if (error.message.includes('Invalid login credentials')) {
-          setServerError('Email ou mot de passe incorrect.')
+          toast.error('Email ou mot de passe incorrect.')
         } else if (error.message.includes('Email not confirmed')) {
-          setServerError('Veuillez vérifier votre email avant de vous connecter.')
+          toast.error('Veuillez vérifier votre email avant de vous connecter.')
         } else {
-          setServerError(error.message)
+          toast.error(error.message)
         }
         return
       }
       router.push(redirect)
       router.refresh()
     } catch {
-      setServerError('Une erreur est survenue. Veuillez réessayer.')
+      toast.error('Une erreur est survenue. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
@@ -58,13 +58,6 @@ export function LoginForm() {
 
   return (
     <form className="au-form" onSubmit={submit} noValidate>
-      {serverError && (
-        <div className="au-alert" role="alert">
-          <i className="fas fa-exclamation-circle" aria-hidden />
-          <span>{serverError}</span>
-        </div>
-      )}
-
       <div className="au-field">
         <label htmlFor="email">Adresse email</label>
         <input

@@ -5,6 +5,8 @@ import { ProfileEditorPhp } from '@/components/user/profile-editor-php'
 
 export const metadata: Metadata = {
   title: 'Modifier mon profil - AlgoCodeBF',
+  description:
+    'Mettez à jour votre profil AlgoCodeBF : formation, ville, biographie, compétences, photo et CV.',
   robots: { index: false },
 }
 

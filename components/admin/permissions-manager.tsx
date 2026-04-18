@@ -1,7 +1,9 @@
 'use client'
 
 import { useMemo, useState, useTransition } from 'react'
+import Link from 'next/link'
 import { setUserPermissionAction } from '@/app/actions/admin'
+import { useToast } from '@/components/ui/toast-provider'
 
 type Status = 'active' | 'pending' | 'suspended' | 'banned'
 
@@ -25,16 +27,16 @@ const STATUS_LABEL: Record<Status, string> = {
 }
 
 export function PermissionsManager({ initialUsers }: Props) {
+  const toast = useToast()
   const [users, setUsers] = useState<UserRow[]>(initialUsers)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState<'' | Status>('')
   const [permFilter, setPermFilter] = useState<'' | 'both' | 'tutorial' | 'project' | 'none'>('')
   const [, startTransition] = useTransition()
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
 
   const showMsg = (type: 'success' | 'error', msg: string) => {
-    setFeedback({ type, msg })
-    setTimeout(() => setFeedback(null), 3500)
+    if (type === 'success') toast.success(msg)
+    else toast.error(msg)
   }
 
   const togglePermission = (
@@ -95,56 +97,58 @@ export function PermissionsManager({ initialUsers }: Props) {
 
   return (
     <>
-      {feedback && (
-        <div
-          className={`alert alert-${feedback.type === 'success' ? 'success' : 'danger'}`}
-          style={{
-            padding: '12px 18px',
-            borderRadius: 10,
-            marginBottom: 20,
-            background: feedback.type === 'success' ? '#d4edda' : '#f8d7da',
-            color: feedback.type === 'success' ? '#155724' : '#721c24',
-            border: `1px solid ${feedback.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
-          }}
-        >
-          <i
-            className={`fas ${feedback.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}
-            style={{ marginRight: 10 }}
-          ></i>
-          {feedback.msg}
+      <div className="stats-grid-admin">
+        <div className="stat-card-admin card-users">
+          <div className="stat-icon-admin">
+            <i className="fas fa-users" aria-hidden />
+          </div>
+          <div className="stat-data">
+            <h3>{users.length}</h3>
+            <p>Comptes (hors admin)</p>
+            <span className="stat-trend positive">
+              <i className="fas fa-user-check" aria-hidden /> Liste chargée
+            </span>
+          </div>
         </div>
-      )}
-
-      <div className="permissions-stats">
-        <div className="stat-card">
-          <i className="fas fa-users"></i>
-          <h3>{users.length}</h3>
-          <p>Utilisateurs</p>
+        <div className="stat-card-admin card-tutorials">
+          <div className="stat-icon-admin">
+            <i className="fas fa-book-open" aria-hidden />
+          </div>
+          <div className="stat-data">
+            <h3>{totalTutorial}</h3>
+            <p>Création formations</p>
+            <span className="stat-trend positive">Permission accordée</span>
+          </div>
         </div>
-        <div className="stat-card">
-          <i className="fas fa-book"></i>
-          <h3>{totalTutorial}</h3>
-          <p>Autorisés formations</p>
-        </div>
-        <div className="stat-card">
-          <i className="fas fa-project-diagram"></i>
-          <h3>{totalProject}</h3>
-          <p>Autorisés Projets</p>
+        <div className="stat-card-admin card-posts">
+          <div className="stat-icon-admin">
+            <i className="fas fa-project-diagram" aria-hidden />
+          </div>
+          <div className="stat-data">
+            <h3>{totalProject}</h3>
+            <p>Création projets</p>
+            <span className="stat-trend positive">Permission accordée</span>
+          </div>
         </div>
       </div>
 
-      <div className="search-filters">
-        <input
-          type="text"
-          className="search-input"
-          placeholder="Rechercher un utilisateur..."
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-        />
+      <div className="header-actions admin-users-filters-form flex-wrap mb-2">
+        <div className="search-box-admin min-w-[200px] flex-1">
+          <i className="fas fa-search" aria-hidden />
+          <input
+            type="search"
+            className="filter-select-admin border-0 bg-transparent shadow-none flex-1 min-w-0"
+            placeholder="Rechercher un utilisateur…"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            aria-label="Rechercher"
+          />
+        </div>
         <select
-          className="filter-select"
+          className="filter-select-admin"
           value={statusFilter}
           onChange={e => setStatusFilter(e.target.value as '' | Status)}
+          aria-label="Filtrer par statut"
         >
           <option value="">Tous les statuts</option>
           <option value="active">Actifs</option>
@@ -153,11 +157,12 @@ export function PermissionsManager({ initialUsers }: Props) {
           <option value="banned">Bannis</option>
         </select>
         <select
-          className="filter-select"
+          className="filter-select-admin"
           value={permFilter}
           onChange={e =>
             setPermFilter(e.target.value as '' | 'both' | 'tutorial' | 'project' | 'none')
           }
+          aria-label="Filtrer par permissions"
         >
           <option value="">Toutes les permissions</option>
           <option value="both">Toutes accordées</option>
@@ -167,7 +172,13 @@ export function PermissionsManager({ initialUsers }: Props) {
         </select>
       </div>
 
-      <div className="permissions-table-wrapper">
+      <p className="text-sm text-gray-600 m-0 mb-2">
+        {filtered.length === users.length
+          ? `${users.length} utilisateur${users.length === 1 ? '' : 's'}.`
+          : `${filtered.length} sur ${users.length} (filtres actifs).`}
+      </p>
+
+      <div className="permissions-table-wrapper recent-section p-0 shadow-none bg-transparent">
         <table className="permissions-table">
           <thead>
             <tr>
@@ -195,7 +206,9 @@ export function PermissionsManager({ initialUsers }: Props) {
                   <td>
                     <div className="user-info">
                       <i className="fas fa-user-circle user-icon"></i>
-                      <span className="user-name">{u.full_name}</span>
+                      <Link href={`/user/${u.id}`} className="user-name hover:underline text-[#C8102E]">
+                        {u.full_name}
+                      </Link>
                     </div>
                   </td>
                   <td>

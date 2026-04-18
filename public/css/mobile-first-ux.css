@@ -883,48 +883,8 @@ button:disabled,
 }
 
 /* ========================================================================
-   ADMIN SHELL : mobile collapse (sidebar en drawer)
-   Le sidebar fait 280px — sur mobile on bascule en stack vertical
+   ADMIN SHELL — mobile : tiroir + burger (admin-console.css, mobile-first)
    ======================================================================== */
-@media (max-width: 900px) {
-    .admin-dashboard-ultra {
-        grid-template-columns: 1fr !important;
-    }
-
-    .admin-sidebar-ultra {
-        position: relative !important;
-        height: auto !important;
-        overflow: visible !important;
-    }
-
-    .admin-nav-ultra {
-        display: flex !important;
-        overflow-x: auto;
-        padding: 10px !important;
-        gap: 8px;
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nav-item-ultra {
-        flex-shrink: 0;
-        margin: 0 !important;
-        padding: 10px 14px !important;
-        font-size: 0.9rem;
-    }
-
-    .nav-item-ultra span {
-        font-size: 0.9rem;
-    }
-
-    .sidebar-footer {
-        display: none;
-    }
-
-    .admin-topbar {
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-}
 
 /* ========================================================================
    TABLES : wrapper horizontal-scroll propre sur mobile

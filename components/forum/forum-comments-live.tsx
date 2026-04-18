@@ -6,6 +6,7 @@ import { addCommentAction, deleteCommentAction } from '@/app/actions/forum'
 import { createClient } from '@/lib/supabase/client'
 import { buildAvatarUrl, timeAgo } from '@/lib/utils'
 import type { Profile } from '@/types'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface CommentItem {
   id: number
@@ -29,6 +30,7 @@ interface Props {
 }
 
 export function ForumCommentsLive({ postId, initialComments, profile }: Props) {
+  const toast = useToast()
   const [comments, setComments] = useState<CommentItem[]>(initialComments)
   const [newIds, setNewIds] = useState<Set<number>>(new Set())
   const [body, setBody] = useState('')
@@ -291,7 +293,7 @@ export function ForumCommentsLive({ postId, initialComments, profile }: Props) {
       const res = await deleteCommentAction(commentId)
       if (!res.ok) {
         setComments(backup)
-        alert(res.message ?? 'Suppression impossible.')
+        toast.error(res.message ?? 'Suppression impossible.')
       }
     })
   }

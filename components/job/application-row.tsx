@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Check, X, FileText, Mail, MapPin } from 'lucide-react'
 import { buildCvUrl, formatDateShort } from '@/lib/utils'
 import { updateApplicationStatusAction } from '@/app/actions/jobs'
+import { useToast } from '@/components/ui/toast-provider'
 import type { ApplicationStatus } from '@/types'
 
 interface Props {
@@ -29,6 +30,7 @@ interface Props {
 
 export function ApplicationRow(props: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, startTransition] = useTransition()
   const [status, setStatus] = useState<ApplicationStatus>(props.status)
   const [open, setOpen] = useState(false)
@@ -39,7 +41,7 @@ export function ApplicationRow(props: Props) {
       if (res.ok) {
         setStatus(next)
         router.refresh()
-      } else alert(res.message)
+      } else toast.error(res.message ?? 'Erreur')
     })
   }
 

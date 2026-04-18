@@ -3,6 +3,7 @@
 import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { deleteMessageAction } from '@/app/actions/messages'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface Props {
   messageId: number
@@ -11,6 +12,7 @@ interface Props {
 
 export function DeleteMessageButton({ messageId, mode }: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, start] = useTransition()
 
   const onClick = () => {
@@ -18,7 +20,7 @@ export function DeleteMessageButton({ messageId, mode }: Props) {
     start(async () => {
       const res = await deleteMessageAction(messageId)
       if (!res.ok) {
-        alert(res.message ?? 'Erreur lors de la suppression.')
+        toast.error(res.message ?? 'Erreur lors de la suppression.')
         return
       }
       router.push(mode === 'inbox' ? '/message' : '/message/envoyes')

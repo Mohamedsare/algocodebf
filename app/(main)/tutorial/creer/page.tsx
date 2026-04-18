@@ -25,43 +25,40 @@ export default async function TutorialCreatePage() {
 
   if (!canCreate) {
     return (
-      <div className="formation-saas">
-      <section className="create-tutorial-section">
+      <div className="formation-create-saas">
         <div className="container">
-          <div
-            className="alert alert-danger"
-            style={{ textAlign: 'center', padding: 48 }}
-          >
-            <i className="fas fa-lock" style={{ fontSize: 48, marginBottom: 20 }}></i>
-            <h2 style={{ marginBottom: 12 }}>Permission requise</h2>
-            <p>
-              Vous devez demander à un administrateur l&apos;autorisation de publier
-              des formations.
+          <div className="fc-gate">
+            <div className="fc-gate-icon fc-gate-icon--lock" aria-hidden>
+              <i className="fas fa-graduation-cap" />
+            </div>
+            <h1 className="fc-gate-title">Permission requise</h1>
+            <p className="fc-gate-text">
+              La publication de formations est réservée aux comptes autorisés par un administrateur. Demandez
+              l&apos;activation ou continuez à suivre le catalogue.
             </p>
-            <Link
-              href={FORMATIONS_PATH}
-              className="btn-back"
-              style={{ marginTop: 20, display: 'inline-flex' }}
-            >
-              <i className="fas fa-arrow-left"></i> Retour au catalogue
-            </Link>
+            <div className="fc-gate-actions">
+              <Link href={FORMATIONS_PATH} className="fc-gate-btn fc-gate-btn--primary">
+                <i className="fas fa-book-open" aria-hidden />
+                Retour au catalogue
+              </Link>
+              <a href="mailto:contact@algocodebf.bf" className="fc-gate-btn fc-gate-btn--ghost">
+                <i className="fas fa-envelope" aria-hidden />
+                Contacter l&apos;équipe
+              </a>
+            </div>
           </div>
         </div>
-      </section>
       </div>
     )
   }
 
   const supabase = await createClient()
-  const { data: cats } = await supabase
-    .from('tutorial_categories')
-    .select('name')
-    .order('name')
+  const { data: cats } = await supabase.from('tutorial_categories').select('name').order('name')
   const dbCats = ((cats ?? []) as Array<{ name: string }>).map(c => c.name)
   const categories = Array.from(new Set([...DEFAULT_CATEGORIES, ...dbCats]))
 
   return (
-    <div className="formation-saas">
+    <div className="formation-create-saas">
       <TutorialCreateClient mode="create" categories={categories} />
     </div>
   )

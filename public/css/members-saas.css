@@ -109,20 +109,47 @@
   max-width: 540px;
 }
 
-/* Stats */
+/* Stats — mobile-first : toujours 2 colonnes sur petit écran, 4 à partir de 640px */
 .members-saas .mem-stats {
-  padding: 8px 0 24px;
+  padding: 4px 0 clamp(20px, 5vw, 28px);
 }
 
 .members-saas .mem-stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  /* minmax(0,1fr) évite le débordement horizontal des libellés longs */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+/* Très petits écrans : 2 colonnes serrées mais lisibles */
+@media (max-width: 359px) {
+  .members-saas .mem-stats-grid {
+    gap: 8px;
+  }
+
+  .members-saas .mem-stat {
+    padding: 10px 8px;
+    gap: 8px;
+    min-height: 72px;
+  }
+
+  .members-saas .mem-stat-icon {
+    width: 38px;
+    height: 38px;
+    font-size: 0.98rem;
+    border-radius: 10px;
+  }
+
+  .members-saas .mem-stat::before {
+    left: 8px;
+    right: 8px;
+  }
 }
 
 @media (min-width: 640px) {
   .members-saas .mem-stats-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
   }
 }
@@ -130,12 +157,60 @@
 .members-saas .mem-stat {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
+  min-height: 76px;
+  min-width: 0;
   background: var(--m-card);
   border: 1px solid var(--m-border);
   border-radius: var(--m-r);
-  padding: 14px 16px;
+  padding: 12px 12px;
+  box-shadow: 0 1px 3px rgba(10, 11, 15, 0.04);
   transition: border-color 0.15s var(--m-ease), box-shadow 0.15s var(--m-ease);
+  position: relative;
+}
+
+/* Accent BF discret en haut de carte (lisible au doigt, propre au scroll) */
+.members-saas .mem-stat::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12px;
+  right: 12px;
+  height: 2px;
+  border-radius: 0 0 2px 2px;
+  background: linear-gradient(90deg, var(--m-red) 0%, var(--m-green) 55%, var(--m-gold) 100%);
+  opacity: 0.65;
+  pointer-events: none;
+}
+
+.members-saas .mem-stat:nth-child(1)::before {
+  background: linear-gradient(90deg, var(--m-red), var(--m-red-dark));
+}
+
+.members-saas .mem-stat:nth-child(2)::before {
+  background: linear-gradient(90deg, var(--m-green), var(--m-green));
+}
+
+.members-saas .mem-stat:nth-child(3)::before {
+  background: linear-gradient(90deg, #5b21b6, #7c3aed);
+}
+
+.members-saas .mem-stat:nth-child(4)::before {
+  background: linear-gradient(90deg, #b8860b, var(--m-gold));
+}
+
+@media (min-width: 640px) {
+  .members-saas .mem-stat {
+    gap: 14px;
+    min-height: 0;
+    padding: 14px 16px;
+    box-shadow: none;
+  }
+
+  .members-saas .mem-stat::before {
+    left: 16px;
+    right: 16px;
+  }
 }
 
 .members-saas .mem-stat:hover {
@@ -143,17 +218,31 @@
   box-shadow: var(--m-shadow);
 }
 
+.members-saas .mem-stat > div:last-child {
+  min-width: 0;
+  flex: 1;
+}
+
 .members-saas .mem-stat-icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 12px;
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   flex-shrink: 0;
   background: var(--m-red-soft);
   color: var(--m-red);
+}
+
+@media (min-width: 640px) {
+  .members-saas .mem-stat-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    font-size: 1.1rem;
+  }
 }
 
 .members-saas .mem-stat:nth-child(2) .mem-stat-icon {
@@ -173,19 +262,40 @@
 
 .members-saas .mem-stat strong {
   display: block;
-  font-size: clamp(1.25rem, 3.5vw, 1.55rem);
+  font-size: clamp(1.2rem, 5.5vw, 1.55rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   color: var(--m-ink);
-  line-height: 1.1;
+  line-height: 1.05;
+  font-variant-numeric: tabular-nums;
 }
 
 .members-saas .mem-stat span {
-  font-size: 0.75rem;
-  font-weight: 600;
+  display: block;
+  margin-top: 3px;
+  font-size: 0.65rem;
+  font-weight: 700;
   color: var(--m-muted);
   text-transform: uppercase;
-  letter-spacing: 0.04em;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+@media (min-width: 400px) {
+  .members-saas .mem-stat span {
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+@media (min-width: 640px) {
+  .members-saas .mem-stat span {
+    font-size: 0.75rem;
+    letter-spacing: 0.04em;
+    margin-top: 4px;
+  }
 }
 
 /* Filters panel */
@@ -379,7 +489,7 @@
 .members-saas .mem-avatar {
   width: 88px;
   height: 88px;
-  border-radius: 20px;
+  border-radius: 50%;
   border: 4px solid var(--m-card);
   overflow: hidden;
   background: linear-gradient(135deg, var(--m-red), var(--m-green));
@@ -467,18 +577,22 @@
   justify-content: center;
   gap: 8px;
   padding: 0 14px;
-  background: var(--m-ink);
+  background: linear-gradient(135deg, var(--m-red) 0%, var(--m-red-dark) 42%, #004d37 100%);
   color: #fff !important;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.86rem;
   border-radius: var(--m-full);
   text-decoration: none;
-  transition: background 0.15s var(--m-ease);
+  border: none;
+  box-shadow: 0 4px 16px rgba(200, 16, 46, 0.3);
+  transition: transform 0.15s var(--m-ease), box-shadow 0.15s var(--m-ease), filter 0.15s var(--m-ease);
 }
 
 .members-saas .mem-btn-profile:hover {
-  background: var(--m-red);
   color: #fff !important;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 22px rgba(200, 16, 46, 0.38);
+  filter: brightness(1.05);
 }
 
 .members-saas .mem-btn-msg {

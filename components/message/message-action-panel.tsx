@@ -3,6 +3,7 @@
 import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { respondJoinRequestAction } from '@/app/actions/projects'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface Props {
   messageId: number
@@ -12,6 +13,7 @@ interface Props {
 
 export function MessageActionPanel({ messageId, actionType, actionStatus }: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, start] = useTransition()
   const [status, setStatus] = useState<string | null>(actionStatus)
 
@@ -52,7 +54,7 @@ export function MessageActionPanel({ messageId, actionType, actionStatus }: Prop
     start(async () => {
       const res = await respondJoinRequestAction(messageId, decision)
       if (!res.ok) {
-        alert(res.message ?? 'Erreur.')
+        toast.error(res.message ?? 'Erreur.')
         return
       }
       setStatus(decision)

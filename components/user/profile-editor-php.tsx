@@ -12,6 +12,7 @@ import {
   updateSkillsAction,
   type SkillEntry,
 } from '@/app/actions/users'
+import { useToast } from '@/components/ui/toast-provider'
 import type { Profile } from '@/types'
 
 type DbLevel = 'beginner' | 'intermediate' | 'advanced'
@@ -55,8 +56,8 @@ interface Props {
 
 export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, startTransition] = useTransition()
-  const [feedback, setFeedback] = useState<{ type: 'success' | 'error'; msg: string } | null>(null)
 
   const [form, setForm] = useState({
     prenom: profile.prenom ?? '',
@@ -87,10 +88,11 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
   const [skillState, setSkillState] = useState(initialStateEntries)
 
   const showMsg = (type: 'success' | 'error', msg: string) => {
-    setFeedback({ type, msg })
-    setTimeout(() => setFeedback(null), 4000)
     if (type === 'success') {
+      toast.success(msg)
       setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 50)
+    } else {
+      toast.error(msg)
     }
   }
 
@@ -211,7 +213,7 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
   const bioRemaining = 500 - form.bio.length
 
   return (
-    <section className="edit-profile-section">
+    <section className="upe-saas edit-profile-section">
       <div className="container">
         <div className="page-header-edit">
           <div className="header-content">
@@ -224,26 +226,6 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
             <i className="fas fa-arrow-left"></i> Retour au profil
           </Link>
         </div>
-
-        {feedback && (
-          <div
-            className={`alert alert-${feedback.type === 'success' ? 'success' : 'danger'}`}
-            style={{
-              padding: '15px 20px',
-              borderRadius: 10,
-              marginBottom: 20,
-              background: feedback.type === 'success' ? '#d4edda' : '#f8d7da',
-              color: feedback.type === 'success' ? '#155724' : '#721c24',
-              border: `1px solid ${feedback.type === 'success' ? '#c3e6cb' : '#f5c6cb'}`,
-            }}
-          >
-            <i
-              className={`fas ${feedback.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}
-              style={{ marginRight: 10 }}
-            ></i>
-            {feedback.msg}
-          </div>
-        )}
 
         <form onSubmit={handleSubmit} className="edit-profile-form">
           <div className="edit-grid">
@@ -263,13 +245,7 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
                           src={currentAvatarUrl}
                           alt="Photo actuelle"
                           id="photoPreview"
-                          style={{
-                            width: 150,
-                            height: 150,
-                            borderRadius: '50%',
-                            objectFit: 'cover',
-                            border: '4px solid #f0f0f0',
-                          }}
+                          className="upe-avatar-preview"
                         />
                       ) : (
                         <div className="avatar-placeholder-edit" id="photoPreview">
@@ -314,14 +290,7 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
                         type="button"
                         onClick={handleCvDelete}
                         disabled={pending}
-                        style={{
-                          marginLeft: 'auto',
-                          background: 'transparent',
-                          border: 'none',
-                          color: '#e74c3c',
-                          cursor: 'pointer',
-                          fontSize: '1.1rem',
-                        }}
+                        className="upe-cv-delete"
                         aria-label="Supprimer le CV"
                       >
                         <i className="fas fa-trash"></i>
@@ -483,9 +452,8 @@ export function ProfileEditorPhp({ profile, email, allSkills, initialSkills }: P
                       onChange={e => setForm(p => ({ ...p, bio: e.target.value }))}
                     />
                     <small
-                      className="form-hint"
+                      className={`form-hint${bioRemaining < 50 ? ' upe-hint-warn' : ''}`}
                       id="bioCounter"
-                      style={{ color: bioRemaining < 50 ? '#e74c3c' : '#6c757d' }}
                     >
                       {bioRemaining} caractères restants
                     </small>

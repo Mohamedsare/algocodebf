@@ -11,6 +11,19 @@ interface Props {
   project?: Project
 }
 
+const STATUS_OPTIONS: Array<{ value: ProjectStatus; label: string }> = [
+  { value: 'planning', label: 'Planification' },
+  { value: 'in_progress', label: 'En cours' },
+  { value: 'active', label: 'Actif' },
+  { value: 'paused', label: 'En pause' },
+  { value: 'completed', label: 'Terminé' },
+  { value: 'archived', label: 'Archivé' },
+]
+
+function statusOptionsForMode(mode: 'create' | 'edit') {
+  return mode === 'create' ? STATUS_OPTIONS.filter(s => s.value !== 'archived') : STATUS_OPTIONS
+}
+
 export function ProjectCreateClient({ mode, project }: Props) {
   const router = useRouter()
   const [pending, startTransition] = useTransition()
@@ -25,11 +38,10 @@ export function ProjectCreateClient({ mode, project }: Props) {
   const [visibility, setVisibility] = useState<ProjectVisibility>(
     (project?.visibility as ProjectVisibility) ?? 'public'
   )
-  const [lookingForMembers, setLookingForMembers] = useState(
-    project?.looking_for_members ?? false
-  )
+  const [lookingForMembers, setLookingForMembers] = useState(project?.looking_for_members ?? false)
 
   const charCount = description.length
+  const statusChoices = statusOptionsForMode(mode)
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -46,9 +58,7 @@ export function ProjectCreateClient({ mode, project }: Props) {
 
     startTransition(async () => {
       const res =
-        mode === 'edit' && project
-          ? await updateProjectAction(project.id, fd)
-          : await createProjectAction(fd)
+        mode === 'edit' && project ? await updateProjectAction(project.id, fd) : await createProjectAction(fd)
 
       if (res.ok) {
         const newId =
@@ -67,284 +77,305 @@ export function ProjectCreateClient({ mode, project }: Props) {
   }
 
   return (
-    <section className="create-project-section">
-      <div className="container">
-        <div className="page-header-create">
-          <div className="header-content">
-            <h1>
-              <i className="fas fa-rocket"></i>{' '}
-              {mode === 'edit' ? 'Modifier le projet' : 'Créer un Projet'}
-            </h1>
-            <p>
-              {mode === 'edit'
-                ? 'Mettez à jour les informations de votre projet'
-                : 'Lancez votre projet et trouvez des collaborateurs talentueux'}
-            </p>
-          </div>
-          <Link href="/project" className="btn-back">
-            <i className="fas fa-arrow-left"></i> Retour aux projets
-          </Link>
+    <>
+      <section className="pc-hero">
+        <div className="container">
+          <nav className="pc-breadcrumb" aria-label="Fil d'Ariane">
+            <Link href="/" className="pc-crumb">
+              Accueil
+            </Link>
+            <span className="pc-crumb-sep" aria-hidden>
+              /
+            </span>
+            <Link href="/project" className="pc-crumb">
+              Projets
+            </Link>
+            <span className="pc-crumb-sep" aria-hidden>
+              /
+            </span>
+            <span className="pc-crumb pc-crumb--current">{mode === 'edit' ? 'Modifier' : 'Créer'}</span>
+          </nav>
+
+          <header className="pc-header">
+            <div className="pc-title-block">
+              <p className="pc-eyebrow">
+                <i className="fas fa-code-branch" aria-hidden />
+                Collaboration
+              </p>
+              <h1 className="pc-page-title">{mode === 'edit' ? 'Modifier le projet' : 'Créer un projet'}</h1>
+              <p className="pc-lead">
+                {mode === 'edit'
+                  ? 'Actualisez la fiche, les liens et la visibilité pour votre équipe et les visiteurs.'
+                  : 'Présentez l&apos;idée, la stack et vos besoins en contributeurs — la communauté tech burkinabè peut vous rejoindre.'}
+              </p>
+            </div>
+            <Link href="/project" className="pc-back">
+              <i className="fas fa-arrow-left" aria-hidden />
+              Liste des projets
+            </Link>
+          </header>
         </div>
+      </section>
 
-        <div className="create-project-wrapper">
-          <div className="form-main">
-            <form onSubmit={onSubmit} className="project-form">
-              {generalError && (
-                <div
-                  style={{
-                    background: '#f8d7da',
-                    color: '#842029',
-                    padding: 12,
-                    borderRadius: 10,
-                    marginBottom: 16,
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  <i className="fas fa-exclamation-circle"></i> {generalError}
-                </div>
-              )}
+      <div className="pc-body">
+        <div className="container">
+          <div className="pc-layout">
+            <div className="pc-form-shell">
+              <form className="pc-form" onSubmit={onSubmit} noValidate>
+                {generalError && (
+                  <div className="pc-alert pc-alert--error" role="alert">
+                    <i className="fas fa-exclamation-circle" aria-hidden />
+                    <span>{generalError}</span>
+                  </div>
+                )}
 
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-info-circle"></i>
-                  <h3>Informations de base</h3>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="title">
-                    Titre du projet *
-                    <span className="field-hint">Un titre clair et accrocheur</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    className={`form-control${errors.title ? ' is-invalid' : ''}`}
-                    placeholder="Ex: Plateforme e-commerce pour l'artisanat burkinabè"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    required
-                  />
-                  {errors.title && (
-                    <span className="error-message">
-                      <i className="fas fa-exclamation-circle"></i> {errors.title}
+                <section className="pc-section" aria-labelledby="pc-base-title">
+                  <div className="pc-section-head">
+                    <span className="pc-section-icon" aria-hidden>
+                      <i className="fas fa-info-circle" />
                     </span>
-                  )}
-                </div>
+                    <div>
+                      <h2 className="pc-section-title" id="pc-base-title">
+                        Informations de base
+                      </h2>
+                      <p className="pc-section-desc">Titre et description visibles sur la fiche publique.</p>
+                    </div>
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="description">
-                    Description *
-                    <span className="field-hint">Décrivez votre projet en détail</span>
-                  </label>
-                  <textarea
-                    id="description"
-                    name="description"
-                    className={`form-control textarea-control${errors.description ? ' is-invalid' : ''}`}
-                    rows={6}
-                    placeholder="Décrivez l'objectif, les technologies utilisées, les fonctionnalités principales..."
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    required
-                  ></textarea>
-                  <div className="textarea-footer">
-                    <span className="char-counter">
-                      {charCount} caractères (min: 20)
+                  <div className="pc-field">
+                    <label htmlFor="title" className="pc-label">
+                      Titre du projet <abbr title="obligatoire">*</abbr>
+                    </label>
+                    <span className="pc-hint">Court, mémorable, orienté produit ou impact.</span>
+                    <input
+                      type="text"
+                      id="title"
+                      name="title"
+                      className={`pc-input${errors.title ? ' is-invalid' : ''}`}
+                      placeholder="Ex. Marketplace artisanat — vitrine & paiement mobile"
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      required
+                    />
+                    {errors.title && (
+                      <span className="pc-field-error" role="alert">
+                        <i className="fas fa-exclamation-circle" aria-hidden /> {errors.title}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="pc-field">
+                    <label htmlFor="description" className="pc-label">
+                      Description <abbr title="obligatoire">*</abbr>
+                    </label>
+                    <span className="pc-hint">Objectifs, périmètre, technologies, besoins en compétences.</span>
+                    <textarea
+                      id="description"
+                      name="description"
+                      className={`pc-textarea pc-textarea--mid${errors.description ? ' is-invalid' : ''}`}
+                      rows={6}
+                      placeholder="Contexte, problème résolu, stack, état d&apos;avancement, profils recherchés…"
+                      value={description}
+                      onChange={e => setDescription(e.target.value)}
+                      required
+                    />
+                    <div className="pc-counter">
+                      <span>{charCount}</span> caractères · min. 20
+                    </div>
+                    {errors.description && (
+                      <span className="pc-field-error" role="alert">
+                        <i className="fas fa-exclamation-circle" aria-hidden /> {errors.description}
+                      </span>
+                    )}
+                  </div>
+                </section>
+
+                <section className="pc-section" aria-labelledby="pc-links-title">
+                  <div className="pc-section-head">
+                    <span className="pc-section-icon" aria-hidden>
+                      <i className="fas fa-link" />
                     </span>
+                    <div>
+                      <h2 className="pc-section-title" id="pc-links-title">
+                        Liens
+                      </h2>
+                      <p className="pc-section-desc">GitHub et démo renforcent la crédibilité du projet.</p>
+                    </div>
                   </div>
-                  {errors.description && (
-                    <span className="error-message">
-                      <i className="fas fa-exclamation-circle"></i>{' '}
-                      {errors.description}
+
+                  <div className="pc-row">
+                    <div className="pc-field">
+                      <label htmlFor="github_link" className="pc-label">
+                        <i className="fab fa-github" aria-hidden /> GitHub
+                      </label>
+                      <span className="pc-hint">Dépôt public ou organisation.</span>
+                      <input
+                        type="url"
+                        id="github_link"
+                        name="github_link"
+                        className={`pc-input${errors.github_link ? ' is-invalid' : ''}`}
+                        placeholder="https://github.com/…"
+                        value={githubLink}
+                        onChange={e => setGithubLink(e.target.value)}
+                        inputMode="url"
+                      />
+                      {errors.github_link && (
+                        <span className="pc-field-error" role="alert">{errors.github_link}</span>
+                      )}
+                    </div>
+
+                    <div className="pc-field">
+                      <label htmlFor="demo_link" className="pc-label">
+                        Démo en ligne
+                      </label>
+                      <span className="pc-hint">Site, prototype ou vidéo.</span>
+                      <input
+                        type="url"
+                        id="demo_link"
+                        name="demo_link"
+                        className={`pc-input${errors.demo_link ? ' is-invalid' : ''}`}
+                        placeholder="https://…"
+                        value={demoLink}
+                        onChange={e => setDemoLink(e.target.value)}
+                        inputMode="url"
+                      />
+                      {errors.demo_link && (
+                        <span className="pc-field-error" role="alert">{errors.demo_link}</span>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
+                <section className="pc-section pc-section--last" aria-labelledby="pc-settings-title">
+                  <div className="pc-section-head">
+                    <span className="pc-section-icon" aria-hidden>
+                      <i className="fas fa-sliders-h" />
                     </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-link"></i>
-                  <h3>Liens du projet</h3>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="github_link">
-                      <i className="fab fa-github"></i> Lien GitHub
-                      <span className="field-hint">Repository du code source</span>
-                    </label>
-                    <input
-                      type="url"
-                      id="github_link"
-                      name="github_link"
-                      className="form-control"
-                      placeholder="https://github.com/username/repo"
-                      value={githubLink}
-                      onChange={e => setGithubLink(e.target.value)}
-                    />
+                    <div>
+                      <h2 className="pc-section-title" id="pc-settings-title">
+                        Paramètres
+                      </h2>
+                      <p className="pc-section-desc">Statut, visibilité et recrutement.</p>
+                    </div>
                   </div>
 
-                  <div className="form-group">
-                    <label htmlFor="demo_link">
-                      <i className="fas fa-external-link-alt"></i> Lien Démo
-                      <span className="field-hint">Site web ou démo en ligne</span>
-                    </label>
-                    <input
-                      type="url"
-                      id="demo_link"
-                      name="demo_link"
-                      className="form-control"
-                      placeholder="https://demo.example.com"
-                      value={demoLink}
-                      onChange={e => setDemoLink(e.target.value)}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-cog"></i>
-                  <h3>Paramètres du projet</h3>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="status">
-                      <i className="fas fa-tasks"></i> Statut du projet
-                    </label>
-                    <select
-                      id="status"
-                      name="status"
-                      className="form-control select-control"
-                      value={status}
-                      onChange={e => setStatus(e.target.value as ProjectStatus)}
-                    >
-                      <option value="planning">📋 Planification</option>
-                      <option value="in_progress">🚀 En cours</option>
-                      <option value="active">🚀 Actif</option>
-                      <option value="paused">⏸️ En pause</option>
-                      <option value="completed">✅ Terminé</option>
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="visibility">
-                      <i className="fas fa-eye"></i> Visibilité
-                    </label>
-                    <select
-                      id="visibility"
-                      name="visibility"
-                      className="form-control select-control"
-                      value={visibility}
-                      onChange={e => setVisibility(e.target.value as ProjectVisibility)}
-                    >
-                      <option value="public">🌍 Public</option>
-                      <option value="private">🔒 Privé</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <div className="checkbox-card">
-                    <input
-                      type="checkbox"
-                      id="looking_for_members"
-                      name="looking_for_members"
-                      checked={lookingForMembers}
-                      onChange={e => setLookingForMembers(e.target.checked)}
-                    />
-                    <label htmlFor="looking_for_members" className="checkbox-label">
-                      <div className="checkbox-icon">
-                        <i className="fas fa-users"></i>
+                  <div className="pc-row">
+                    <div className="pc-field">
+                      <label htmlFor="status" className="pc-label">
+                        Statut
+                      </label>
+                      <div className="pc-select-wrap">
+                        <select
+                          id="status"
+                          name="status"
+                          className="pc-select"
+                          value={status}
+                          onChange={e => setStatus(e.target.value as ProjectStatus)}
+                        >
+                          {statusChoices.map(o => (
+                            <option key={o.value} value={o.value}>
+                              {o.label}
+                            </option>
+                          ))}
+                        </select>
                       </div>
-                      <div className="checkbox-content">
-                        <strong>Recherche de membres</strong>
-                        <p>Je recherche des collaborateurs pour ce projet</p>
+                    </div>
+
+                    <div className="pc-field">
+                      <label htmlFor="visibility" className="pc-label">
+                        Visibilité
+                      </label>
+                      <div className="pc-select-wrap">
+                        <select
+                          id="visibility"
+                          name="visibility"
+                          className="pc-select"
+                          value={visibility}
+                          onChange={e => setVisibility(e.target.value as ProjectVisibility)}
+                        >
+                          <option value="public">Public (catalogue)</option>
+                          <option value="private">Privé</option>
+                        </select>
                       </div>
+                    </div>
+                  </div>
+
+                  <div className="pc-field pc-field--flush">
+                    <label className="pc-switch" htmlFor="looking_for_members">
+                      <input
+                        type="checkbox"
+                        id="looking_for_members"
+                        className="pc-checkbox"
+                        checked={lookingForMembers}
+                        onChange={e => setLookingForMembers(e.target.checked)}
+                      />
+                      <span className="pc-switch-body">
+                        <strong>Recruter des membres</strong>
+                        <span className="pc-switch-desc">
+                          Affiche l&apos;étiquette « On recrute » et autorise les demandes d&apos;adhésion.
+                        </span>
+                      </span>
                     </label>
                   </div>
+                </section>
+
+                <div className="pc-actions">
+                  <button type="submit" className="pc-submit" disabled={pending}>
+                    <i className="fas fa-rocket" aria-hidden />
+                    {pending
+                      ? 'Enregistrement…'
+                      : mode === 'edit'
+                        ? 'Enregistrer les modifications'
+                        : 'Créer le projet'}
+                  </button>
+                  <Link href="/project" className="pc-cancel">
+                    <i className="fas fa-times" aria-hidden />
+                    Annuler
+                  </Link>
                 </div>
+              </form>
+            </div>
+
+            <aside className="pc-aside" aria-label="Conseils">
+              <div className="pc-tip">
+                <div className="pc-tip-icon" aria-hidden>
+                  <i className="fas fa-lightbulb" />
+                </div>
+                <h3 className="pc-tip-title">Fiche attractive</h3>
+                <ul className="pc-tip-list">
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Titre = produit ou mission, pas seulement un nom de code
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Mentionnez la stack et ce qui est déjà fait / à faire
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Liens GitHub & démo à jour
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Activez le recrutement seulement si vous pouvez répondre aux demandes
+                  </li>
+                </ul>
               </div>
 
-              <div className="form-actions">
-                <button type="submit" className="btn-submit" disabled={pending}>
-                  <i className="fas fa-rocket"></i>{' '}
-                  {pending
-                    ? 'Enregistrement…'
-                    : mode === 'edit'
-                      ? 'Enregistrer les modifications'
-                      : 'Créer le projet'}
-                </button>
-                <Link href="/project" className="btn-cancel">
-                  <i className="fas fa-times"></i> Annuler
-                </Link>
+              <div className="pc-tip pc-tip--accent">
+                <div className="pc-tip-icon pc-tip-icon--alt" aria-hidden>
+                  <i className="fas fa-users" />
+                </div>
+                <h3 className="pc-tip-title">Collaboration</h3>
+                <p className="pc-tip-text">
+                  Les projets avec description structurée et statut à jour reçoivent davantage de sollicitations
+                  pertinentes depuis le catalogue mobile.
+                </p>
               </div>
-            </form>
+            </aside>
           </div>
-
-          <aside className="tips-sidebar">
-            <div className="tip-card">
-              <div className="tip-icon">
-                <i className="fas fa-lightbulb"></i>
-              </div>
-              <h3>Conseils pour réussir</h3>
-              <ul className="tips-list">
-                <li>
-                  <i className="fas fa-check-circle"></i> Choisissez un titre clair et
-                  descriptif
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Détaillez les technologies
-                  utilisées
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Précisez les compétences
-                  recherchées
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Ajoutez des liens vers GitHub
-                  et démo
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Mettez à jour le statut
-                  régulièrement
-                </li>
-              </ul>
-            </div>
-
-            <div className="tip-card stats-card">
-              <div className="tip-icon">
-                <i className="fas fa-chart-line"></i>
-              </div>
-              <h3>Statistiques</h3>
-              <div className="stats-info">
-                <div className="stat-item">
-                  <span className="stat-value">+50%</span>
-                  <span className="stat-label">Plus de visibilité</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">3x</span>
-                  <span className="stat-label">Plus de collaborations</span>
-                </div>
-              </div>
-              <p className="stats-note">
-                Les projets bien documentés attirent plus de collaborateurs
-              </p>
-            </div>
-
-            <div className="tip-card">
-              <div className="tip-icon">
-                <i className="fas fa-trophy"></i>
-              </div>
-              <h3>Gagnez des badges</h3>
-              <p>
-                Créez des projets pour débloquer des badges et améliorer votre profil !
-              </p>
-            </div>
-          </aside>
         </div>
       </div>
-    </section>
+    </>
   )
 }

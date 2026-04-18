@@ -4,6 +4,7 @@ import { useEffect, useRef, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { sendMessageAction } from '@/app/actions/messages'
+import { useToast } from '@/components/ui/toast-provider'
 import { buildAvatarUrl } from '@/lib/utils'
 
 interface Receiver {
@@ -32,8 +33,8 @@ interface UserSearchResult {
 
 export function ComposeClient({ receiver, replyTo, defaultSubject }: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, start] = useTransition()
-  const [error, setError] = useState<string | null>(null)
 
   const [subject, setSubject] = useState(defaultSubject ?? '')
   const [body, setBody] = useState('')
@@ -105,18 +106,17 @@ export function ComposeClient({ receiver, replyTo, defaultSubject }: Props) {
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    setError(null)
     const receiverId = receiver?.id ?? selectedUser?.id ?? ''
     if (!receiverId) {
-      setError('Veuillez sélectionner un destinataire.')
+      toast.error('Veuillez sélectionner un destinataire.')
       return
     }
     if (!subject.trim()) {
-      setError('Le sujet est requis.')
+      toast.error('Le sujet est requis.')
       return
     }
     if (body.trim().length < 10) {
-      setError('Le message doit contenir au moins 10 caractères.')
+      toast.error('Le message doit contenir au moins 10 caractères.')
       return
     }
     const fd = new FormData()
@@ -126,7 +126,7 @@ export function ComposeClient({ receiver, replyTo, defaultSubject }: Props) {
     start(async () => {
       const res = await sendMessageAction(fd)
       if (!res.ok) {
-        setError(res.message ?? 'Envoi impossible.')
+        toast.error(res.message ?? 'Envoi impossible.')
         return
       }
       try {
@@ -145,7 +145,7 @@ export function ComposeClient({ receiver, replyTo, defaultSubject }: Props) {
         'message_draft',
         JSON.stringify({ subject, body })
       )
-      alert('Brouillon sauvegardé.')
+      toast.info('Brouillon sauvegardé.')
     } catch {
       /* ignore */
     }
@@ -189,21 +189,6 @@ export function ComposeClient({ receiver, replyTo, defaultSubject }: Props) {
 
           <form onSubmit={onSubmit} className="compose-form">
             <div className="compose-card">
-              {error && (
-                <div
-                  className="alert alert-danger"
-                  style={{
-                    marginBottom: 20,
-                    padding: 12,
-                    background: '#f8d7da',
-                    color: '#721c24',
-                    borderRadius: 10,
-                  }}
-                >
-                  <i className="fas fa-exclamation-circle"></i> {error}
-                </div>
-              )}
-
               <div className="form-group-compose">
                 <label htmlFor="receiver_id">
                   <i className="fas fa-user"></i> Destinataire *

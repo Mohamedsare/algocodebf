@@ -3,18 +3,18 @@
 import Link from 'next/link'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ui/toast-provider'
 
 export function ForgotPasswordForm() {
+  const toast = useToast()
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setError('')
     if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      setError('Adresse email invalide')
+      toast.error('Adresse email invalide')
       return
     }
     setLoading(true)
@@ -24,12 +24,12 @@ export function ForgotPasswordForm() {
         redirectTo: `${window.location.origin}/api/auth/callback?next=/reset-password`,
       })
       if (err) {
-        setError(err.message)
+        toast.error(err.message)
         return
       }
       setSuccess(true)
     } catch {
-      setError('Une erreur est survenue. Veuillez réessayer.')
+      toast.error('Une erreur est survenue. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
@@ -52,11 +52,6 @@ export function ForgotPasswordForm() {
 
   return (
     <form onSubmit={submit} className="auth-form">
-      {error && (
-        <div className="alert alert-error" style={{ marginBottom: 16 }}>
-          <i className="fas fa-exclamation-circle"></i> {error}
-        </div>
-      )}
       <div className="form-group">
         <label htmlFor="email">Adresse email</label>
         <input

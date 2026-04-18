@@ -32,17 +32,16 @@ export default async function TutorialEditPage({ params }: EditProps) {
   const profile = await requireLogin()
   const supabase = await createClient()
 
-  const [{ data: tuto }, { data: tags }, { data: videos }, { data: cats }] =
-    await Promise.all([
-      supabase.from('tutorials').select('*').eq('id', numericId).maybeSingle(),
-      supabase.from('tutorial_tags').select('tags(name)').eq('tutorial_id', numericId),
-      supabase
-        .from('tutorial_videos')
-        .select('id, title, file_path, file_name, file_size, order_index')
-        .eq('tutorial_id', numericId)
-        .order('order_index'),
-      supabase.from('tutorial_categories').select('name').order('name'),
-    ])
+  const [{ data: tuto }, { data: tags }, { data: videos }, { data: cats }] = await Promise.all([
+    supabase.from('tutorials').select('*').eq('id', numericId).maybeSingle(),
+    supabase.from('tutorial_tags').select('tags(name)').eq('tutorial_id', numericId),
+    supabase
+      .from('tutorial_videos')
+      .select('id, title, file_path, file_name, file_size, order_index')
+      .eq('tutorial_id', numericId)
+      .order('order_index'),
+    supabase.from('tutorial_categories').select('name').order('name'),
+  ])
 
   if (!tuto) notFound()
   if (tuto.user_id !== profile.id && profile.role !== 'admin')
@@ -57,7 +56,7 @@ export default async function TutorialEditPage({ params }: EditProps) {
   const categories = Array.from(new Set([...DEFAULT_CATEGORIES, ...dbCats]))
 
   return (
-    <div className="formation-saas">
+    <div className="formation-create-saas">
       <TutorialCreateClient
         mode="edit"
         tutorialId={numericId}
@@ -75,17 +74,26 @@ export default async function TutorialEditPage({ params }: EditProps) {
         }}
       />
 
-      <section className="create-tutorial-section" style={{ paddingTop: 0 }}>
+      <div className="fc-video-block">
         <div className="container">
-          <div className="form-section">
-            <div className="section-title">
-              <i className="fas fa-video"></i>
-              <h3>Gestion des vidéos</h3>
+          <section className="fc-panel fc-panel-video" aria-labelledby="fc-video-heading">
+            <div className="fc-section-head">
+              <span className="fc-section-icon" aria-hidden>
+                <i className="fas fa-video" />
+              </span>
+              <div>
+                <h2 className="fc-section-title" id="fc-video-heading">
+                  Vidéos du parcours
+                </h2>
+                <p className="fc-section-desc">
+                  Ajoutez ou retirez des fichiers vidéo associés à cette formation.
+                </p>
+              </div>
             </div>
             <TutorialVideoManager tutorialId={numericId} initialVideos={videos ?? []} />
-          </div>
+          </section>
         </div>
-      </section>
+      </div>
     </div>
   )
 }

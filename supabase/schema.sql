@@ -50,6 +50,26 @@ begin
 end;
 $$ language plpgsql security definer;
 
+-- Confirmer l’e-mail à l’inscription (pas de blocage à la connexion)
+create or replace function public.tg_auth_user_auto_confirm_email()
+returns trigger
+language plpgsql
+security definer
+set search_path = public, auth
+as $$
+begin
+  if new.email_confirmed_at is null then
+    new.email_confirmed_at := now();
+  end if;
+  return new;
+end;
+$$;
+
+drop trigger if exists on_auth_user_auto_confirm_email on auth.users;
+create trigger on_auth_user_auto_confirm_email
+  before insert on auth.users
+  for each row execute procedure public.tg_auth_user_auto_confirm_email();
+
 drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
@@ -511,6 +531,8 @@ create policy "tutorials_owner_write" on tutorials for insert
   with check (auth.uid() = user_id and auth.uid() in (select id from profiles where can_create_tutorial = true));
 create policy "tutorials_owner_update" on tutorials for update
   using (auth.uid() = user_id or auth.uid() in (select id from profiles where role = 'admin'));
+create policy "tutorials_admin_select" on tutorials for select
+  using (auth.uid() in (select id from profiles where role = 'admin'));
 
 -- Posts: public read active
 create policy "posts_public_read" on posts for select using (status = 'active');
@@ -553,6 +575,8 @@ create policy "projects_auth_insert" on projects for insert
   with check (auth.uid() = owner_id and auth.uid() in (select id from profiles where can_create_project = true));
 create policy "projects_owner_update" on projects for update
   using (auth.uid() = owner_id or auth.uid() in (select id from profiles where role = 'admin'));
+create policy "projects_admin_select" on projects for select
+  using (auth.uid() in (select id from profiles where role = 'admin'));
 
 -- Project members
 create policy "project_members_read" on project_members for select using (true);

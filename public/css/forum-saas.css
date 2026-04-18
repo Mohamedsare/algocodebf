@@ -39,7 +39,8 @@
 .forum-saas {
     background: var(--f-bg);
     min-height: 100vh;
-    padding-bottom: 80px;
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    -webkit-font-smoothing: antialiased;
 }
 
 .forum-saas * {
@@ -49,13 +50,19 @@
 .forum-saas .container-xl {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
 }
 
 @media (min-width: 768px) {
     .forum-saas .container-xl {
-        padding: 0 32px;
+        padding: 0 max(32px, env(safe-area-inset-left, 0px)) 0 max(32px, env(safe-area-inset-right, 0px));
     }
+}
+
+/* Contenu sous le hero (évite padding inline dans la page) */
+.forum-page-main {
+    padding-top: clamp(16px, 4vw, 24px);
+    padding-bottom: max(8px, env(safe-area-inset-bottom, 0px));
 }
 
 /* ============================================================
@@ -63,7 +70,7 @@
    ============================================================ */
 .forum-hero-saas {
     position: relative;
-    padding: 48px 0 32px;
+    padding: clamp(28px, 7vw, 48px) 0 clamp(20px, 5vw, 32px);
     background: linear-gradient(135deg, #FFFFFF 0%, #F9FAFB 100%);
     border-bottom: 1px solid var(--f-border);
     overflow: hidden;
@@ -156,6 +163,21 @@
     font-size: 13px;
     font-weight: 600;
     margin-top: 8px;
+}
+
+/* Badge LIVE à côté du mot « Forum » (remplace margin inline) */
+.forum-hero-live--title {
+    margin-top: 0;
+    margin-left: clamp(8px, 2vw, 12px);
+    vertical-align: middle;
+}
+
+.forum-hero-title > span:last-child {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px 8px;
+    min-width: 0;
 }
 
 .forum-hero-live .live-dot {
@@ -267,16 +289,26 @@
 /* ============================================================
    STATS BAR (au-dessus du layout)
    ============================================================ */
+/* Grille des stats : mobile-first 2×2 puis 4 colonnes — ne modifie pas le design des .forum-stat-chip */
 .forum-stats-bar {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
-    margin: 24px 0;
+    align-items: stretch;
+    margin: clamp(16px, 4vw, 24px) 0 clamp(8px, 2vw, 16px);
+}
+
+@media (max-width: 359px) {
+    .forum-stats-bar {
+        gap: 8px;
+    }
 }
 
 @media (min-width: 640px) {
     .forum-stats-bar {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 12px;
+        margin: 24px 0 16px;
     }
 }
 
@@ -340,15 +372,22 @@
 .forum-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 24px;
-    margin-top: 8px;
+    gap: clamp(16px, 4vw, 24px);
+    margin-top: 4px;
 }
 
 @media (min-width: 1024px) {
     .forum-grid {
         grid-template-columns: 1fr 320px;
         gap: 28px;
+        margin-top: 8px;
     }
+}
+
+/* Colonne flux : évite le débordement horizontal (cartes inchangées visuellement) */
+.forum-grid > main {
+    min-width: 0;
+    width: 100%;
 }
 
 /* ============================================================
@@ -362,8 +401,10 @@
     background: var(--f-surface);
     border: 1px solid var(--f-border);
     border-radius: var(--f-radius);
-    margin-bottom: 16px;
+    margin-bottom: clamp(12px, 3vw, 16px);
     box-shadow: var(--f-shadow-xs);
+    width: 100%;
+    min-width: 0;
 }
 
 @media (min-width: 768px) {
@@ -482,8 +523,11 @@
     display: flex;
     gap: 8px;
     overflow-x: auto;
-    padding-bottom: 4px;
-    margin-bottom: 16px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-x: contain;
+    scroll-padding-inline: max(8px, env(safe-area-inset-left, 0px));
+    padding: 2px 0 10px 0;
+    margin-bottom: clamp(12px, 3vw, 16px);
     scrollbar-width: none;
     -ms-overflow-style: none;
 }
@@ -540,7 +584,8 @@
 .forum-posts-stream {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: clamp(10px, 2.5vw, 14px);
+    min-width: 0;
 }
 
 .forum-post-saas {
@@ -805,7 +850,9 @@
 .forum-sidebar-saas {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: clamp(12px, 3vw, 16px);
+    min-width: 0;
+    width: 100%;
 }
 
 @media (min-width: 1024px) {
@@ -1767,9 +1814,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4px;
-    margin-top: 24px;
+    gap: 6px;
+    row-gap: 8px;
+    margin-top: clamp(18px, 5vw, 28px);
     flex-wrap: wrap;
+    padding: 4px max(4px, env(safe-area-inset-right, 0px)) max(8px, env(safe-area-inset-bottom, 0px))
+        max(4px, env(safe-area-inset-left, 0px));
+    min-width: 0;
 }
 
 .pagination-saas .page-btn {
@@ -2093,18 +2144,44 @@
 /* ============================================================
    MOBILE ADJUSTMENTS
    ============================================================ */
+@media (max-width: 767px) {
+    /* Toolbar : tri horizontal scroll (apparence des boutons inchangée) */
+    .toolbar-actions {
+        width: 100%;
+        min-width: 0;
+    }
+
+    .segment-group {
+        display: flex;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-x: contain;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        scrollbar-width: thin;
+        padding-bottom: 4px;
+    }
+
+    .segment-group .segment-btn {
+        flex: 0 0 auto;
+    }
+
+    .new-posts-pill {
+        padding: 0 max(8px, env(safe-area-inset-right, 0px)) 0 max(8px, env(safe-area-inset-left, 0px));
+    }
+
+    /* Carte vide : largeur fluide sans modifier son style visuel */
+    .forum-page-main .empty-state-saas {
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+}
+
 @media (max-width: 640px) {
     .forum-hero-saas { padding: 28px 0 20px; }
     .forum-hero-title { font-size: 22px; gap: 10px; }
     .forum-hero-title .title-badge { width: 44px; height: 44px; font-size: 18px; border-radius: 12px; }
-
-    .forum-post-saas {
-        padding: 12px;
-        gap: 10px;
-    }
-
-    .forum-post-saas .post-title-saas { font-size: 14.5px; }
-    .forum-post-saas .post-excerpt { font-size: 13px; }
 
     .comments-section-saas { padding: 16px; }
     .thread-article { padding: 18px; }

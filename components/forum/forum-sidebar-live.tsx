@@ -85,7 +85,7 @@ export function ForumSidebarLive({ initialTrending, initialContributors, profile
         ) : (
           <div className="trending-list-saas">
             {initialTrending.map((t) => (
-              <Link key={t.id} href={`/forum/${t.id}`} className="trending-item-saas">
+              <Link key={t.id} href={`/forum/${t.id}`} prefetch={false} className="trending-item-saas">
                 <span className="trending-rank">0{t.rank}</span>
                 <span className="trending-title-saas">{t.title}</span>
                 <span className="trending-views">

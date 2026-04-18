@@ -2,6 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { ADMIN_CONSOLE_PATH } from '@/lib/routes'
 import { buildAvatarUrl } from '@/lib/utils'
 import type { Profile } from '@/types'
 
@@ -13,6 +15,7 @@ interface Stats {
   total_jobs: number
   total_subscribers: number
   pending_reports: number
+  total_comments: number
 }
 
 interface NavItem {
@@ -24,29 +27,39 @@ interface NavItem {
 }
 
 const NAV: NavItem[] = [
-  { href: '/admin', icon: 'fa-chart-pie', label: "Vue d'ensemble" },
-  { href: '/admin/users', icon: 'fa-users', label: 'Utilisateurs', countKey: 'total_users' },
-  { href: '/admin/forum', icon: 'fa-comments', label: 'Forum', countKey: 'total_posts' },
-  { href: '/admin/tutorials', icon: 'fa-book-open', label: 'Formations', countKey: 'total_tutorials' },
-  { href: '/admin/projects', icon: 'fa-project-diagram', label: 'Projets', countKey: 'total_projects' },
-  { href: '/admin/jobs', icon: 'fa-briefcase', label: 'Opportunités', countKey: 'total_jobs' },
-  { href: '/admin/blog', icon: 'fa-blog', label: 'Blog' },
-  { href: '/admin/reports', icon: 'fa-flag', label: 'Signalements', alertKey: 'pending_reports' },
-  { href: '/admin/permissions', icon: 'fa-shield-alt', label: 'Permissions' },
-  { href: '/admin/settings', icon: 'fa-cog', label: 'Paramètres' },
+  { href: ADMIN_CONSOLE_PATH, icon: 'fa-chart-pie', label: "Vue d'ensemble" },
+  { href: `${ADMIN_CONSOLE_PATH}/users`, icon: 'fa-users', label: 'Utilisateurs', countKey: 'total_users' },
+  { href: `${ADMIN_CONSOLE_PATH}/forum`, icon: 'fa-comments', label: 'Forum', countKey: 'total_posts' },
+  { href: `${ADMIN_CONSOLE_PATH}/tutorials`, icon: 'fa-book-open', label: 'Formations', countKey: 'total_tutorials' },
+  { href: `${ADMIN_CONSOLE_PATH}/projects`, icon: 'fa-project-diagram', label: 'Projets', countKey: 'total_projects' },
+  { href: `${ADMIN_CONSOLE_PATH}/jobs`, icon: 'fa-briefcase', label: 'Opportunités', countKey: 'total_jobs' },
+  { href: `${ADMIN_CONSOLE_PATH}/blog`, icon: 'fa-blog', label: 'Blog' },
+  { href: `${ADMIN_CONSOLE_PATH}/comments`, icon: 'fa-comment-dots', label: 'Commentaires', countKey: 'total_comments' },
+  { href: `${ADMIN_CONSOLE_PATH}/reports`, icon: 'fa-flag', label: 'Signalements', alertKey: 'pending_reports' },
+  { href: `${ADMIN_CONSOLE_PATH}/newsletter`, icon: 'fa-envelope-open-text', label: 'Newsletter', countKey: 'total_subscribers' },
+  { href: `${ADMIN_CONSOLE_PATH}/statistics`, icon: 'fa-chart-bar', label: 'Statistiques' },
+  { href: `${ADMIN_CONSOLE_PATH}/content`, icon: 'fa-layer-group', label: 'Contenus' },
+  { href: `${ADMIN_CONSOLE_PATH}/logs`, icon: 'fa-history', label: 'Logs' },
+  { href: `${ADMIN_CONSOLE_PATH}/permissions`, icon: 'fa-shield-alt', label: 'Permissions' },
+  { href: `${ADMIN_CONSOLE_PATH}/settings`, icon: 'fa-cog', label: 'Paramètres' },
 ]
 
 const TITLES: Record<string, { icon: string; label: string }> = {
-  '/admin': { icon: 'fa-chart-pie', label: "Vue d'ensemble" },
-  '/admin/users': { icon: 'fa-users', label: 'Gestion des Utilisateurs' },
-  '/admin/forum': { icon: 'fa-comments', label: 'Gestion du Forum' },
-  '/admin/tutorials': { icon: 'fa-book-open', label: 'Gestion des formations' },
-  '/admin/projects': { icon: 'fa-project-diagram', label: 'Gestion des Projets' },
-  '/admin/jobs': { icon: 'fa-briefcase', label: 'Gestion des Opportunités' },
-  '/admin/blog': { icon: 'fa-blog', label: 'Gestion du Blog' },
-  '/admin/reports': { icon: 'fa-flag', label: 'Signalements' },
-  '/admin/permissions': { icon: 'fa-shield-alt', label: 'Gestion des Permissions' },
-  '/admin/settings': { icon: 'fa-cog', label: 'Paramètres' },
+  [ADMIN_CONSOLE_PATH]: { icon: 'fa-chart-pie', label: "Vue d'ensemble" },
+  [`${ADMIN_CONSOLE_PATH}/users`]: { icon: 'fa-users', label: 'Gestion des Utilisateurs' },
+  [`${ADMIN_CONSOLE_PATH}/forum`]: { icon: 'fa-comments', label: 'Gestion du Forum' },
+  [`${ADMIN_CONSOLE_PATH}/tutorials`]: { icon: 'fa-book-open', label: 'Gestion des formations' },
+  [`${ADMIN_CONSOLE_PATH}/projects`]: { icon: 'fa-project-diagram', label: 'Gestion des Projets' },
+  [`${ADMIN_CONSOLE_PATH}/jobs`]: { icon: 'fa-briefcase', label: 'Gestion des Opportunités' },
+  [`${ADMIN_CONSOLE_PATH}/blog`]: { icon: 'fa-blog', label: 'Gestion du Blog' },
+  [`${ADMIN_CONSOLE_PATH}/comments`]: { icon: 'fa-comment-dots', label: 'Modération des Commentaires' },
+  [`${ADMIN_CONSOLE_PATH}/reports`]: { icon: 'fa-flag', label: 'Signalements' },
+  [`${ADMIN_CONSOLE_PATH}/newsletter`]: { icon: 'fa-envelope-open-text', label: 'Newsletter' },
+  [`${ADMIN_CONSOLE_PATH}/statistics`]: { icon: 'fa-chart-bar', label: 'Statistiques avancées' },
+  [`${ADMIN_CONSOLE_PATH}/content`]: { icon: 'fa-layer-group', label: 'Gestion des contenus' },
+  [`${ADMIN_CONSOLE_PATH}/logs`]: { icon: 'fa-history', label: "Logs d'activité" },
+  [`${ADMIN_CONSOLE_PATH}/permissions`]: { icon: 'fa-shield-alt', label: 'Gestion des Permissions' },
+  [`${ADMIN_CONSOLE_PATH}/settings`]: { icon: 'fa-cog', label: 'Paramètres' },
 }
 
 interface Props {
@@ -56,14 +69,50 @@ interface Props {
 }
 
 export function AdminShell({ profile, stats, children }: Props) {
-  const pathname = usePathname() ?? '/admin'
-  const title = TITLES[pathname] ?? TITLES['/admin']
+  const pathname = usePathname() ?? ADMIN_CONSOLE_PATH
+  const title = TITLES[pathname] ?? TITLES[ADMIN_CONSOLE_PATH]
   const adminInitial = (profile.prenom?.charAt(0) ?? 'A').toUpperCase()
   const adminName = `${profile.prenom ?? 'Admin'} ${profile.nom ?? ''}`.trim()
+  const [navOpen, setNavOpen] = useState(false)
+
+  useEffect(() => {
+    setNavOpen(false)
+  }, [pathname])
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 992px)')
+    const onChange = () => {
+      if (mq.matches) setNavOpen(false)
+    }
+    mq.addEventListener('change', onChange)
+    onChange()
+    return () => mq.removeEventListener('change', onChange)
+  }, [])
+
+  useEffect(() => {
+    if (navOpen) document.body.classList.add('admin-mobile-nav-open')
+    else document.body.classList.remove('admin-mobile-nav-open')
+    return () => document.body.classList.remove('admin-mobile-nav-open')
+  }, [navOpen])
+
+  useEffect(() => {
+    if (!navOpen) return
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setNavOpen(false)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [navOpen])
 
   return (
-    <div className="admin-dashboard-ultra">
-      <aside className="admin-sidebar-ultra">
+    <div className={`admin-dashboard-ultra${navOpen ? ' admin-nav-drawer-open' : ''}`}>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions -- voile tactile pour fermer le tiroir */}
+      <div
+        className="admin-sidebar-backdrop"
+        aria-hidden={!navOpen}
+        onClick={() => setNavOpen(false)}
+      />
+      <aside className="admin-sidebar-ultra" id="admin-sidebar-nav" aria-label="Navigation administration">
         <div className="sidebar-header">
           <div className="admin-logo">
             <i className="fas fa-shield-halved"></i>
@@ -81,9 +130,10 @@ export function AdminShell({ profile, stats, children }: Props) {
                 key={item.href}
                 href={item.href}
                 className={`nav-item-ultra${active ? ' active' : ''}`}
+                onClick={() => setNavOpen(false)}
               >
-                <i className={`fas ${item.icon}`}></i>
-                <span>{item.label}</span>
+                <i className={`fas ${item.icon}`} aria-hidden />
+                <span className="nav-item-ultra-label">{item.label}</span>
                 {countVal !== null && countVal !== undefined && (
                   <span className="count-badge">{countVal}</span>
                 )}
@@ -96,7 +146,7 @@ export function AdminShell({ profile, stats, children }: Props) {
         </nav>
 
         <div className="sidebar-footer">
-          <Link href="/" className="btn-back-site">
+          <Link href="/" className="btn-back-site" onClick={() => setNavOpen(false)}>
             <i className="fas fa-home"></i> Retour au site
           </Link>
         </div>
@@ -105,8 +155,19 @@ export function AdminShell({ profile, stats, children }: Props) {
       <main className="admin-content-ultra">
         <div className="admin-topbar">
           <div className="topbar-left">
-            <h1>
-              <i className={`fas ${title.icon}`}></i> {title.label}
+            <button
+              type="button"
+              className="admin-burger"
+              aria-expanded={navOpen}
+              aria-controls="admin-sidebar-nav"
+              aria-label={navOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+              onClick={() => setNavOpen(o => !o)}
+            >
+              <i className={`fas ${navOpen ? 'fa-times' : 'fa-bars'}`} aria-hidden />
+            </button>
+            <h1 className="admin-topbar-title">
+              <i className={`fas ${title.icon}`} aria-hidden />
+              <span className="admin-topbar-title-text">{title.label}</span>
             </h1>
           </div>
           <div className="topbar-right">

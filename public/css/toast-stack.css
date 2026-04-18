@@ -1,0 +1,110 @@
+/* ============================================================
+   Toasts globaux — ultra éphémères, au-dessus de tout le chrome
+   ============================================================ */
+
+:root {
+  --bf-toast-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+.bf-toast-stack {
+  position: fixed;
+  top: max(10px, env(safe-area-inset-top, 0px));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  width: min(420px, calc(100vw - 20px));
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+.bf-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow:
+    0 4px 24px rgba(10, 11, 15, 0.12),
+    0 0 0 1px rgba(10, 11, 15, 0.06);
+  animation: bf-toast-in 0.32s var(--bf-toast-ease) both;
+  -webkit-font-smoothing: antialiased;
+}
+
+.bf-toast__ico {
+  flex-shrink: 0;
+  margin-top: 1px;
+  font-size: 1rem;
+  opacity: 0.95;
+}
+
+.bf-toast__msg {
+  flex: 1;
+  min-width: 0;
+  word-break: break-word;
+}
+
+.bf-toast--success {
+  background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+  color: #065f46;
+  border: 1px solid rgba(0, 106, 78, 0.22);
+}
+
+.bf-toast--success .bf-toast__ico {
+  color: #006a4e;
+}
+
+.bf-toast--error {
+  background: linear-gradient(135deg, #fff1f2 0%, #ffe4e6 100%);
+  color: #9f1239;
+  border: 1px solid rgba(200, 16, 46, 0.25);
+}
+
+.bf-toast--error .bf-toast__ico {
+  color: #c8102e;
+}
+
+.bf-toast--warning {
+  background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+  color: #92400e;
+  border: 1px solid rgba(180, 83, 9, 0.22);
+}
+
+.bf-toast--warning .bf-toast__ico {
+  color: #b45309;
+}
+
+.bf-toast--info {
+  background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+  color: #1e40af;
+  border: 1px solid rgba(59, 130, 246, 0.25);
+}
+
+.bf-toast--info .bf-toast__ico {
+  color: #2563eb;
+}
+
+@keyframes bf-toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-16px) scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bf-toast {
+    animation: none;
+  }
+}

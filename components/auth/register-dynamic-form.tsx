@@ -1,8 +1,10 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ui/toast-provider'
 
 const CITIES = [
   'Ouagadougou',
@@ -52,6 +54,8 @@ function validatePassword(p: string): string | null {
 }
 
 export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
+  const router = useRouter()
+  const toast = useToast()
   const meta = KIND_META[kind]
   const [email, setEmail] = useState('')
   const [prenom, setPrenom] = useState('')
@@ -72,14 +76,12 @@ export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
   const [sector, setSector] = useState('')
 
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrors({})
-    setServerError('')
     const eMap: Record<string, string> = {}
 
     if (prenom.trim().length < 2) eMap.prenom = 'Prénom requis (2 car. min)'
@@ -142,7 +144,7 @@ export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
     setLoading(true)
     try {
       const supabase = createClient()
-      const { error } = await supabase.auth.signUp({
+      const { data, error } = await supabase.auth.signUp({
         email: email.trim().toLowerCase(),
         password,
         options: {
@@ -152,15 +154,20 @@ export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
       })
       if (error) {
         if (error.message.includes('already registered') || error.message.includes('already in use')) {
-          setServerError('Cette adresse email est déjà utilisée.')
+          toast.error('Cette adresse email est déjà utilisée.')
         } else {
-          setServerError(error.message)
+          toast.error(error.message)
         }
+        return
+      }
+      if (data.session) {
+        router.push('/')
+        router.refresh()
         return
       }
       setSuccess(true)
     } catch {
-      setServerError('Une erreur est survenue. Veuillez réessayer.')
+      toast.error('Une erreur est survenue. Veuillez réessayer.')
     } finally {
       setLoading(false)
     }
@@ -174,8 +181,7 @@ export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
         </div>
         <h2>Compte créé</h2>
         <p>
-          Un email de confirmation a été envoyé à <strong>{email}</strong>. Après validation, connectez-vous avec la
-          même page de connexion que tout le monde.
+          Compte créé. Connectez-vous avec <strong>{email}</strong> et le mot de passe choisi.
         </p>
         <Link href="/login" className="au-link-btn">
           Se connecter
@@ -186,13 +192,6 @@ export function RegisterDynamicForm({ kind }: { kind: RegisterKindSlug }) {
 
   return (
     <form className="au-form" onSubmit={submit} noValidate>
-      {serverError && (
-        <div className="au-alert" role="alert">
-          <i className="fas fa-exclamation-circle" aria-hidden />
-          <span>{serverError}</span>
-        </div>
-      )}
-
       <div className="au-row au-row-2">
         <div className="au-field">
           <label htmlFor="prenom">Prénom *</label>

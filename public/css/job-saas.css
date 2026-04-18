@@ -915,3 +915,672 @@
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ============================================================
+   CRÉER / MODIFIER UNE OFFRE — mobile first, scope .job-create-saas
+   ============================================================ */
+
+.job-create-saas {
+  --jc-red: #c8102e;
+  --jc-red-dark: #a00c24;
+  --jc-red-soft: #fce4e8;
+  --jc-green: #006a4e;
+  --jc-green-soft: #dcf4eb;
+  --jc-gold: #fcd116;
+  --jc-ink: #0a0b0f;
+  --jc-text: #2e2f36;
+  --jc-muted: #64656c;
+  --jc-subtle: #8b8c93;
+  --jc-border: #e7e8ee;
+  --jc-bg: #fafbfc;
+  --jc-card: #ffffff;
+  --jc-shadow: 0 4px 24px rgba(10, 11, 15, 0.07);
+  --jc-r: 14px;
+  --jc-r-lg: 20px;
+  --jc-full: 999px;
+  --jc-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  color: var(--jc-text);
+  background: var(--jc-bg);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100%;
+}
+
+.job-create-saas *,
+.job-create-saas *::before,
+.job-create-saas *::after {
+  box-sizing: border-box;
+}
+
+.job-create-saas .container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* ---------- Gates (non connecté / mauvais rôle) ---------- */
+.job-create-saas .jc-gate {
+  max-width: 520px;
+  margin: clamp(48px, 12vw, 100px) auto;
+  padding: clamp(28px, 5vw, 40px) clamp(22px, 4vw, 36px);
+  background: var(--jc-card);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-r-lg);
+  box-shadow: var(--jc-shadow);
+  text-align: center;
+}
+
+.job-create-saas .jc-gate-icon {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 18px;
+  border-radius: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.job-create-saas .jc-gate-icon--lock {
+  background: var(--jc-red-soft);
+  color: var(--jc-red);
+}
+
+.job-create-saas .jc-gate-icon--deny {
+  background: var(--jc-green-soft);
+  color: var(--jc-green);
+}
+
+.job-create-saas .jc-gate-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.25rem, 3.5vw, 1.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--jc-ink);
+  line-height: 1.2;
+}
+
+.job-create-saas .jc-gate-text {
+  margin: 0 0 22px;
+  font-size: 0.94rem;
+  line-height: 1.6;
+  color: var(--jc-muted);
+}
+
+.job-create-saas .jc-gate-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 480px) {
+  .job-create-saas .jc-gate-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.job-create-saas .jc-gate-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: var(--jc-full);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1.5px solid transparent;
+  font-family: inherit;
+  transition: transform 0.15s var(--jc-ease), box-shadow 0.15s var(--jc-ease), background 0.15s var(--jc-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.job-create-saas .jc-gate-btn--primary {
+  background: linear-gradient(135deg, var(--jc-red), var(--jc-red-dark));
+  color: #fff !important;
+  box-shadow: 0 8px 24px rgba(200, 16, 46, 0.28);
+}
+
+.job-create-saas .jc-gate-btn--primary:hover {
+  transform: translateY(-2px);
+  color: #fff !important;
+}
+
+.job-create-saas .jc-gate-btn--ghost {
+  background: var(--jc-card);
+  color: var(--jc-ink) !important;
+  border-color: var(--jc-border);
+}
+
+.job-create-saas .jc-gate-btn--ghost:hover {
+  border-color: var(--jc-green);
+  color: var(--jc-green) !important;
+}
+
+/* ---------- Hero + header formulaire ---------- */
+.job-create-saas .jc-hero {
+  position: relative;
+  padding: clamp(20px, 5vw, 32px) 0 clamp(8px, 2vw, 16px);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.job-create-saas .jc-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 480px 240px at 12% 20%, rgba(200, 16, 46, 0.07), transparent 65%),
+    radial-gradient(ellipse 520px 260px at 88% 25%, rgba(0, 106, 78, 0.07), transparent 62%),
+    radial-gradient(ellipse 400px 200px at 50% 100%, rgba(252, 209, 22, 0.09), transparent 72%);
+  z-index: -1;
+}
+
+.job-create-saas .jc-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 10px;
+  margin-bottom: clamp(16px, 3vw, 22px);
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.job-create-saas .jc-crumb {
+  color: var(--jc-muted);
+  text-decoration: none;
+  padding: 4px 8px;
+  border-radius: var(--jc-full);
+  transition: color 0.15s var(--jc-ease), background 0.15s var(--jc-ease);
+}
+
+.job-create-saas .jc-crumb:hover {
+  color: var(--jc-red);
+  background: rgba(200, 16, 46, 0.06);
+}
+
+.job-create-saas .jc-crumb--current {
+  color: var(--jc-ink);
+  font-weight: 700;
+  cursor: default;
+}
+
+.job-create-saas .jc-crumb-sep {
+  color: var(--jc-subtle);
+  user-select: none;
+}
+
+.job-create-saas .jc-header {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+@media (min-width: 720px) {
+  .job-create-saas .jc-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.job-create-saas .jc-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px;
+  margin: 0 0 12px;
+  background: var(--jc-card);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--jc-muted);
+}
+
+.job-create-saas .jc-eyebrow i {
+  color: var(--jc-red);
+}
+
+.job-create-saas .jc-page-title {
+  margin: 0 0 10px;
+  font-size: clamp(1.55rem, 4.2vw, 2.15rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: var(--jc-ink);
+}
+
+.job-create-saas .jc-lead {
+  margin: 0;
+  max-width: 560px;
+  font-size: clamp(0.95rem, 2vw, 1.05rem);
+  line-height: 1.55;
+  color: var(--jc-muted);
+}
+
+.job-create-saas .jc-back {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: var(--jc-full);
+  border: 1.5px solid var(--jc-border);
+  background: var(--jc-card);
+  color: var(--jc-muted) !important;
+  font-weight: 600;
+  font-size: 0.88rem;
+  text-decoration: none;
+  transition: border-color 0.15s var(--jc-ease), color 0.15s var(--jc-ease);
+}
+
+.job-create-saas .jc-back:hover {
+  border-color: var(--jc-green);
+  color: var(--jc-green) !important;
+}
+
+/* ---------- Corps ---------- */
+.job-create-saas .jc-body {
+  padding: clamp(8px, 2vw, 16px) 0 clamp(48px, 10vw, 88px);
+}
+
+.job-create-saas .jc-layout {
+  display: grid;
+  gap: 22px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 992px) {
+  .job-create-saas .jc-layout {
+    grid-template-columns: 1fr 300px;
+    align-items: start;
+    gap: 28px;
+  }
+}
+
+.job-create-saas .jc-form-shell {
+  min-width: 0;
+}
+
+.job-create-saas .jc-form {
+  background: var(--jc-card);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-r-lg);
+  padding: clamp(18px, 3.5vw, 28px);
+  box-shadow: var(--jc-shadow);
+}
+
+.job-create-saas .jc-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 14px 16px;
+  border-radius: var(--jc-r);
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.job-create-saas .jc-alert--error {
+  background: var(--jc-red-soft);
+  border: 1px solid rgba(200, 16, 46, 0.2);
+  color: #7a1022;
+}
+
+.job-create-saas .jc-alert--error i {
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.job-create-saas .jc-section {
+  padding-bottom: 22px;
+  margin-bottom: 22px;
+  border-bottom: 1px solid var(--jc-border);
+}
+
+.job-create-saas .jc-section--last {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 8px;
+}
+
+.job-create-saas .jc-section-head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+
+.job-create-saas .jc-section-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--jc-green-soft);
+  color: var(--jc-green);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1rem;
+}
+
+.job-create-saas .jc-section-title {
+  margin: 0 0 4px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--jc-ink);
+}
+
+.job-create-saas .jc-section-desc {
+  margin: 0;
+  font-size: 0.86rem;
+  color: var(--jc-muted);
+  line-height: 1.45;
+}
+
+.job-create-saas .jc-row {
+  display: grid;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+@media (min-width: 640px) {
+  .job-create-saas .jc-row {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.job-create-saas .jc-field {
+  margin-bottom: 16px;
+}
+
+.job-create-saas .jc-field:last-child {
+  margin-bottom: 0;
+}
+
+.job-create-saas .jc-label {
+  display: block;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--jc-ink);
+  margin-bottom: 6px;
+}
+
+.job-create-saas .jc-label abbr {
+  text-decoration: none;
+  color: var(--jc-red);
+  font-weight: 800;
+}
+
+.job-create-saas .jc-hint {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--jc-subtle);
+  margin: -2px 0 8px;
+  line-height: 1.4;
+}
+
+.job-create-saas .jc-input,
+.job-create-saas .jc-textarea,
+.job-create-saas .jc-select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--jc-text);
+  border: 1.5px solid var(--jc-border);
+  border-radius: var(--jc-r);
+  background: #fff;
+  transition: border-color 0.15s var(--jc-ease), box-shadow 0.15s var(--jc-ease);
+}
+
+.job-create-saas .jc-input {
+  min-height: 48px;
+  padding: 0 14px;
+}
+
+.job-create-saas .jc-input--date {
+  min-height: 48px;
+  padding: 0 14px;
+}
+
+.job-create-saas .jc-textarea {
+  min-height: 200px;
+  padding: 14px;
+  line-height: 1.55;
+  resize: vertical;
+}
+
+.job-create-saas .jc-select-wrap {
+  position: relative;
+}
+
+.job-create-saas .jc-select {
+  min-height: 48px;
+  padding: 0 40px 0 14px;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+  background: #fff
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%2364656C' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E")
+    no-repeat right 14px center;
+}
+
+.job-create-saas .jc-input:focus,
+.job-create-saas .jc-textarea:focus,
+.job-create-saas .jc-select:focus {
+  outline: none;
+  border-color: var(--jc-red);
+  box-shadow: 0 0 0 4px rgba(200, 16, 46, 0.12);
+}
+
+.job-create-saas .jc-input.is-invalid,
+.job-create-saas .jc-textarea.is-invalid {
+  border-color: var(--jc-red);
+  box-shadow: 0 0 0 3px rgba(200, 16, 46, 0.08);
+}
+
+.job-create-saas .jc-field-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--jc-red-dark);
+}
+
+.job-create-saas .jc-counter {
+  margin-top: 8px;
+  font-size: 0.78rem;
+  color: var(--jc-subtle);
+}
+
+.job-create-saas .jc-counter span {
+  font-weight: 700;
+  color: var(--jc-muted);
+}
+
+/* ---------- Actions ---------- */
+.job-create-saas .jc-actions {
+  display: flex;
+  flex-direction: column-reverse;
+  gap: 10px;
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px solid var(--jc-border);
+}
+
+@media (min-width: 560px) {
+  .job-create-saas .jc-actions {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+}
+
+@media (max-width: 559px) {
+  .job-create-saas .jc-actions {
+    position: sticky;
+    bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    z-index: 2;
+    margin-top: 20px;
+    padding-top: 16px;
+    padding-bottom: 4px;
+    background: linear-gradient(180deg, rgba(250, 251, 252, 0) 0%, var(--jc-bg) 18%);
+  }
+}
+
+.job-create-saas .jc-submit {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  min-height: 52px;
+  padding: 0 26px;
+  border: none;
+  border-radius: var(--jc-full);
+  background: linear-gradient(135deg, var(--jc-red), var(--jc-red-dark));
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.94rem;
+  font-family: inherit;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(200, 16, 46, 0.28);
+  transition: transform 0.15s var(--jc-ease), opacity 0.15s var(--jc-ease);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.job-create-saas .jc-submit:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.job-create-saas .jc-submit:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.job-create-saas .jc-cancel {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-radius: var(--jc-full);
+  border: 1.5px solid var(--jc-border);
+  background: var(--jc-card);
+  color: var(--jc-muted) !important;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  font-family: inherit;
+  transition: border-color 0.15s var(--jc-ease), color 0.15s var(--jc-ease);
+}
+
+.job-create-saas .jc-cancel:hover {
+  border-color: var(--jc-ink);
+  color: var(--jc-ink) !important;
+}
+
+/* ---------- Aside ---------- */
+.job-create-saas .jc-aside {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+@media (min-width: 992px) {
+  .job-create-saas .jc-aside {
+    position: sticky;
+    top: calc(12px + env(safe-area-inset-top, 0px));
+  }
+}
+
+.job-create-saas .jc-tip {
+  background: var(--jc-card);
+  border: 1px solid var(--jc-border);
+  border-radius: var(--jc-r-lg);
+  padding: 18px 18px 20px;
+  box-shadow: var(--jc-shadow);
+}
+
+.job-create-saas .jc-tip--accent {
+  border-color: rgba(0, 106, 78, 0.2);
+  background: linear-gradient(165deg, #fff 0%, var(--jc-green-soft) 100%);
+}
+
+.job-create-saas .jc-tip-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: var(--jc-red-soft);
+  color: var(--jc-red);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+  font-size: 1.1rem;
+}
+
+.job-create-saas .jc-tip-icon--chart {
+  background: var(--jc-green-soft);
+  color: var(--jc-green);
+}
+
+.job-create-saas .jc-tip-title {
+  margin: 0 0 12px;
+  font-size: 0.98rem;
+  font-weight: 700;
+  color: var(--jc-ink);
+}
+
+.job-create-saas .jc-tip-text {
+  margin: 0;
+  font-size: 0.86rem;
+  line-height: 1.55;
+  color: var(--jc-muted);
+}
+
+.job-create-saas .jc-tip-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.job-create-saas .jc-tip-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--jc-muted);
+}
+
+.job-create-saas .jc-tip-list i {
+  margin-top: 3px;
+  color: var(--jc-green);
+  font-size: 0.75rem;
+  flex-shrink: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .job-create-saas *,
+  .job-create-saas *::before,
+  .job-create-saas *::after {
+    transition-duration: 0.01ms !important;
+  }
+}

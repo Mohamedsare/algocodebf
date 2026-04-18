@@ -4,20 +4,20 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { createClient } from '@/lib/supabase/client'
+import { useToast } from '@/components/ui/toast-provider'
 
 export function ResetPasswordForm() {
   const router = useRouter()
+  const toast = useToast()
   const [password, setPassword] = useState('')
   const [confirm, setConfirm] = useState('')
   const [errors, setErrors] = useState<Record<string, string>>({})
-  const [serverError, setServerError] = useState('')
   const [loading, setLoading] = useState(false)
   const [success, setSuccess] = useState(false)
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault()
     setErrors({})
-    setServerError('')
 
     const errs: Record<string, string> = {}
     if (!password || password.length < 8) errs.password = 'Min. 8 caractères'
@@ -34,13 +34,13 @@ export function ResetPasswordForm() {
       const supabase = createClient()
       const { error } = await supabase.auth.updateUser({ password })
       if (error) {
-        setServerError(error.message)
+        toast.error(error.message)
         return
       }
       setSuccess(true)
       setTimeout(() => router.push('/login'), 2000)
     } catch {
-      setServerError('Une erreur est survenue.')
+      toast.error('Une erreur est survenue.')
     } finally {
       setLoading(false)
     }
@@ -58,12 +58,6 @@ export function ResetPasswordForm() {
 
   return (
     <form onSubmit={submit} className="auth-form">
-      {serverError && (
-        <div className="alert alert-error" style={{ marginBottom: 16 }}>
-          <i className="fas fa-exclamation-circle"></i> {serverError}
-        </div>
-      )}
-
       <div className="form-group">
         <label htmlFor="password">Nouveau mot de passe</label>
         <input

@@ -5,7 +5,8 @@ import { NextResponse, type NextRequest } from 'next/server'
  * URL scheme (fidèle au PHP, en gardant la base anglaise + actions en français) :
  * - Bases publiques : /, /blog, /tutorial, /forum, /project, /job, /user, /about,
  *   /politique/*, /search, /newsletter/unsubscribe
- * - Actions protégées : /creer, /modifier, /message, /admin, /candidater, etc.
+ * - Actions protégées : /creer, /modifier, /message, /candidater, etc.
+ * - Console admin : /algocodebfadmin (rôle admin uniquement, traité à part).
  */
 
 const PROTECTED_PREFIXES = [
@@ -17,12 +18,11 @@ const PROTECTED_PREFIXES = [
   '/project/creer',
   '/blog/creer',
   '/job/creer',
-  '/admin',
 ]
 
 const PROTECTED_SUFFIXES = ['/modifier', '/candidater', '/candidatures']
 
-const ADMIN_PREFIXES = ['/admin']
+const ADMIN_PREFIXES = ['/algocodebfadmin']
 
 const AUTH_ROUTES = ['/login', '/register', '/forgot-password', '/reset-password']
 

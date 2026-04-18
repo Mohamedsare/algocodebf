@@ -122,11 +122,16 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
               Lancez une idée, rejoignez une équipe ou recrutez des contributeurs — la communauté tech
               burkinabè au centre.
             </p>
-            {canCreate && (
-              <Link href="/project/creer" className="pr-btn-primary">
-                <i className="fas fa-plus" aria-hidden="true"></i> Créer un projet
+            <div className="pr-hero-actions">
+              {canCreate && (
+                <Link href="/project/creer" className="pr-btn-primary">
+                  <i className="fas fa-plus" aria-hidden="true"></i> Créer un projet
+                </Link>
+              )}
+              <Link href="/forum" className="pr-btn-secondary">
+                <i className="fas fa-comments" aria-hidden="true"></i> Échanger sur le forum
               </Link>
-            )}
+            </div>
           </div>
         </div>
       </section>
@@ -160,6 +165,21 @@ export default async function ProjectsPage({ searchParams }: PageProps) {
 
       <section className="pr-main">
         <div className="container">
+          <div className="pr-results-meta" role="status">
+            <span className="pr-results-count">
+              <strong>{projects.length}</strong>
+              <span>
+                projet{projects.length !== 1 ? 's' : ''}
+                {totalPages > 1 ? ` · page ${page} / ${totalPages}` : ''}
+              </span>
+            </span>
+            {(status || recruiting || search) && (
+              <Link href="/project" className="pr-results-reset">
+                Réinitialiser les filtres
+              </Link>
+            )}
+          </div>
+
           <div className="pr-tabs-wrap">
             <nav className="pr-tabs" aria-label="Filtres rapides">
               <Link

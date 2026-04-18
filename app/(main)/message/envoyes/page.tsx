@@ -4,7 +4,11 @@ import { getSent, getMessage, unreadCount } from '@/lib/queries/messages'
 import { MessagingShell } from '@/components/message/messaging-shell'
 import { MessageViewPane } from '@/components/message/message-view-pane'
 
-export const metadata: Metadata = { title: 'Messages envoyés - AlgoCodeBF' }
+export const metadata: Metadata = {
+  title: 'Messages envoyés - AlgoCodeBF',
+  description:
+    "Consultez l'historique des messages privés que vous avez envoyés sur AlgoCodeBF.",
+}
 
 interface Props {
   searchParams: Promise<{ show?: string }>

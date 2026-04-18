@@ -9,7 +9,7 @@ import {
   isFollowing,
 } from '@/lib/queries/users'
 import { currentProfile } from '@/lib/auth'
-import { buildAvatarUrl, timeAgo } from '@/lib/utils'
+import { buildAvatarUrl, buildCvUrl, timeAgo } from '@/lib/utils'
 import { FollowButtonPhp } from '@/components/user/follow-button-php'
 import { ProfileTabs } from '@/components/user/profile-tabs'
 
@@ -37,6 +37,23 @@ function formatMonthYear(iso: string): string {
     month: 'short',
     year: 'numeric',
   })
+}
+
+function skillLevelClass(level: string | null | undefined): string {
+  const l = (level ?? 'beginner').toLowerCase()
+  if (l === 'beginner' || l === 'débutant') return 'debutant'
+  if (l === 'intermediate' || l === 'intermédiaire') return 'intermediaire'
+  if (l === 'advanced' || l === 'avancé' || l === 'expert') return 'avance'
+  return 'debutant'
+}
+
+function skillLevelLabel(level: string | null | undefined): string {
+  const l = (level ?? 'beginner').toLowerCase()
+  if (l === 'beginner' || l === 'débutant') return 'Débutant'
+  if (l === 'intermediate' || l === 'intermédiaire') return 'Intermédiaire'
+  if (l === 'advanced' || l === 'avancé') return 'Avancé'
+  if (l === 'expert') return 'Expert'
+  return 'Débutant'
 }
 
 export default async function UserProfilePage({ params }: PageProps) {
@@ -180,12 +197,7 @@ export default async function UserProfilePage({ params }: PageProps) {
                       {timeAgo(pr.created_at)}
                     </span>
                     {pr.looking_for_members && (
-                      <span
-                        style={{
-                          color: 'var(--secondary-color)',
-                          fontWeight: 600,
-                        }}
-                      >
+                      <span className="upro-recruit">
                         <i className="fas fa-user-plus"></i> Recrute
                       </span>
                     )}
@@ -205,7 +217,7 @@ export default async function UserProfilePage({ params }: PageProps) {
   ]
 
   return (
-    <section className="profile-section">
+    <section className="upro-saas profile-section">
       <div className="container">
         <div className="profile-header-wrapper">
           <div className="profile-cover">
@@ -216,6 +228,7 @@ export default async function UserProfilePage({ params }: PageProps) {
             <div className="profile-avatar-wrapper">
               <div className="profile-avatar">
                 {profile.photo_path ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- URL Supabase dynamique
                   <img
                     src={buildAvatarUrl(profile.photo_path)}
                     alt={`${profile.prenom} ${profile.nom}`}
@@ -337,16 +350,11 @@ export default async function UserProfilePage({ params }: PageProps) {
               </div>
               <div className="card-body-modern">
                 {profile.bio ? (
-                  <p
-                    className="bio-text"
-                    style={{ whiteSpace: 'pre-wrap' }}
-                  >
+                  <p className="bio-text" style={{ whiteSpace: 'pre-wrap' }}>
                     {profile.bio}
                   </p>
                 ) : (
-                  <p className="text-muted" style={{ color: '#6c757d' }}>
-                    Aucune bio disponible
-                  </p>
+                  <p className="text-muted">Aucune bio disponible</p>
                 )}
               </div>
             </div>
@@ -365,16 +373,15 @@ export default async function UserProfilePage({ params }: PageProps) {
                         skills: { name: string } | null
                       }
                       if (!row.skills) return null
-                      const level = (row.level ?? 'debutant').toLowerCase()
                       return (
                         <div key={i} className="skill-badge-modern">
                           <span className="skill-name-modern">
                             {row.skills.name}
                           </span>
                           <span
-                            className={`skill-level-modern level-${level}`}
+                            className={`skill-level-modern level-${skillLevelClass(row.level)}`}
                           >
-                            {row.level ?? 'Débutant'}
+                            {skillLevelLabel(row.level)}
                           </span>
                         </div>
                       )
@@ -429,9 +436,9 @@ export default async function UserProfilePage({ params }: PageProps) {
                 </div>
                 <div className="card-body-modern">
                   <a
-                    href={buildAvatarUrl(profile.cv_path)}
+                    href={buildCvUrl(profile.cv_path)}
                     target="_blank"
-                    rel="noreferrer"
+                    rel="noopener noreferrer"
                     className="btn-download-cv"
                   >
                     <i className="fas fa-download"></i>

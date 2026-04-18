@@ -1,0 +1,649 @@
+/* ============================================================
+   PROFIL PUBLIC (/user/[id]) — SaaS mobile-first, palette BF
+   Scope : .upro-saas
+   ============================================================ */
+
+.upro-saas {
+  --up-red: #c8102e;
+  --up-red-dark: #a00c24;
+  --up-red-soft: #fce4e8;
+  --up-green: #006a4e;
+  --up-green-dark: #004d37;
+  --up-green-soft: #dcf4eb;
+  --up-gold: #fcd116;
+  --up-gold-soft: #fff8d6;
+  --up-ink: #0a0b0f;
+  --up-text: #2e2f36;
+  --up-muted: #64656c;
+  --up-subtle: #8b8c93;
+  --up-border: #e7e8ee;
+  --up-bg: #f3f4f7;
+  --up-card: #ffffff;
+  --up-shadow: 0 4px 24px rgba(10, 11, 15, 0.07);
+  --up-shadow-lg: 0 14px 48px rgba(10, 11, 15, 0.09);
+  --up-r: 14px;
+  --up-r-lg: 20px;
+  --up-full: 999px;
+  --up-ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, system-ui, sans-serif;
+  color: var(--up-text);
+  -webkit-font-smoothing: antialiased;
+}
+
+.upro-saas *,
+.upro-saas *::before,
+.upro-saas *::after {
+  box-sizing: border-box;
+}
+
+.upro-saas.profile-section {
+  padding: clamp(12px, 3vw, 24px) 0 calc(88px + env(safe-area-inset-bottom, 0px));
+  background:
+    radial-gradient(ellipse 520px 280px at 10% -5%, rgba(200, 16, 46, 0.07), transparent 60%),
+    radial-gradient(ellipse 480px 260px at 90% 8%, rgba(0, 106, 78, 0.08), transparent 58%),
+    var(--up-bg);
+}
+
+.upro-saas .container {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 max(16px, env(safe-area-inset-left, 0px)) 0 max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Header card */
+.upro-saas .profile-header-wrapper {
+  background: var(--up-card);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r-lg);
+  box-shadow: var(--up-shadow-lg);
+  margin-bottom: clamp(18px, 4vw, 28px);
+  overflow: hidden;
+}
+
+.upro-saas .profile-cover {
+  height: clamp(100px, 22vw, 180px);
+  background: linear-gradient(135deg, var(--up-red) 0%, #8f0b22 38%, var(--up-green) 72%, #06352a 100%);
+  position: relative;
+}
+
+.upro-saas .cover-pattern {
+  opacity: 0.45;
+  background:
+    radial-gradient(ellipse 200px 120px at 20% 40%, rgba(252, 209, 22, 0.2), transparent 70%),
+    url('data:image/svg+xml,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><defs><pattern id="g" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M32 0H0v32" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23g)"/></svg>');
+}
+
+.upro-saas .profile-header-content {
+  padding: 0 clamp(16px, 4vw, 40px) clamp(20px, 4vw, 36px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: clamp(16px, 3vw, 28px);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.upro-saas .profile-avatar-wrapper {
+  margin-top: clamp(-48px, -12vw, -72px);
+  flex-shrink: 0;
+}
+
+.upro-saas .profile-avatar {
+  width: clamp(96px, 22vw, 140px);
+  height: clamp(96px, 22vw, 140px);
+  border-radius: 50%;
+  border: 4px solid var(--up-card);
+  box-shadow: 0 12px 40px rgba(10, 11, 15, 0.15);
+}
+
+.upro-saas .avatar-placeholder-profile {
+  background: linear-gradient(145deg, var(--up-red) 0%, var(--up-green) 100%);
+  font-size: clamp(2rem, 6vw, 2.75rem);
+  font-weight: 800;
+}
+
+.upro-saas .profile-info-main {
+  flex: 1;
+  min-width: min(100%, 280px);
+  padding-bottom: 4px;
+}
+
+.upro-saas .profile-name {
+  font-size: clamp(1.35rem, 4.5vw, 2rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--up-ink);
+  margin: 0 0 6px;
+  line-height: 1.15;
+}
+
+.upro-saas .verified-badge {
+  color: var(--up-green);
+  font-size: 1.15em;
+}
+
+.upro-saas .profile-role {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--up-muted);
+  margin: 0 0 14px;
+}
+
+.upro-saas .profile-meta-info {
+  gap: 12px 20px;
+  font-size: 0.88rem;
+  color: var(--up-muted);
+}
+
+.upro-saas .meta-item {
+  gap: 8px;
+  line-height: 1.35;
+}
+
+.upro-saas .meta-item i {
+  color: var(--up-red);
+  width: 1.1em;
+  text-align: center;
+}
+
+.upro-saas .profile-actions-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 4px;
+  width: 100%;
+  justify-content: flex-start;
+}
+
+@media (min-width: 900px) {
+  .upro-saas .profile-actions-wrapper {
+    width: auto;
+    justify-content: flex-end;
+    align-self: flex-end;
+  }
+}
+
+.upro-saas .btn-action {
+  min-height: 48px;
+  padding: 12px 20px;
+  border-radius: var(--up-full);
+  font-weight: 700;
+  font-size: 0.9rem;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+  transition: transform 0.2s var(--up-ease), box-shadow 0.2s var(--up-ease), filter 0.2s var(--up-ease),
+    background 0.2s var(--up-ease), border-color 0.2s var(--up-ease);
+}
+
+.upro-saas .btn-primary-action {
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-red-dark) 40%, var(--up-green-dark) 100%);
+  color: #fff !important;
+  border: none;
+  box-shadow: 0 4px 18px rgba(200, 16, 46, 0.32);
+}
+
+.upro-saas .btn-primary-action:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 26px rgba(200, 16, 46, 0.4);
+  filter: brightness(1.03);
+}
+
+.upro-saas .btn-secondary-action {
+  background: var(--up-card);
+  color: var(--up-red-dark) !important;
+  border: 1.5px solid var(--up-border);
+  box-shadow: 0 2px 8px rgba(10, 11, 15, 0.04);
+}
+
+.upro-saas .btn-secondary-action:hover {
+  background: var(--up-red-soft);
+  border-color: rgba(200, 16, 46, 0.35);
+  color: var(--up-red-dark) !important;
+}
+
+/* Stats */
+.upro-saas .stats-grid-profile {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  margin-bottom: clamp(18px, 4vw, 28px);
+}
+
+@media (min-width: 720px) {
+  .upro-saas .stats-grid-profile {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+  }
+}
+
+.upro-saas .stat-card-profile {
+  background: var(--up-card);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r);
+  padding: 16px 18px;
+  box-shadow: var(--up-shadow);
+  gap: 14px;
+  transition: transform 0.2s var(--up-ease), box-shadow 0.2s var(--up-ease), border-color 0.2s var(--up-ease);
+}
+
+.upro-saas .stat-card-profile::before {
+  width: 3px;
+  background: linear-gradient(180deg, var(--up-red) 0%, var(--up-green) 100%);
+  border-radius: 2px;
+}
+
+.upro-saas .stat-card-profile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(200, 16, 46, 0.18);
+  box-shadow: var(--up-shadow-lg);
+}
+
+.upro-saas .stat-icon-wrapper {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--up-r);
+  background: linear-gradient(135deg, var(--up-red-soft) 0%, var(--up-green-soft) 100%);
+  font-size: 1.35rem;
+  color: var(--up-red-dark);
+}
+
+.upro-saas .stat-number {
+  font-size: 1.55rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--up-ink);
+}
+
+.upro-saas .stat-label {
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--up-subtle);
+}
+
+/* Layout */
+.upro-saas .profile-content-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: clamp(16px, 3vw, 24px);
+}
+
+@media (min-width: 992px) {
+  .upro-saas .profile-content-grid {
+    grid-template-columns: minmax(280px, 320px) 1fr;
+    align-items: start;
+  }
+}
+
+.upro-saas .profile-sidebar-modern {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.upro-saas .sidebar-card {
+  background: var(--up-card);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r-lg);
+  box-shadow: var(--up-shadow);
+}
+
+.upro-saas .sidebar-card:hover {
+  box-shadow: var(--up-shadow-lg);
+}
+
+.upro-saas .card-header-modern {
+  padding: 14px 18px;
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.06) 0%, rgba(0, 106, 78, 0.06) 100%);
+  border-bottom: 1px solid var(--up-border);
+}
+
+.upro-saas .card-header-modern i {
+  color: var(--up-red);
+  font-size: 1.1rem;
+}
+
+.upro-saas .card-header-modern h3 {
+  font-size: 0.98rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--up-ink);
+}
+
+.upro-saas .card-body-modern {
+  padding: 16px 18px;
+}
+
+.upro-saas .bio-text {
+  line-height: 1.7;
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.upro-saas .text-muted {
+  color: var(--up-muted) !important;
+  font-size: 0.92rem;
+  margin: 0;
+}
+
+/* Skills */
+.upro-saas .skill-badge-modern {
+  background: var(--up-bg);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-full);
+  padding: 8px 14px;
+}
+
+.upro-saas .skill-badge-modern:hover {
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-green-dark) 100%);
+  color: #fff;
+  border-color: transparent;
+}
+
+.upro-saas .skill-level-modern.level-beginner,
+.upro-saas .skill-level-modern.level-debutant {
+  background: var(--up-green-soft);
+  color: var(--up-green-dark);
+}
+
+.upro-saas .skill-level-modern.level-intermediate,
+.upro-saas .skill-level-modern.level-intermediaire {
+  background: var(--up-gold-soft);
+  color: #7a5f00;
+}
+
+.upro-saas .skill-level-modern.level-advanced,
+.upro-saas .skill-level-modern.level-avance,
+.upro-saas .skill-level-modern.level-expert {
+  background: var(--up-red-soft);
+  color: var(--up-red-dark);
+}
+
+/* Badges */
+.upro-saas .badge-card-modern {
+  background: linear-gradient(145deg, var(--up-gold) 0%, #ffe566 100%);
+  border: 1px solid rgba(122, 95, 0, 0.2);
+  border-radius: var(--up-r);
+}
+
+.upro-saas .badge-name-modern {
+  color: var(--up-ink);
+}
+
+.upro-saas .btn-download-cv {
+  border-radius: var(--up-full);
+  min-height: 48px;
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-green-dark) 100%);
+  font-weight: 700;
+  box-shadow: 0 4px 16px rgba(200, 16, 46, 0.28);
+}
+
+.upro-saas .contact-item {
+  background: var(--up-bg);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r);
+}
+
+.upro-saas .contact-item i {
+  color: var(--up-green);
+}
+
+/* Tabs + activity */
+.upro-saas .profile-main-modern {
+  gap: 14px;
+  min-width: 0;
+}
+
+.upro-saas .activity-tabs {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  padding: 6px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  background: var(--up-card);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r-lg);
+  box-shadow: var(--up-shadow);
+}
+
+.upro-saas .activity-tabs::-webkit-scrollbar {
+  height: 4px;
+}
+
+.upro-saas .activity-tabs::-webkit-scrollbar-thumb {
+  background: var(--up-border);
+  border-radius: var(--up-full);
+}
+
+.upro-saas .tab-btn {
+  flex: 1 0 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 10px 16px;
+  border-radius: var(--up-full);
+  font-size: 0.86rem;
+  font-weight: 700;
+  color: var(--up-muted);
+  gap: 8px;
+  white-space: nowrap;
+}
+
+.upro-saas .tab-btn:hover {
+  background: var(--up-bg);
+  color: var(--up-ink);
+}
+
+.upro-saas .tab-btn.active {
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-red-dark) 45%, var(--up-green-dark) 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(200, 16, 46, 0.28);
+}
+
+.upro-saas .tab-btn i {
+  opacity: 0.95;
+}
+
+.upro-saas .activity-list {
+  gap: 12px;
+}
+
+.upro-saas .activity-card {
+  background: var(--up-card);
+  border: 1px solid var(--up-border);
+  border-radius: var(--up-r-lg);
+  padding: clamp(16px, 3vw, 22px);
+  box-shadow: var(--up-shadow);
+  gap: 16px;
+  transition: transform 0.2s var(--up-ease), box-shadow 0.2s var(--up-ease), border-color 0.2s var(--up-ease);
+}
+
+.upro-saas .activity-card:hover {
+  transform: none;
+  border-color: rgba(200, 16, 46, 0.2);
+  box-shadow: var(--up-shadow-lg);
+}
+
+@media (hover: hover) {
+  .upro-saas .activity-card:hover {
+    transform: translateX(4px);
+  }
+}
+
+.upro-saas .activity-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--up-r);
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-green-dark) 100%);
+  font-size: 1.25rem;
+}
+
+.upro-saas .tutorial-icon {
+  background: linear-gradient(135deg, var(--up-green) 0%, var(--up-green-dark) 100%);
+}
+
+.upro-saas .project-icon {
+  background: linear-gradient(135deg, #c8102e 0%, var(--up-gold) 100%);
+}
+
+.upro-saas .activity-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin: 0 0 8px;
+}
+
+.upro-saas .activity-title a {
+  color: var(--up-ink);
+}
+
+.upro-saas .activity-title a:hover {
+  color: var(--up-red);
+}
+
+.upro-saas .activity-excerpt {
+  color: var(--up-muted);
+  font-size: 0.9rem;
+  margin-bottom: 12px;
+}
+
+.upro-saas .activity-meta {
+  gap: 12px 16px;
+  font-size: 0.8rem;
+  color: var(--up-subtle);
+}
+
+.upro-saas .category-badge {
+  background: linear-gradient(135deg, var(--up-red) 0%, var(--up-green-dark) 100%);
+  border-radius: var(--up-full);
+  font-size: 0.72rem;
+  padding: 4px 10px;
+}
+
+.upro-saas .upro-recruit {
+  color: var(--up-green-dark) !important;
+  font-weight: 700;
+}
+
+.upro-saas .upro-recruit i {
+  color: var(--up-green);
+}
+
+/* Project status pills */
+.upro-saas .status-badge-profile {
+  border-radius: var(--up-full);
+  font-size: 0.72rem;
+}
+
+.upro-saas .status-planning,
+.upro-saas .status-active {
+  background: var(--up-green-soft);
+  color: var(--up-green-dark);
+}
+
+.upro-saas .status-in_progress {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.upro-saas .status-completed {
+  background: #f3e5f5;
+  color: #6a1b9a;
+}
+
+.upro-saas .status-paused {
+  background: var(--up-gold-soft);
+  color: #7a5f00;
+}
+
+.upro-saas .status-archived {
+  background: var(--up-bg);
+  color: var(--up-muted);
+}
+
+.upro-saas .empty-state-activity {
+  background: var(--up-card);
+  border: 1px dashed var(--up-border);
+  border-radius: var(--up-r-lg);
+  padding: clamp(40px, 10vw, 72px) 20px;
+}
+
+.upro-saas .empty-state-activity i {
+  font-size: clamp(3rem, 10vw, 4rem);
+  color: var(--up-border);
+}
+
+.upro-saas .empty-state-activity h3 {
+  font-weight: 800;
+  color: var(--up-ink);
+}
+
+.upro-saas .empty-state-activity p {
+  color: var(--up-muted);
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media (max-width: 768px) {
+  .upro-saas .profile-header-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .upro-saas .profile-info-main {
+    text-align: center;
+  }
+
+  .upro-saas .profile-name {
+    justify-content: center;
+  }
+
+  .upro-saas .profile-meta-info {
+    justify-content: center;
+  }
+
+  .upro-saas .profile-actions-wrapper {
+    justify-content: center;
+  }
+
+  .upro-saas .btn-action {
+    flex: 1;
+    justify-content: center;
+    min-width: min(100%, 200px);
+  }
+
+  .upro-saas .activity-tabs {
+    margin: 0 -4px;
+    padding-left: 8px;
+    padding-right: 8px;
+  }
+
+  .upro-saas .tab-btn {
+    flex: 1;
+    min-width: max-content;
+  }
+
+  .upro-saas .activity-card {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upro-saas .stat-card-profile,
+  .upro-saas .activity-card,
+  .upro-saas .btn-action,
+  .upro-saas .sidebar-card {
+    transition: none !important;
+  }
+
+  .upro-saas .stat-card-profile:hover,
+  .upro-saas .activity-card:hover,
+  .upro-saas .btn-primary-action:hover {
+    transform: none;
+  }
+}

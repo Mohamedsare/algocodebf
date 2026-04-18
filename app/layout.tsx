@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
+import { ToastProvider } from '@/components/ui/toast-provider'
 import './globals.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://algocodebf.vercel.app'
@@ -74,6 +75,9 @@ export default function RootLayout({
         <link rel="stylesheet" href="/css/pages.css" />
         {/* Polish mobile-first + UX (touch targets, safe-area, anti-zoom iOS, skeletons, ...) */}
         <link rel="stylesheet" href="/css/mobile-first-ux.css" />
+        <link rel="stylesheet" href="/css/toast-stack.css" />
+        {/* Console admin : échelle dense (après pages + mobile-first) */}
+        <link rel="stylesheet" href="/css/admin-console.css" />
         {/* Forum SaaS-grade (Linear / Slack / Discord look & feel + realtime) */}
         <link rel="stylesheet" href="/css/forum-saas.css" />
         {/* Blog SaaS-grade (Medium / Substack / Ghost / Vercel blog + realtime) */}
@@ -83,6 +87,10 @@ export default function RootLayout({
         {/* Projets + membres — même ligne directrice SaaS */}
         <link rel="stylesheet" href="/css/project-saas.css" />
         <link rel="stylesheet" href="/css/members-saas.css" />
+        <link rel="stylesheet" href="/css/leaderboard-saas.css" />
+        <link rel="stylesheet" href="/css/messaging-saas.css" />
+        <link rel="stylesheet" href="/css/profile-edit-saas.css" />
+        <link rel="stylesheet" href="/css/user-profile-saas.css" />
         <link rel="stylesheet" href="/css/home-saas.css" />
         <link rel="stylesheet" href="/css/formation-saas.css" />
         {/* Tableaux de bord « Mon Espace » (étudiant / formateur / entreprise) */}
@@ -107,7 +115,7 @@ export default function RootLayout({
         />
       </head>
       <body>
-        {children}
+        <ToastProvider>{children}</ToastProvider>
 
         {/* Scripts décoratifs (scroll-to-top). L'animation du drapeau burkinabè
             est maintenant gérée directement par <CtaSection /> côté React. */}

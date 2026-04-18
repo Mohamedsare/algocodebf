@@ -21,7 +21,7 @@ export function MessagingShell({
   const basePath = mode === 'inbox' ? '/message' : '/message/envoyes'
 
   return (
-    <section className="messaging-section">
+    <section className="msg-saas messaging-section">
       <div className="container-fluid">
         <div className="messaging-wrapper">
           <aside
@@ -29,7 +29,12 @@ export function MessagingShell({
           >
             <div className="sidebar-header-msg">
               <h2>
-                <i className="fas fa-envelope"></i> Messagerie
+                <i
+                  className={
+                    mode === 'inbox' ? 'fas fa-inbox' : 'fas fa-paper-plane'
+                  }
+                ></i>{' '}
+                {mode === 'inbox' ? 'Messagerie' : 'Messages envoyés'}
               </h2>
               <Link href="/message/composer" className="btn-new-msg">
                 <i className="fas fa-plus"></i>
@@ -65,7 +70,7 @@ export function MessagingShell({
                   <p>
                     {mode === 'inbox'
                       ? 'Votre boîte de réception est vide'
-                      : 'Vous n’avez envoyé aucun message'}
+                      : "Vous n'avez envoyé aucun message"}
                   </p>
                   <Link href="/message/composer" className="btn-compose-msg">
                     <i className="fas fa-pen"></i> Nouveau message
@@ -132,17 +137,28 @@ export function MessagingShell({
             {children ?? (
               <div className="message-placeholder">
                 <div className="placeholder-content">
-                  <i className="fas fa-envelope-open"></i>
-                  <h3>Bienvenue dans votre messagerie</h3>
+                  <i
+                    className={
+                      mode === 'inbox'
+                        ? 'fas fa-envelope-open'
+                        : 'fas fa-paper-plane'
+                    }
+                  ></i>
+                  <h3>
+                    {mode === 'inbox'
+                      ? 'Bienvenue dans votre messagerie'
+                      : 'Vos messages envoyés'}
+                  </h3>
                   <p>
-                    Sélectionnez un message dans la liste ou rédigez-en un
-                    nouveau.
+                    {mode === 'inbox'
+                      ? 'Sélectionnez un message dans la liste ou rédigez-en un nouveau.'
+                      : 'Sélectionnez une conversation dans la liste pour relire un message envoyé.'}
                   </p>
                   <Link
                     href="/message/composer"
                     className="btn btn-primary btn-lg"
                   >
-                    <i className="fas fa-pen"></i> Nouveau Message
+                    <i className="fas fa-pen"></i> Nouveau message
                   </Link>
                 </div>
               </div>

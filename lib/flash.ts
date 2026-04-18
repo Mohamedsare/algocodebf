@@ -4,9 +4,9 @@ import { cookies } from 'next/headers'
  * Système de messages flash simple via cookie httpOnly court.
  * Équivalent des flash messages `$_SESSION['flash']` du projet PHP d'origine.
  *
- * Les messages sont consommés une seule fois : après `getFlashes()`, ils
- * sont effacés. Utile après une server action (redirect), pour afficher
- * un message de succès/erreur dans le layout au prochain render.
+ * Les messages sont consommés une seule fois : après affichage, un composant
+ * client appelle `consumeFlashCookie` depuis `app/actions/flash.ts`, car Next.js
+ * n’autorise pas la modification des cookies pendant le rendu d’un Server Component.
  */
 
 export type FlashType = 'success' | 'error' | 'info' | 'warning'
@@ -39,17 +39,21 @@ export async function setFlash(type: FlashType, message: string) {
   })
 }
 
-export async function getFlashes(): Promise<FlashMessage[]> {
+/** Lecture seule pour le rendu RSC (aucune mutation du cookie). */
+export async function getFlashMessagesForRender(): Promise<{
+  messages: FlashMessage[]
+  shouldClearCookie: boolean
+}> {
   const store = await cookies()
   const raw = store.get(COOKIE_NAME)?.value
-  if (!raw) return []
+  if (!raw) return { messages: [], shouldClearCookie: false }
   try {
     const parsed = JSON.parse(raw)
-    if (!Array.isArray(parsed)) return []
-    store.delete(COOKIE_NAME)
-    return parsed
+    if (!Array.isArray(parsed)) {
+      return { messages: [], shouldClearCookie: true }
+    }
+    return { messages: parsed as FlashMessage[], shouldClearCookie: true }
   } catch {
-    store.delete(COOKIE_NAME)
-    return []
+    return { messages: [], shouldClearCookie: true }
   }
 }

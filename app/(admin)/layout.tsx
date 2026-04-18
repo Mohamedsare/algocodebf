@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { requireAdmin } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import { AdminShell } from '@/components/admin/admin-shell'
+import { FlashMessages } from '@/components/layout/flash-messages'
 
 export const metadata: Metadata = {
   title: { template: '%s · Admin', default: 'Admin - AlgoCodeBF' },
@@ -19,6 +20,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     { count: totalJobs },
     { count: totalSubscribers },
     { count: pendingReports },
+    { count: totalComments },
   ] = await Promise.all([
     supabase.from('profiles').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('posts').select('*', { count: 'exact', head: true }).eq('status', 'active'),
@@ -27,6 +29,7 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     supabase.from('jobs').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('newsletter_subscribers').select('*', { count: 'exact', head: true }).eq('status', 'active'),
     supabase.from('reports').select('*', { count: 'exact', head: true }).eq('status', 'pending'),
+    supabase.from('comments').select('*', { count: 'exact', head: true }).eq('status', 'active'),
   ])
 
   const stats = {
@@ -37,10 +40,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
     total_jobs: totalJobs ?? 0,
     total_subscribers: totalSubscribers ?? 0,
     pending_reports: pendingReports ?? 0,
+    total_comments: totalComments ?? 0,
   }
 
   return (
     <AdminShell profile={profile} stats={stats}>
+      <FlashMessages />
       {children}
     </AdminShell>
   )

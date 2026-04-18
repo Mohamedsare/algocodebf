@@ -401,6 +401,7 @@ export function ForumListLive({
                 <Link
                   key={post.id}
                   href={`/forum/${post.id}`}
+                  prefetch={false}
                   className={`forum-post-saas${isNew ? ' is-new' : ''}`}
                 >
                   <div className="post-avatar-wrap">

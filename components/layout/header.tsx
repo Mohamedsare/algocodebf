@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useRouter, usePathname } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { logoutAction } from '@/app/actions/auth'
-import { FORMATIONS_PATH } from '@/lib/routes'
+import { ADMIN_CONSOLE_PATH, FORMATIONS_PATH } from '@/lib/routes'
 import { getMySpacePath } from '@/lib/my-space'
 import { SearchSuggestPanel } from '@/components/search/search-suggest-panel'
 import { useSearchSuggest } from '@/components/search/use-search-suggest'
@@ -296,7 +296,7 @@ export function Header({ profile }: HeaderProps) {
                         <hr />
                       </li>
                       <li>
-                        <Link href="/admin">
+                        <Link href={ADMIN_CONSOLE_PATH}>
                           <i className="fas fa-cog"></i> Administration
                         </Link>
                       </li>
@@ -535,8 +535,8 @@ export function Header({ profile }: HeaderProps) {
                 </Link>
                 {profile.role === 'admin' && (
                   <Link
-                    href="/admin"
-                    className={`nb-link${navIsActive('/admin') ? ' nb-link--active' : ''}`}
+                    href={ADMIN_CONSOLE_PATH}
+                    className={`nb-link${navIsActive(ADMIN_CONSOLE_PATH) ? ' nb-link--active' : ''}`}
                     onClick={() => setBurgerActive(false)}
                   >
                     <span className="nb-ico">

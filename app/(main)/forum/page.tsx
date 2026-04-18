@@ -106,7 +106,7 @@ export default async function ForumPage({ searchParams }: ForumPageProps) {
                 </span>
                 <span>
                   Forum
-                  <span className="forum-hero-live" style={{ marginLeft: 12, verticalAlign: 'middle' }}>
+                  <span className="forum-hero-live forum-hero-live--title">
                     <span className="live-dot"></span>
                     LIVE
                   </span>
@@ -175,7 +175,7 @@ export default async function ForumPage({ searchParams }: ForumPageProps) {
       </section>
 
       {/* Main grid */}
-      <section className="container-xl" style={{ paddingTop: 20 }}>
+      <section className="container-xl forum-page-main">
         <div className="forum-grid">
           <main>
             <ForumListLive

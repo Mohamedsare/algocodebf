@@ -12,11 +12,11 @@ interface Props {
 }
 
 const TYPES: Array<{ value: string; label: string }> = [
-  { value: 'stage', label: '🎓 Stage' },
-  { value: 'emploi', label: '💼 Emploi' },
-  { value: 'freelance', label: '💻 Freelance' },
-  { value: 'hackathon', label: '🏆 Hackathon' },
-  { value: 'formation', label: '📚 Formation' },
+  { value: 'stage', label: 'Stage' },
+  { value: 'emploi', label: 'Emploi' },
+  { value: 'freelance', label: 'Freelance' },
+  { value: 'hackathon', label: 'Hackathon' },
+  { value: 'formation', label: 'Formation' },
 ]
 
 const CITIES = ['Ouagadougou', 'Bobo-Dioulasso', 'Koudougou', 'Ouahigouya', 'Autre']
@@ -54,9 +54,7 @@ export function JobCreateClient({ mode, job }: Props) {
 
     startTransition(async () => {
       const res =
-        mode === 'edit' && job
-          ? await updateJobAction(job.id, fd)
-          : await createJobAction(fd)
+        mode === 'edit' && job ? await updateJobAction(job.id, fd) : await createJobAction(fd)
       if (res.ok) {
         const newId =
           res.data && typeof res.data === 'object' && 'id' in res.data
@@ -72,305 +70,337 @@ export function JobCreateClient({ mode, job }: Props) {
   }
 
   return (
-    <section className="create-project-section">
-      <div className="container">
-        <div className="page-header-create">
-          <div className="header-content">
-            <h1>
-              <i className="fas fa-briefcase"></i>{' '}
-              {mode === 'edit' ? "Modifier l'offre" : 'Publier une Offre'}
-            </h1>
-            <p>
-              {mode === 'edit'
-                ? "Mettez à jour les informations de l'offre"
-                : 'Publiez une opportunité pour toucher la communauté tech burkinabè'}
-            </p>
-          </div>
-          <Link href="/job" className="btn-back">
-            <i className="fas fa-arrow-left"></i> Retour aux offres
-          </Link>
-        </div>
+    <div className="job-create-saas">
+      <section className="jc-hero">
+        <div className="container">
+          <nav className="jc-breadcrumb" aria-label="Fil d'Ariane">
+            <Link href="/" className="jc-crumb">
+              Accueil
+            </Link>
+            <span className="jc-crumb-sep" aria-hidden>
+              /
+            </span>
+            <Link href="/job" className="jc-crumb">
+              Opportunités
+            </Link>
+            <span className="jc-crumb-sep" aria-hidden>
+              /
+            </span>
+            <span className="jc-crumb jc-crumb--current">
+              {mode === 'edit' ? 'Modifier' : 'Publier'}
+            </span>
+          </nav>
 
-        <div className="create-project-wrapper">
-          <div className="form-main">
-            <form onSubmit={onSubmit} className="project-form">
-              {generalError && (
-                <div
-                  style={{
-                    background: '#f8d7da',
-                    color: '#842029',
-                    padding: 12,
-                    borderRadius: 10,
-                    marginBottom: 16,
-                    fontSize: '0.9rem',
-                  }}
-                >
-                  <i className="fas fa-exclamation-circle"></i> {generalError}
-                </div>
-              )}
-
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-info-circle"></i>
-                  <h3>Informations principales</h3>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="type">
-                      <i className="fas fa-tags"></i> Type d&apos;offre *
-                    </label>
-                    <select
-                      id="type"
-                      className="form-control select-control"
-                      value={type}
-                      onChange={e => setType(e.target.value)}
-                      required
-                    >
-                      {TYPES.map(t => (
-                        <option key={t.value} value={t.value}>
-                          {t.label}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="city">
-                      <i className="fas fa-map-marker-alt"></i> Ville *
-                    </label>
-                    <select
-                      id="city"
-                      className="form-control select-control"
-                      value={city}
-                      onChange={e => setCity(e.target.value)}
-                      required
-                    >
-                      <option value="">— Sélectionner —</option>
-                      {CITIES.map(c => (
-                        <option key={c} value={c}>
-                          {c}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="title">
-                    Titre de l&apos;offre *
-                    <span className="field-hint">Un titre clair et accrocheur</span>
-                  </label>
-                  <input
-                    type="text"
-                    id="title"
-                    className={`form-control${errors.title ? ' is-invalid' : ''}`}
-                    placeholder="Ex : Développeur Full-Stack Junior"
-                    value={title}
-                    onChange={e => setTitle(e.target.value)}
-                    required
-                  />
-                  {errors.title && (
-                    <span className="error-message">
-                      <i className="fas fa-exclamation-circle"></i> {errors.title}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="company_name">
-                    <i className="fas fa-building"></i> Entreprise / Organisation
-                    <span className="field-hint">
-                      Par défaut : votre nom d&apos;utilisateur
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    id="company_name"
-                    className="form-control"
-                    placeholder="Nom de l'entreprise"
-                    value={companyName}
-                    onChange={e => setCompanyName(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-file-alt"></i>
-                  <h3>Description de l&apos;offre</h3>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="description">
-                    Description détaillée *
-                    <span className="field-hint">
-                      Missions, profil recherché, compétences, conditions…
-                    </span>
-                  </label>
-                  <textarea
-                    id="description"
-                    className={`form-control textarea-control${errors.description ? ' is-invalid' : ''}`}
-                    rows={10}
-                    placeholder="Décrivez la mission, les responsabilités, les conditions..."
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    required
-                  ></textarea>
-                  <div className="textarea-footer">
-                    <span className="char-counter">
-                      {description.length} caractères (min: 50)
-                    </span>
-                  </div>
-                  {errors.description && (
-                    <span className="error-message">
-                      <i className="fas fa-exclamation-circle"></i>{' '}
-                      {errors.description}
-                    </span>
-                  )}
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="skills_required">
-                    <i className="fas fa-tools"></i> Compétences requises
-                    <span className="field-hint">
-                      Séparez par des virgules (ex : React, Node.js, MongoDB)
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    id="skills_required"
-                    className="form-control"
-                    placeholder="React, Node.js, PostgreSQL, Git..."
-                    value={skills}
-                    onChange={e => setSkills(e.target.value)}
-                  />
-                </div>
-              </div>
-
-              <div className="form-section">
-                <div className="section-title">
-                  <i className="fas fa-cog"></i>
-                  <h3>Conditions & contact</h3>
-                </div>
-
-                <div className="form-row">
-                  <div className="form-group">
-                    <label htmlFor="salary">
-                      <i className="fas fa-money-bill-wave"></i> Rémunération
-                      <span className="field-hint">Exemple : 200 000 - 400 000 FCFA</span>
-                    </label>
-                    <input
-                      type="text"
-                      id="salary"
-                      className="form-control"
-                      placeholder="250 000 FCFA / mois"
-                      value={salary}
-                      onChange={e => setSalary(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label htmlFor="deadline">
-                      <i className="fas fa-calendar-alt"></i> Date limite
-                    </label>
-                    <input
-                      type="date"
-                      id="deadline"
-                      className="form-control"
-                      value={deadline ?? ''}
-                      onChange={e => setDeadline(e.target.value)}
-                    />
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label htmlFor="external_link">
-                    <i className="fas fa-external-link-alt"></i> Lien externe
-                    <span className="field-hint">
-                      Optionnel : site officiel où postuler
-                    </span>
-                  </label>
-                  <input
-                    type="url"
-                    id="external_link"
-                    className={`form-control${errors.external_link ? ' is-invalid' : ''}`}
-                    placeholder="https://entreprise.com/offre"
-                    value={externalLink}
-                    onChange={e => setExternalLink(e.target.value)}
-                  />
-                  {errors.external_link && (
-                    <span className="error-message">
-                      <i className="fas fa-exclamation-circle"></i>{' '}
-                      {errors.external_link}
-                    </span>
-                  )}
-                </div>
-              </div>
-
-              <div className="form-actions">
-                <button type="submit" className="btn-submit" disabled={pending}>
-                  <i className="fas fa-paper-plane"></i>{' '}
-                  {pending
-                    ? 'Enregistrement…'
-                    : mode === 'edit'
-                      ? 'Enregistrer les modifications'
-                      : "Publier l'offre"}
-                </button>
-                <Link href="/job" className="btn-cancel">
-                  <i className="fas fa-times"></i> Annuler
-                </Link>
-              </div>
-            </form>
-          </div>
-
-          <aside className="tips-sidebar">
-            <div className="tip-card">
-              <div className="tip-icon">
-                <i className="fas fa-lightbulb"></i>
-              </div>
-              <h3>Conseils pour une offre réussie</h3>
-              <ul className="tips-list">
-                <li>
-                  <i className="fas fa-check-circle"></i> Titre clair et précis
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Missions bien décrites
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Compétences précises
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Conditions transparentes
-                </li>
-                <li>
-                  <i className="fas fa-check-circle"></i> Date limite réaliste
-                </li>
-              </ul>
-            </div>
-
-            <div className="tip-card stats-card">
-              <div className="tip-icon">
-                <i className="fas fa-chart-line"></i>
-              </div>
-              <h3>Visibilité</h3>
-              <div className="stats-info">
-                <div className="stat-item">
-                  <span className="stat-value">500+</span>
-                  <span className="stat-label">Étudiants actifs</span>
-                </div>
-                <div className="stat-item">
-                  <span className="stat-value">24h</span>
-                  <span className="stat-label">Temps de publication</span>
-                </div>
-              </div>
-              <p className="stats-note">
-                Les offres bien rédigées reçoivent jusqu&apos;à 3× plus de candidatures.
+          <header className="jc-header">
+            <div className="jc-title-block">
+              <p className="jc-eyebrow">
+                <i className="fas fa-briefcase" aria-hidden />
+                {mode === 'edit' ? 'Édition' : 'Recrutement'}
+              </p>
+              <h1 className="jc-page-title">{mode === 'edit' ? "Modifier l'offre" : 'Publier une offre'}</h1>
+              <p className="jc-lead">
+                {mode === 'edit'
+                  ? 'Mettez à jour les informations ; les candidats voient les changements immédiatement.'
+                  : 'Rédigez une annonce claire pour attirer les bons profils dans la communauté tech burkinabè.'}
               </p>
             </div>
-          </aside>
+            <Link href="/job" className="jc-back">
+              <i className="fas fa-arrow-left" aria-hidden />
+              Liste des offres
+            </Link>
+          </header>
+        </div>
+      </section>
+
+      <div className="jc-body">
+        <div className="container">
+          <div className="jc-layout">
+            <div className="jc-form-shell">
+              <form onSubmit={onSubmit} className="jc-form" noValidate>
+                {generalError && (
+                  <div className="jc-alert jc-alert--error" role="alert">
+                    <i className="fas fa-exclamation-circle" aria-hidden />
+                    <span>{generalError}</span>
+                  </div>
+                )}
+
+                <section className="jc-section" aria-labelledby="jc-main-title">
+                  <div className="jc-section-head">
+                    <span className="jc-section-icon" aria-hidden>
+                      <i className="fas fa-info-circle" />
+                    </span>
+                    <div>
+                      <h2 className="jc-section-title" id="jc-main-title">
+                        Informations principales
+                      </h2>
+                      <p className="jc-section-desc">Type, lieu et accroche de l&apos;annonce.</p>
+                    </div>
+                  </div>
+
+                  <div className="jc-row">
+                    <div className="jc-field">
+                      <label htmlFor="type" className="jc-label">
+                        Type d&apos;offre <abbr title="obligatoire">*</abbr>
+                      </label>
+                      <div className="jc-select-wrap">
+                        <select
+                          id="type"
+                          className="jc-select"
+                          value={type}
+                          onChange={e => setType(e.target.value)}
+                          required
+                          aria-required="true"
+                        >
+                          {TYPES.map(t => (
+                            <option key={t.value} value={t.value}>
+                              {t.label}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="jc-field">
+                      <label htmlFor="city" className="jc-label">
+                        Ville <abbr title="obligatoire">*</abbr>
+                      </label>
+                      <div className="jc-select-wrap">
+                        <select
+                          id="city"
+                          className="jc-select"
+                          value={city}
+                          onChange={e => setCity(e.target.value)}
+                          required
+                          aria-required="true"
+                        >
+                          <option value="">Choisir une ville</option>
+                          {CITIES.map(c => (
+                            <option key={c} value={c}>
+                              {c}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="jc-field">
+                    <label htmlFor="title" className="jc-label">
+                      Titre de l&apos;offre <abbr title="obligatoire">*</abbr>
+                    </label>
+                    <span className="jc-hint">Une phrase précise : rôle + niveau ou techno principale.</span>
+                    <input
+                      type="text"
+                      id="title"
+                      className={`jc-input${errors.title ? ' is-invalid' : ''}`}
+                      placeholder="Ex. Développeur full-stack junior — React & Node"
+                      value={title}
+                      onChange={e => setTitle(e.target.value)}
+                      required
+                      autoComplete="off"
+                    />
+                    {errors.title && (
+                      <span className="jc-field-error" role="alert">
+                        <i className="fas fa-exclamation-circle" aria-hidden /> {errors.title}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="jc-field">
+                    <label htmlFor="company_name" className="jc-label">
+                      Entreprise ou organisation
+                    </label>
+                    <span className="jc-hint">Visible sur l&apos;annonce. Laissez vide pour utiliser votre nom de profil.</span>
+                    <input
+                      type="text"
+                      id="company_name"
+                      className="jc-input"
+                      placeholder="Ex. Startup BF, ONG, ministère…"
+                      value={companyName}
+                      onChange={e => setCompanyName(e.target.value)}
+                    />
+                  </div>
+                </section>
+
+                <section className="jc-section" aria-labelledby="jc-desc-title">
+                  <div className="jc-section-head">
+                    <span className="jc-section-icon" aria-hidden>
+                      <i className="fas fa-align-left" />
+                    </span>
+                    <div>
+                      <h2 className="jc-section-title" id="jc-desc-title">
+                        Description & compétences
+                      </h2>
+                      <p className="jc-section-desc">Soyez transparent sur les missions et le profil attendu.</p>
+                    </div>
+                  </div>
+
+                  <div className="jc-field">
+                    <label htmlFor="description" className="jc-label">
+                      Description détaillée <abbr title="obligatoire">*</abbr>
+                    </label>
+                    <span className="jc-hint">Missions, stack, conditions de travail, processus de recrutement…</span>
+                    <textarea
+                      id="description"
+                      className={`jc-textarea${errors.description ? ' is-invalid' : ''}`}
+                      rows={10}
+                      placeholder="Décrivez le poste comme vous le présenteriez à un candidat…"
+                      value={description}
+                      onChange={e => setDescription(e.target.value)}
+                      required
+                    />
+                    <div className="jc-counter">
+                      <span>{description.length}</span> caractères · minimum recommandé 50
+                    </div>
+                    {errors.description && (
+                      <span className="jc-field-error" role="alert">
+                        <i className="fas fa-exclamation-circle" aria-hidden /> {errors.description}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="jc-field">
+                    <label htmlFor="skills_required" className="jc-label">
+                      Compétences requises
+                    </label>
+                    <span className="jc-hint">Séparez par des virgules (ex. React, Node.js, PostgreSQL, Git).</span>
+                    <input
+                      type="text"
+                      id="skills_required"
+                      className="jc-input"
+                      placeholder="React, Node.js, PostgreSQL, Git…"
+                      value={skills}
+                      onChange={e => setSkills(e.target.value)}
+                    />
+                  </div>
+                </section>
+
+                <section className="jc-section jc-section--last" aria-labelledby="jc-extra-title">
+                  <div className="jc-section-head">
+                    <span className="jc-section-icon" aria-hidden>
+                      <i className="fas fa-sliders-h" />
+                    </span>
+                    <div>
+                      <h2 className="jc-section-title" id="jc-extra-title">
+                        Rémunération, échéance & lien
+                      </h2>
+                      <p className="jc-section-desc">Optionnel mais augmente la confiance des candidats.</p>
+                    </div>
+                  </div>
+
+                  <div className="jc-row">
+                    <div className="jc-field">
+                      <label htmlFor="salary" className="jc-label">
+                        Rémunération
+                      </label>
+                      <span className="jc-hint">Fourchette ou mention « selon profil ».</span>
+                      <input
+                        type="text"
+                        id="salary"
+                        className="jc-input"
+                        placeholder="250 000 – 400 000 FCFA / mois"
+                        value={salary}
+                        onChange={e => setSalary(e.target.value)}
+                      />
+                    </div>
+
+                    <div className="jc-field">
+                      <label htmlFor="deadline" className="jc-label">
+                        Date limite de candidature
+                      </label>
+                      <input
+                        type="date"
+                        id="deadline"
+                        className="jc-input jc-input--date"
+                        value={deadline ?? ''}
+                        onChange={e => setDeadline(e.target.value)}
+                      />
+                    </div>
+                  </div>
+
+                  <div className="jc-field">
+                    <label htmlFor="external_link" className="jc-label">
+                      Lien externe (candidature)
+                    </label>
+                    <span className="jc-hint">ATS, site carrière ou formulaire officiel.</span>
+                    <input
+                      type="url"
+                      id="external_link"
+                      className={`jc-input${errors.external_link ? ' is-invalid' : ''}`}
+                      placeholder="https://…"
+                      value={externalLink}
+                      onChange={e => setExternalLink(e.target.value)}
+                      inputMode="url"
+                    />
+                    {errors.external_link && (
+                      <span className="jc-field-error" role="alert">
+                        <i className="fas fa-exclamation-circle" aria-hidden /> {errors.external_link}
+                      </span>
+                    )}
+                  </div>
+                </section>
+
+                <div className="jc-actions">
+                  <button type="submit" className="jc-submit" disabled={pending}>
+                    <i className="fas fa-paper-plane" aria-hidden />
+                    {pending
+                      ? 'Enregistrement…'
+                      : mode === 'edit'
+                        ? 'Enregistrer les modifications'
+                        : "Publier l'offre"}
+                  </button>
+                  <Link href="/job" className="jc-cancel">
+                    <i className="fas fa-times" aria-hidden />
+                    Annuler
+                  </Link>
+                </div>
+              </form>
+            </div>
+
+            <aside className="jc-aside" aria-label="Conseils">
+              <div className="jc-tip">
+                <div className="jc-tip-icon" aria-hidden>
+                  <i className="fas fa-lightbulb" />
+                </div>
+                <h3 className="jc-tip-title">Bonnes pratiques</h3>
+                <ul className="jc-tip-list">
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Titre lisible en une ligne sur mobile
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Missions et livrables concrets
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Stack et niveau attendu explicites
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Fourchette salariale ou fourchette « selon expérience »
+                  </li>
+                  <li>
+                    <i className="fas fa-check" aria-hidden />
+                    Date limite réaliste
+                  </li>
+                </ul>
+              </div>
+
+              <div className="jc-tip jc-tip--accent">
+                <div className="jc-tip-icon jc-tip-icon--chart" aria-hidden>
+                  <i className="fas fa-chart-line" />
+                </div>
+                <h3 className="jc-tip-title">Visibilité</h3>
+                <p className="jc-tip-text">
+                  Les annonces structurées reçoivent davantage de candidatures qualifiées. Pensez aux mots-clés que les
+                  profils tech burkinabè utilisent dans leur recherche.
+                </p>
+              </div>
+            </aside>
+          </div>
         </div>
       </div>
-    </section>
+    </div>
   )
 }

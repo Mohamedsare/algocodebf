@@ -20,5 +20,9 @@ export default async function EditProjectPage({
   if (!detail) notFound()
   if (!detail.isOwner && profile.role !== 'admin') redirect(`/project/${pid}`)
 
-  return <ProjectCreateClient mode="edit" project={detail.project} />
+  return (
+    <div className="project-create-saas">
+      <ProjectCreateClient mode="edit" project={detail.project} />
+    </div>
+  )
 }

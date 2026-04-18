@@ -1,10 +1,14 @@
 'use client'
 
+import { useToast } from '@/components/ui/toast-provider'
+
 interface Props {
   title: string
 }
 
 export function ShareJobButtons({ title }: Props) {
+  const toast = useToast()
+
   const onFacebook = () => {
     if (typeof window === 'undefined') return
     const url = encodeURIComponent(window.location.href)
@@ -30,9 +34,9 @@ export function ShareJobButtons({ title }: Props) {
     if (typeof window === 'undefined') return
     try {
       await navigator.clipboard.writeText(window.location.href)
-      alert('Lien copié dans le presse-papiers !')
+      toast.success('Lien copié dans le presse-papiers.')
     } catch {
-      // ignore
+      toast.error('Impossible de copier le lien.')
     }
   }
 

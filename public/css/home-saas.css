@@ -386,22 +386,36 @@
 
 /* ---------- Stats strip ---------- */
 .home-saas .hm-stats-strip {
-  padding: clamp(28px, 5vw, 48px) 0;
+  padding: clamp(24px, 5vw, 48px) 0 max(20px, env(safe-area-inset-bottom, 0px));
   background: var(--hm-card);
   border-bottom: 1px solid var(--hm-border);
 }
 
+/* Grille mobile-first 2×2 puis 4 colonnes — conteneur uniquement (cartes .hm-stat-* inchangées visuellement) */
 .home-saas .hm-stats-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  align-items: stretch;
+}
+
+@media (max-width: 359px) {
+  .home-saas .hm-stats-grid {
+    gap: 8px;
+  }
 }
 
 @media (min-width: 768px) {
   .home-saas .hm-stats-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 16px;
   }
+}
+
+/* Bloc texte : évite le débordement en 2 colonnes étroites (ne change pas typo/couleurs) */
+.home-saas .hm-stat-card > div:last-child {
+  min-width: 0;
+  flex: 1;
 }
 
 .home-saas .hm-stat-card {

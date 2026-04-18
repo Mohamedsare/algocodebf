@@ -1,6 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
+import { useToast } from '@/components/ui/toast-provider'
 
 interface Props {
   className?: string
@@ -11,6 +12,8 @@ interface Props {
 }
 
 export function ShareButton({ className, title, text, url, children }: Props) {
+  const toast = useToast()
+
   const onClick = async () => {
     if (typeof window === 'undefined') return
     const target = url ?? window.location.href
@@ -28,9 +31,9 @@ export function ShareButton({ className, title, text, url, children }: Props) {
     if (nav.clipboard) {
       try {
         await nav.clipboard.writeText(target)
-        alert('Lien copié dans le presse-papiers !')
+        toast.success('Lien copié dans le presse-papiers.')
       } catch {
-        // ignore
+        toast.error('Impossible de copier le lien.')
       }
     }
   }

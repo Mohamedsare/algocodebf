@@ -8,9 +8,16 @@ interface Props {
   projectId: number
   hasPending: boolean
   variant?: 'action' | 'full'
+  /** Remplace les classes par défaut (ex. fiche projet SaaS) */
+  triggerClassName?: string
 }
 
-export function JoinProjectButton({ projectId, hasPending, variant = 'action' }: Props) {
+export function JoinProjectButton({
+  projectId,
+  hasPending,
+  variant = 'action',
+  triggerClassName,
+}: Props) {
   const router = useRouter()
   const [open, setOpen] = useState(false)
   const [pending, startTransition] = useTransition()
@@ -20,13 +27,18 @@ export function JoinProjectButton({ projectId, hasPending, variant = 'action' }:
 
   if (hasPending) {
     return (
-      <button type="button" className="btn-action" disabled>
+      <button
+        type="button"
+        className={triggerClassName ?? 'btn-action'}
+        disabled
+      >
         <i className="fas fa-hourglass-half"></i> Demande en attente…
       </button>
     )
   }
 
-  const triggerClass = variant === 'full' ? 'btn-join-full' : 'btn-action btn-join'
+  const triggerClass =
+    triggerClassName ?? (variant === 'full' ? 'btn-join-full' : 'btn-action btn-join')
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()

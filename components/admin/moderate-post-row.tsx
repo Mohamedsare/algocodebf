@@ -4,6 +4,7 @@ import { useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { togglePinPostAction, hidePostAction, restorePostAction } from '@/app/actions/admin'
+import { useToast } from '@/components/ui/toast-provider'
 import { Pin, EyeOff, Eye } from 'lucide-react'
 
 interface Props {
@@ -14,13 +15,14 @@ interface Props {
 
 export function ModeratePostRow({ id, isPinned, status }: Props) {
   const router = useRouter()
+  const toast = useToast()
   const [pending, startTransition] = useTransition()
 
   function run(fn: () => Promise<{ ok: boolean; message?: string }>) {
     startTransition(async () => {
       const res = await fn()
       if (res.ok) router.refresh()
-      else alert(res.message)
+      else toast.error(res.message ?? 'Erreur')
     })
   }
 

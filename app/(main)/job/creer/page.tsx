@@ -11,67 +11,58 @@ export default async function CreateJobPage() {
 
   if (!profile) {
     return (
-      <section className="create-project-section">
+      <div className="job-create-saas">
         <div className="container">
-          <div
-            style={{
-              maxWidth: 560,
-              margin: '80px auto',
-              background: '#fff',
-              padding: 40,
-              borderRadius: 20,
-              textAlign: 'center',
-              boxShadow: '0 5px 25px rgba(0,0,0,0.08)',
-            }}
-          >
-            <i
-              className="fas fa-lock"
-              style={{ fontSize: '2.5rem', color: '#CE1126', marginBottom: 16 }}
-            ></i>
-            <h2 style={{ margin: '0 0 12px' }}>Connexion requise</h2>
-            <p style={{ color: '#6c757d', marginBottom: 20 }}>
-              Vous devez être connecté pour publier une offre.
+          <div className="jc-gate">
+            <div className="jc-gate-icon jc-gate-icon--lock" aria-hidden>
+              <i className="fas fa-lock" />
+            </div>
+            <h1 className="jc-gate-title">Connexion requise</h1>
+            <p className="jc-gate-text">
+              Connectez-vous avec un compte entreprise ou administrateur pour publier une opportunité sur AlgoCodeBF.
             </p>
-            <Link href="/login?redirect=/job/creer" className="btn btn-primary">
-              <i className="fas fa-sign-in-alt"></i> Se connecter
-            </Link>
+            <div className="jc-gate-actions">
+              <Link href="/login?redirect=/job/creer" className="jc-gate-btn jc-gate-btn--primary">
+                <i className="fas fa-sign-in-alt" aria-hidden />
+                Se connecter
+              </Link>
+              <Link href="/job" className="jc-gate-btn jc-gate-btn--ghost">
+                <i className="fas fa-briefcase" aria-hidden />
+                Voir les offres
+              </Link>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     )
   }
 
   if (!canPublish) {
     return (
-      <section className="create-project-section">
+      <div className="job-create-saas">
         <div className="container">
-          <div
-            style={{
-              maxWidth: 560,
-              margin: '80px auto',
-              background: '#fff',
-              padding: 40,
-              borderRadius: 20,
-              textAlign: 'center',
-              boxShadow: '0 5px 25px rgba(0,0,0,0.08)',
-            }}
-          >
-            <i
-              className="fas fa-ban"
-              style={{ fontSize: '2.5rem', color: '#CE1126', marginBottom: 16 }}
-            ></i>
-            <h2 style={{ margin: '0 0 12px' }}>Accès réservé</h2>
-            <p style={{ color: '#6c757d', marginBottom: 20 }}>
-              Seuls les comptes entreprises (ou administrateurs) peuvent publier
-              une offre. Passez votre profil en &laquo; entreprise &raquo; pour
-              publier des opportunités.
+          <div className="jc-gate">
+            <div className="jc-gate-icon jc-gate-icon--deny" aria-hidden>
+              <i className="fas fa-building" />
+            </div>
+            <h1 className="jc-gate-title">Compte entreprise requis</h1>
+            <p className="jc-gate-text">
+              Seuls les profils <strong>entreprise</strong> et les <strong>administrateurs</strong> peuvent publier une
+              offre. Demandez le passage en compte recruteur ou contactez l&apos;équipe.
             </p>
-            <Link href="/job" className="btn btn-outline">
-              <i className="fas fa-arrow-left"></i> Retour aux offres
-            </Link>
+            <div className="jc-gate-actions">
+              <Link href="/job" className="jc-gate-btn jc-gate-btn--primary">
+                <i className="fas fa-arrow-left" aria-hidden />
+                Retour aux opportunités
+              </Link>
+              <a href="mailto:contact@algocodebf.bf" className="jc-gate-btn jc-gate-btn--ghost">
+                <i className="fas fa-envelope" aria-hidden />
+                Écrire à l&apos;équipe
+              </a>
+            </div>
           </div>
         </div>
-      </section>
+      </div>
     )
   }
 
