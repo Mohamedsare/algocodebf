@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
 import { createClient, getProfile } from '@/lib/supabase/server'
+import { FormationCatalogCard } from '@/components/tutorial/formation-catalog-card'
 import { buildAvatarUrl, buildBlogImageUrl, truncate } from '@/lib/utils'
 import { HeroCarousel } from '@/components/home/hero-carousel'
 import { HomeFlagBand } from '@/components/home/home-flag-band'
@@ -43,6 +44,8 @@ interface PopularTutorial {
   type: string
   views: number
   likes_count: number
+  thumbnail: string | null
+  tutorial_videos: { file_path: string | null; order_index: number | null }[] | null
   profiles: JoinedAuthor | null
 }
 
@@ -105,7 +108,9 @@ async function getHomeData() {
       .limit(5),
     supabase
       .from('tutorials')
-      .select('id, title, description, type, views, likes_count, profiles!inner(prenom, nom, photo_path)')
+      .select(
+        'id, title, description, type, views, likes_count, thumbnail, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index)'
+      )
       .eq('status', 'active')
       .order('views', { ascending: false })
       .limit(5),
@@ -143,21 +148,6 @@ const HOME_PARTNERS: { name: string; href?: string }[] = [
   { name: 'Entreprise tech' },
   { name: 'Association professionnelle' },
 ]
-
-function tutorialIcon(type: string) {
-  switch (type) {
-    case 'video':
-      return 'fa-video'
-    case 'pdf':
-      return 'fa-file-pdf'
-    case 'code':
-      return 'fa-code'
-    case 'article':
-      return 'fa-newspaper'
-    default:
-      return 'fa-book'
-  }
-}
 
 function AuthorAvatar({ author, size = 'xs' }: { author: JoinedAuthor | null; size?: 'xs' | 'sm' }) {
   const p = author?.prenom ?? 'U'
@@ -259,37 +249,7 @@ export default async function HomePage() {
               </div>
             ) : (
               popularTutorials.map(tuto => (
-                <article key={tuto.id} className="hm-tuto">
-                  <div className="hm-tuto-type" aria-hidden>
-                    <i className={`fas ${tutorialIcon(tuto.type)}`} />
-                  </div>
-                  <h3>
-                    <Link href={`${FORMATIONS_PATH}/${tuto.id}`}>{tuto.title}</Link>
-                  </h3>
-                  <p>{truncate(stripHtml(tuto.description ?? ''), 100)}…</p>
-                  <div className="hm-tuto-foot">
-                    <div className="hm-tuto-author">
-                      <AuthorAvatar author={tuto.profiles} size="sm" />
-                      <span>
-                        {tuto.profiles?.prenom ?? ''} {tuto.profiles?.nom ?? ''}
-                      </span>
-                    </div>
-                    <div className="hm-tuto-metrics">
-                      <span>
-                        <i className="fas fa-eye" aria-hidden />
-                        {tuto.views}
-                      </span>
-                      <span>
-                        <i className="fas fa-heart" aria-hidden />
-                        {tuto.likes_count}
-                      </span>
-                    </div>
-                  </div>
-                  <Link href={`${FORMATIONS_PATH}/${tuto.id}`} className="hm-btn hm-btn-cta hm-btn-lg">
-                    <i className="fas fa-arrow-right" />
-                    Voir la formation
-                  </Link>
-                </article>
+                <FormationCatalogCard key={tuto.id} tuto={tuto} />
               ))
             )}
           </div>

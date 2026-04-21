@@ -528,7 +528,14 @@ create policy "blog_posts_admin_all" on blog_posts for all
 -- Tutorials: public read active
 create policy "tutorials_public_read" on tutorials for select using (status = 'active');
 create policy "tutorials_owner_write" on tutorials for insert
-  with check (auth.uid() = user_id and auth.uid() in (select id from profiles where can_create_tutorial = true));
+  with check (
+    auth.uid() = user_id
+    and auth.uid() in (
+      select id from profiles
+      where role = 'admin'
+         or coalesce(can_create_tutorial, false) = true
+    )
+  );
 create policy "tutorials_owner_update" on tutorials for update
   using (auth.uid() = user_id or auth.uid() in (select id from profiles where role = 'admin'));
 create policy "tutorials_admin_select" on tutorials for select

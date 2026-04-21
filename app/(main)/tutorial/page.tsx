@@ -1,9 +1,13 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import { createClient, getProfile } from '@/lib/supabase/server'
+import {
+  FormationCatalogCard,
+  type FormationCatalogTutorial,
+} from '@/components/tutorial/formation-catalog-card'
 import { FormationsLiveSearch } from '@/components/tutorial/formations-live-search'
 import { FORMATIONS_PATH } from '@/lib/routes'
-import { buildAvatarUrl, buildFileUrl, formatNumber, timeAgo } from '@/lib/utils'
 
 export const metadata: Metadata = {
   title: 'Formations',
@@ -12,6 +16,30 @@ export const metadata: Metadata = {
 }
 
 const PAGE_SIZE = 24
+
+/** Anciens filtres URL (libellés FR / types PHP) → valeurs DB. */
+function normalizeLevelParam(raw: string): string {
+  const m: Record<string, string> = {
+    Débutant: 'beginner',
+    débutant: 'beginner',
+    Intermédiaire: 'intermediate',
+    intermédiaire: 'intermediate',
+    Avancé: 'advanced',
+    avancé: 'advanced',
+  }
+  const t = raw.trim()
+  return m[t] ?? t
+}
+
+function normalizeTypeParam(raw: string): string {
+  const m: Record<string, string> = {
+    pdf: 'text',
+    code: 'mixed',
+    article: 'text',
+  }
+  const t = raw.trim()
+  return m[t] ?? t
+}
 
 interface SearchParams {
   page?: string
@@ -22,24 +50,18 @@ interface SearchParams {
   search?: string
 }
 
+/* Valeurs = colonnes DB (`level`, `type`), pas les libellés français. */
 const LEVELS = [
-  { value: 'Débutant', label: '⭐ Débutant' },
-  { value: 'Intermédiaire', label: '⭐⭐ Intermédiaire' },
-  { value: 'Avancé', label: '⭐⭐⭐ Avancé' },
+  { value: 'beginner', label: '⭐ Débutant' },
+  { value: 'intermediate', label: '⭐⭐ Intermédiaire' },
+  { value: 'advanced', label: '⭐⭐⭐ Avancé' },
 ]
 
 const TYPES = [
   { value: 'video', label: 'Vidéo', icon: 'fa-video' },
-  { value: 'pdf', label: 'PDF', icon: 'fa-file-pdf' },
-  { value: 'code', label: 'Code', icon: 'fa-code' },
+  { value: 'text', label: 'Texte / PDF / lecture', icon: 'fa-align-left' },
+  { value: 'mixed', label: 'Mixte (vidéo + texte, code…)', icon: 'fa-layer-group' },
 ]
-
-const TYPE_ICONS: Record<string, string> = {
-  video: 'fa-play-circle',
-  pdf: 'fa-file-pdf',
-  code: 'fa-code',
-  article: 'fa-file-alt',
-}
 
 export default async function TutorialPage({
   searchParams,
@@ -47,20 +69,23 @@ export default async function TutorialPage({
   searchParams: Promise<SearchParams>
 }) {
   const params = await searchParams
-  const page = Math.max(1, parseInt(params.page ?? '1'))
+  const pageNum = parseInt(params.page ?? '1', 10)
+  const page = Math.max(1, Number.isFinite(pageNum) ? pageNum : 1)
   const category = (params.category ?? '').trim()
-  const type = (params.type ?? '').trim()
-  const level = (params.level ?? '').trim()
+  const type = normalizeTypeParam(params.type ?? '')
+  const level = normalizeLevelParam(params.level ?? '')
   const sort = params.sort ?? 'recent'
   const search = (params.search ?? '').trim()
   const offset = (page - 1) * PAGE_SIZE
 
   const [supabase, profile] = await Promise.all([createClient(), getProfile()])
 
+  /* Jointure profil en LEFT : évite d’exclure une formation si le profil auteur manque (données legacy, etc.). */
   let query = supabase
     .from('tutorials')
+    /* Pas de `file_path` sur `tutorials` (schéma Supabase) : seulement sur `tutorial_videos`. Le demander casse toute la requête. */
     .select(
-      'id, title, description, type, level, category, views, likes_count, thumbnail, file_path, created_at, user_id, profiles!inner(prenom, nom, photo_path)',
+      'id, title, description, type, level, category, views, likes_count, thumbnail, created_at, user_id, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index)',
       { count: 'exact' }
     )
     .eq('status', 'active')
@@ -125,7 +150,27 @@ export default async function TutorialPage({
       <div className="tutorials-page ft-cat-body">
         <div className="tutorials-container">
         <div className="tutorials-search-bar">
-          <FormationsLiveSearch initialSearch={search} />
+          <Suspense
+            fallback={
+              <div className="search-form-tutorials live-url-search" aria-hidden>
+                <div className="search-input-wrapper">
+                  <input
+                    type="search"
+                    readOnly
+                    tabIndex={-1}
+                    className="opacity-60"
+                    placeholder="Rechercher une formation…"
+                    defaultValue={search}
+                  />
+                  <button type="button" className="search-btn" tabIndex={-1}>
+                    <i className="fas fa-search" />
+                  </button>
+                </div>
+              </div>
+            }
+          >
+            <FormationsLiveSearch initialSearch={search} />
+          </Suspense>
         </div>
 
         <div className="tutorials-filters">
@@ -213,133 +258,41 @@ export default async function TutorialPage({
           </div>
         )}
 
-        <div className="tutorials-grid">
-          {!tutorials || tutorials.length === 0 ? (
-            <div className="empty-tutorials">
-              <div className="empty-icon">
-                <i className="fas fa-graduation-cap"></i>
-              </div>
-              <h3>Aucune formation dans le catalogue</h3>
-              <p>
-                {search
-                  ? 'Aucune formation ne correspond à votre recherche.'
-                  : 'Soyez le premier à publier un parcours structuré pour la communauté.'}
-              </p>
-              {canCreate && (
-                <Link href={`${FORMATIONS_PATH}/creer`} className="btn-create-empty">
-                  <i className="fas fa-plus"></i> Publier une formation
-                </Link>
-              )}
-            </div>
-          ) : (
-            tutorials.map(tuto => {
-              const author = tuto.profiles as unknown as {
-                prenom: string
-                nom: string
-                photo_path: string | null
-              } | null
-              const authorName = author ? `${author.prenom} ${author.nom}` : 'Utilisateur'
-              const initial = authorName.charAt(0).toUpperCase()
-              const fileExt = (tuto.file_path ?? '').split('.').pop()?.toLowerCase() ?? ''
-              const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp'].includes(fileExt)
-              const icon = TYPE_ICONS[tuto.type ?? 'article'] ?? 'fa-book'
-              const thumbSrc = tuto.thumbnail
-                ? buildFileUrl(tuto.thumbnail)
-                : tuto.file_path && isImage
-                  ? buildFileUrl(tuto.file_path)
-                  : null
-
-              return (
-                <div key={tuto.id} className="tutorial-card-youtube">
-                  <Link
-                    href={`${FORMATIONS_PATH}/${tuto.id}`}
-                    className="tutorial-thumbnail-link"
-                  >
-                    <div className="tutorial-thumbnail-container">
-                      {thumbSrc ? (
-                        tuto.type === 'video' ? (
-                          <div className="tutorial-thumbnail-video">
-                            <i className="fas fa-play-circle"></i>
-                            <img
-                              src={thumbSrc}
-                              alt={tuto.title}
-                              className="tutorial-thumbnail-img"
-                            />
-                          </div>
-                        ) : (
-                          <img
-                            src={thumbSrc}
-                            alt={tuto.title}
-                            className="tutorial-thumbnail-img"
-                          />
-                        )
-                      ) : (
-                        <div className="tutorial-thumbnail-placeholder">
-                          <i className={`fas ${icon}`}></i>
-                        </div>
-                      )}
-                      {tuto.type === 'video' && (
-                        <div className="tutorial-type-badge">
-                          <i className="fas fa-video"></i>
-                        </div>
-                      )}
-                    </div>
+        <div className="home-saas ft-catalog-home-scope">
+          <div className="hm-grid hm-grid-tuto">
+            {!tutorials || tutorials.length === 0 ? (
+              <div className="hm-empty">
+                <i className="fas fa-graduation-cap" aria-hidden />
+                <p>
+                  {search
+                    ? 'Aucune formation ne correspond à votre recherche.'
+                    : 'Aucune formation pour le moment. Soyez le premier à publier un parcours structuré pour la communauté.'}
+                </p>
+                {canCreate && (
+                  <Link href={`${FORMATIONS_PATH}/creer`} className="btn-create-empty">
+                    <i className="fas fa-plus"></i> Publier une formation
                   </Link>
-
-                  <div className="tutorial-info">
-                    <div className="tutorial-meta">
-                      <Link
-                        href={`/user/${tuto.user_id}`}
-                        className="tutorial-author-avatar"
-                      >
-                        {author?.photo_path ? (
-                          <img
-                            src={buildAvatarUrl(author.photo_path)}
-                            alt={authorName}
-                            className="tutorial-avatar-img"
-                          />
-                        ) : (
-                          <div className="avatar-placeholder">{initial}</div>
-                        )}
-                      </Link>
-
-                      <div className="tutorial-details">
-                        <h3 className="tutorial-title">
-                          <Link href={`${FORMATIONS_PATH}/${tuto.id}`}>{tuto.title}</Link>
-                        </h3>
-                        <Link
-                          href={`/user/${tuto.user_id}`}
-                          className="tutorial-author-name"
-                        >
-                          {authorName}
-                        </Link>
-                        <div className="tutorial-stats">
-                          <span className="stat-item">
-                            <i className="fas fa-eye"></i>{' '}
-                            {formatNumber(tuto.views ?? 0)} vues
-                          </span>
-                          <span className="stat-separator">•</span>
-                          <span className="stat-item">{timeAgo(tuto.created_at)}</span>
-                          {(tuto.likes_count ?? 0) > 0 && (
-                            <>
-                              <span className="stat-separator">•</span>
-                              <span className="stat-item">
-                                <i className="fas fa-heart"></i>{' '}
-                                {formatNumber(tuto.likes_count)}
-                              </span>
-                            </>
-                          )}
-                        </div>
-                        {tuto.level && (
-                          <div className="tutorial-level-badge">{tuto.level}</div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )
-            })
-          )}
+                )}
+              </div>
+            ) : (
+              tutorials.map(tuto => (
+                <FormationCatalogCard
+                  key={tuto.id}
+                  tuto={{
+                    id: tuto.id,
+                    title: tuto.title,
+                    description: tuto.description,
+                    type: tuto.type ?? 'video',
+                    views: tuto.views ?? 0,
+                    likes_count: tuto.likes_count ?? 0,
+                    thumbnail: tuto.thumbnail,
+                    tutorial_videos: tuto.tutorial_videos as FormationCatalogTutorial['tutorial_videos'],
+                    profiles: tuto.profiles as FormationCatalogTutorial['profiles'],
+                  }}
+                />
+              ))
+            )}
+          </div>
         </div>
 
         {totalPages > 1 && (

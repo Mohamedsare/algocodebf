@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next'
 import Script from 'next/script'
 import { ToastProvider } from '@/components/ui/toast-provider'
 import './globals.css'
+import 'highlight.js/styles/github-dark.css'
 
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://algocodebf.vercel.app'
 

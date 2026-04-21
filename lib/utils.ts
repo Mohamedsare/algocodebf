@@ -133,7 +133,10 @@ export function buildStorageUrl(
 export function buildFileUrl(path: string | null | undefined): string {
   if (!path) return ''
   if (path.startsWith('http://') || path.startsWith('https://')) return path
-  return buildStorageUrl('uploads', path)
+  let clean = path.replace(/^\/+/, '')
+  /* Données PHP / imports : clé parfois `uploads/tutorials/…` alors que l’URL Storage est déjà `…/object/public/uploads/…`. */
+  if (clean.startsWith('uploads/')) clean = clean.slice('uploads/'.length)
+  return buildStorageUrl('uploads', clean)
 }
 
 export function buildAvatarUrl(path: string | null | undefined): string {

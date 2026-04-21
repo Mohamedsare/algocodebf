@@ -1489,6 +1489,17 @@
   color: inherit;
 }
 
+.blog-saas .bs-prose pre.hljs-code-block {
+  background: #0d1117;
+  border: 1px solid #30363d;
+}
+
+.blog-saas .bs-prose pre.hljs-code-block code.hljs {
+  display: block;
+  background: transparent !important;
+  color: #c9d1d9;
+}
+
 .blog-saas .bs-prose img {
   max-width: 100%;
   height: auto;

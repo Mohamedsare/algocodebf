@@ -184,28 +184,23 @@
   filter: brightness(1.06);
 }
 
-.formation-saas .tutorial-card-youtube {
-  background: var(--ft-card);
-  border: 1px solid var(--ft-border);
-  border-radius: var(--ft-r-lg);
-  overflow: hidden;
-  box-shadow: var(--ft-shadow);
-  transition:
-    box-shadow 0.2s,
-    transform 0.2s var(--ft-ease),
-    border-color 0.2s;
+/* Cartes catalogue = mêmes classes que l’accueil (.hm-tuto) via scope .home-saas. */
+.formation-saas .ft-catalog-home-scope.home-saas {
+  background: transparent;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--hm-text);
 }
 
-.formation-saas .tutorial-card-youtube:hover {
-  box-shadow: var(--ft-shadow-lg);
-  transform: translateY(-3px);
-  border-color: rgba(200, 16, 46, 0.15);
+.formation-saas .ft-catalog-home-scope.home-saas .hm-grid {
+  margin-bottom: 40px;
 }
 
-.formation-saas .empty-tutorials {
-  border: 1px dashed var(--ft-border);
-  border-radius: var(--ft-r-lg);
-  background: var(--ft-card);
+.formation-saas .ft-catalog-home-scope.home-saas .hm-empty .btn-create-empty {
+  margin-top: 16px;
+  display: inline-flex;
 }
 
 /* ---------- Fiche formation (LMS-style) ---------- */
@@ -419,6 +414,118 @@
   color: var(--ft-ink);
 }
 
+/* Carte auteur (sidebar formation) — corrige l’ovale (width:100% global sur .avatar-placeholder-large) */
+.formation-saas.ft-course-pro .sidebar-card.ft-author-card {
+  padding: 20px 18px 22px;
+  text-align: center;
+}
+
+.formation-saas.ft-course-pro .ft-author-card-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ft-muted);
+}
+
+.formation-saas.ft-course-pro .ft-author-card-title i {
+  font-size: 1.05rem;
+  color: var(--ft-green);
+  opacity: 0.95;
+}
+
+.formation-saas.ft-course-pro .ft-author-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.formation-saas.ft-course-pro .ft-author-card .author-photo-large,
+.formation-saas.ft-course-pro .ft-author-card .avatar-placeholder-large {
+  width: 84px !important;
+  height: 84px !important;
+  min-width: 84px !important;
+  min-height: 84px !important;
+  max-width: 84px !important;
+  max-height: 84px !important;
+  aspect-ratio: 1;
+  border-radius: 50% !important;
+  margin: 0 auto 14px !important;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 2px solid rgba(0, 106, 78, 0.22) !important;
+  box-shadow: 0 6px 22px rgba(10, 11, 15, 0.07);
+}
+
+.formation-saas.ft-course-pro .ft-author-card .avatar-placeholder-large {
+  background: linear-gradient(155deg, #0f172a 0%, #1e293b 52%, #0a5c45 100%) !important;
+  color: #fff !important;
+  font-size: 1.5rem !important;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+}
+
+.formation-saas.ft-course-pro .ft-author-card-body h5 {
+  margin: 0 0 8px;
+  font-size: 1rem;
+  font-weight: 800;
+  color: var(--ft-ink);
+  letter-spacing: -0.01em;
+  line-height: 1.3;
+  text-transform: none;
+}
+
+.formation-saas.ft-course-pro .ft-author-card .author-bio {
+  margin: 0 0 16px;
+  font-size: 0.8125rem;
+  line-height: 1.55;
+  color: var(--ft-muted);
+  max-width: 100%;
+}
+
+.formation-saas.ft-course-pro .ft-author-card-cta {
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 11px 16px !important;
+  margin: 0;
+  border-radius: var(--ft-full) !important;
+  font-size: 0.875rem !important;
+  font-weight: 700 !important;
+  text-decoration: none !important;
+  background: var(--ft-ink) !important;
+  color: #fff !important;
+  border: 1px solid var(--ft-ink) !important;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    transform 0.2s var(--ft-ease);
+}
+
+.formation-saas.ft-course-pro .ft-author-card-cta:hover {
+  background: var(--ft-green) !important;
+  border-color: var(--ft-green) !important;
+  color: #fff !important;
+  transform: translateY(-1px);
+}
+
+.formation-saas.ft-course-pro .ft-author-card-cta i {
+  font-size: 0.72rem;
+  opacity: 0.95;
+}
+
 /* Carte inscription (roadmap produit) */
 .formation-saas .ft-enroll-card {
   padding: 20px;
@@ -493,10 +600,880 @@
   line-height: 1.45;
 }
 
+/* ---------- Fiche formation PRO (LMS / SaaS) ---------- */
+.formation-saas .ft-read-progress-track {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  z-index: 10040;
+  background: rgba(10, 11, 15, 0.08);
+  pointer-events: none;
+}
+
+.formation-saas .ft-read-progress-fill {
+  height: 100%;
+  width: 100%;
+  transform-origin: left center;
+  background: linear-gradient(90deg, var(--ft-green) 0%, var(--ft-red) 100%);
+  transition: transform 0.12s var(--ft-ease);
+  will-change: transform;
+}
+
+/*
+ * Lien d’évitement (accessibilité) : hors du bloc .formation-saas, donc sélecteur global.
+ * !important : certains thèmes globaux stylent tous les <a> (fond, padding) et le rendaient visible.
+ */
+a.ft-skip-to-content:not(:focus-visible):not(:focus) {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+  background: transparent !important;
+  color: transparent !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  text-indent: -9999px;
+}
+
+a.ft-skip-to-content:focus,
+a.ft-skip-to-content:focus-visible {
+  position: fixed !important;
+  top: max(12px, env(safe-area-inset-top, 0px));
+  left: max(12px, env(safe-area-inset-left, 0px));
+  z-index: 10050;
+  width: auto !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 12px 18px !important;
+  overflow: visible !important;
+  clip: auto !important;
+  clip-path: none !important;
+  white-space: normal !important;
+  text-indent: 0;
+  background: var(--ft-ink) !important;
+  color: #fff !important;
+  font-size: 0.875rem !important;
+  line-height: 1.4 !important;
+  font-weight: 700;
+  border-radius: var(--ft-r);
+  text-decoration: none;
+  box-shadow: 0 8px 28px rgba(10, 11, 15, 0.35);
+  outline: 2px solid var(--ft-gold);
+  outline-offset: 2px;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero {
+  position: relative;
+  overflow: hidden;
+  margin: 0 calc(-1 * max(16px, env(safe-area-inset-left, 0px))) 0;
+  padding: clamp(20px, 4vw, 40px) max(16px, env(safe-area-inset-left, 0px))
+    clamp(28px, 5vw, 48px);
+  border-radius: 0 0 var(--ft-r-lg) var(--ft-r-lg);
+  background: linear-gradient(135deg, #0a0b0f 0%, #1a1d28 38%, #0d3d2e 100%);
+  color: #f4f5f7;
+  box-shadow: var(--ft-shadow-lg);
+}
+
+.formation-saas.ft-course-pro .ft-course-hero--cover {
+  background-size: cover;
+  background-position: center;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-shade {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 120% 80% at 20% 0%, rgba(252, 209, 22, 0.12), transparent 55%);
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-inner {
+  position: relative;
+  z-index: 1;
+}
+
+.formation-saas.ft-course-pro .ft-course-breadcrumb {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 18px;
+  font-size: 0.8125rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.formation-saas.ft-course-pro .ft-course-breadcrumb a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+
+.formation-saas.ft-course-pro .ft-course-breadcrumb a:hover {
+  color: var(--ft-gold);
+}
+
+.formation-saas.ft-course-pro .ft-course-breadcrumb .fa-chevron-right {
+  font-size: 0.65rem;
+  opacity: 0.55;
+}
+
+.formation-saas.ft-course-pro .ft-course-breadcrumb-current {
+  color: #fff;
+  font-weight: 700;
+  max-width: 100%;
+  line-height: 1.35;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.formation-saas.ft-course-pro .ft-hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: var(--ft-full);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(8px);
+}
+
+.formation-saas.ft-course-pro .ft-hero-pill--type {
+  background: rgba(200, 16, 46, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.formation-saas.ft-course-pro .ft-hero-pill--cat {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  color: rgba(255, 255, 255, 0.95);
+}
+
+.formation-saas.ft-course-pro .ft-hero-pill--level {
+  background: rgba(0, 106, 78, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #e8fff6;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-title {
+  margin: 0 0 14px;
+  font-size: clamp(1.65rem, 4.2vw, 2.35rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.12;
+  color: #fff;
+  text-wrap: balance;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-lead {
+  margin: 0 0 20px;
+  max-width: 52rem;
+  font-size: clamp(1rem, 2vw, 1.15rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.formation-saas.ft-course-pro .ft-course-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 22px;
+}
+
+.formation-saas.ft-course-pro .ft-jump-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: var(--ft-full);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--ft-ink);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    transform 0.2s var(--ft-ease);
+}
+
+.formation-saas.ft-course-pro .ft-jump-link:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.formation-saas.ft-course-pro .ft-jump-link i {
+  opacity: 0.85;
+  font-size: 0.85em;
+}
+
+.formation-saas.ft-course-pro .ft-course-hero-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.formation-saas.ft-course-pro .ft-hero-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 0;
+}
+
+.formation-saas.ft-course-pro .ft-hero-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255, 255, 255, 0.15);
+  display: grid;
+  place-items: center;
+  font-weight: 800;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+}
+
+.formation-saas.ft-course-pro .ft-hero-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.formation-saas.ft-course-pro .ft-hero-author-name {
+  font-weight: 700;
+  font-size: 0.95rem;
+  color: #fff;
+}
+
+.formation-saas.ft-course-pro .ft-hero-author-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-top: 4px;
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.formation-saas.ft-course-pro .ft-hero-author-meta i {
+  margin-right: 4px;
+  opacity: 0.85;
+}
+
+.formation-saas.ft-course-pro .ft-hero-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.formation-saas.ft-course-pro .ft-hero-stats i {
+  margin-right: 6px;
+  opacity: 0.85;
+}
+
+.formation-saas.ft-course-pro .ft-course-body {
+  padding-top: 28px;
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile {
+  display: block;
+  margin-bottom: 20px;
+  border-radius: var(--ft-r-lg);
+  border: 1px solid var(--ft-border);
+  background: var(--ft-card);
+  box-shadow: var(--ft-shadow);
+  overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .formation-saas.ft-course-pro .ft-toc-mobile {
+    display: none;
+  }
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 18px;
+  font-weight: 800;
+  font-size: 0.95rem;
+  color: var(--ft-ink);
+  user-select: none;
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile summary::-webkit-details-marker {
+  display: none;
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile summary::after {
+  content: '';
+  margin-left: auto;
+  width: 8px;
+  height: 8px;
+  border-right: 2px solid var(--ft-muted);
+  border-bottom: 2px solid var(--ft-muted);
+  transform: rotate(45deg);
+  transition: transform 0.2s var(--ft-ease);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile[open] summary::after {
+  transform: rotate(-135deg);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-badge {
+  margin-left: 4px;
+  padding: 2px 8px;
+  border-radius: var(--ft-full);
+  font-size: 0.7rem;
+  font-weight: 800;
+  background: var(--ft-green-soft);
+  color: var(--ft-green);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-list {
+  margin: 0;
+  padding: 0 18px 16px;
+  list-style: none;
+  border-top: 1px solid var(--ft-border);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-list li {
+  border-bottom: 1px solid var(--ft-border);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-list li:last-child {
+  border-bottom: none;
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-list a,
+.formation-saas.ft-course-pro .ft-toc-m-disabled {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 0;
+  text-decoration: none;
+  color: var(--ft-text);
+}
+
+.formation-saas.ft-course-pro .ft-toc-mobile-list a:hover {
+  color: var(--ft-green);
+}
+
+.formation-saas.ft-course-pro .ft-toc-m-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--ft-bg);
+  border: 1px solid var(--ft-border);
+}
+
+.formation-saas.ft-course-pro .ft-toc-m-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.formation-saas.ft-course-pro .ft-toc-m-disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.formation-saas.ft-course-pro .ft-course-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding: 14px 16px;
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  box-shadow: var(--ft-shadow);
+}
+
+.formation-saas.ft-course-pro .ft-course-toolbar button {
+  border-color: var(--ft-border) !important;
+  color: var(--ft-text) !important;
+}
+
+.formation-saas.ft-course-pro .ft-course-toolbar button:hover {
+  border-color: var(--ft-gold) !important;
+}
+
+.formation-saas.ft-course-pro .ft-toolbar-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--ft-full);
+  font-size: 0.875rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    color 0.2s;
+}
+
+.formation-saas.ft-course-pro .ft-toolbar-btn--ghost {
+  background: var(--ft-bg);
+  border: 1px solid var(--ft-border);
+  color: var(--ft-ink);
+}
+
+.formation-saas.ft-course-pro .ft-toolbar-btn--ghost:hover {
+  border-color: rgba(0, 106, 78, 0.35);
+  background: var(--ft-green-soft);
+  color: var(--ft-green);
+}
+
+.formation-saas.ft-course-pro .ft-toolbar-btn--primary {
+  background: var(--ft-ink);
+  border: 1px solid var(--ft-ink);
+  color: #fff;
+}
+
+.formation-saas.ft-course-pro .ft-toolbar-btn--primary:hover {
+  background: var(--ft-red);
+  border-color: var(--ft-red);
+}
+
+.formation-saas.ft-course-pro .ft-section-count {
+  margin-left: 8px;
+  padding: 2px 10px;
+  border-radius: var(--ft-full);
+  font-size: 0.75rem;
+  font-weight: 800;
+  background: var(--ft-green-soft);
+  color: var(--ft-green);
+  vertical-align: middle;
+}
+
+.formation-saas.ft-course-pro .ft-section-hint {
+  margin: -8px 0 18px;
+  font-size: 0.875rem;
+  line-height: 1.55;
+  color: var(--ft-muted);
+}
+
+.formation-saas.ft-course-pro .ft-lesson-card {
+  scroll-margin-top: 96px;
+  box-shadow: 0 8px 32px rgba(10, 11, 15, 0.08);
+}
+
+.formation-saas.ft-course-pro .ft-lesson-card .video-header {
+  background: linear-gradient(180deg, #fafbfc 0%, #fff 100%);
+}
+
+.formation-saas.ft-course-pro .ft-lesson-card .video-number {
+  background: linear-gradient(145deg, var(--ft-green) 0%, #004d37 100%);
+  color: #fff;
+  box-shadow: 0 4px 14px rgba(0, 106, 78, 0.35);
+}
+
+.formation-saas.ft-course-pro #sommaire-section {
+  scroll-margin-top: 88px;
+}
+
+.formation-saas.ft-course-pro #ft-videos,
+.formation-saas.ft-course-pro #ft-ressources,
+.formation-saas.ft-course-pro #ft-lecture,
+.formation-saas.ft-course-pro #comments {
+  scroll-margin-top: 88px;
+}
+
+.formation-saas.ft-course-pro .ft-ressources-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.formation-saas.ft-course-pro .ft-lecture-heading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 14px;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--ft-ink);
+}
+
+.formation-saas.ft-course-pro .ft-lecture-heading i {
+  color: var(--ft-green);
+}
+
+.formation-saas.ft-course-pro .ft-lecture-intro {
+  margin: -6px 0 16px;
+  max-width: 42rem;
+}
+
+.formation-saas.ft-course-pro .tutorial-content .content-wrapper.ft-prose {
+  max-width: 42rem;
+}
+
+.formation-saas.ft-course-pro .ft-prose {
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  color: var(--ft-text);
+}
+
+.formation-saas.ft-course-pro .ft-prose h2,
+.formation-saas.ft-course-pro .ft-prose h3,
+.formation-saas.ft-course-pro .ft-prose h4 {
+  margin: 1.75em 0 0.65em;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+  color: var(--ft-ink);
+}
+
+.formation-saas.ft-course-pro .ft-prose h2 {
+  font-size: 1.35rem;
+  padding-bottom: 0.35em;
+  border-bottom: 1px solid var(--ft-border);
+}
+
+.formation-saas.ft-course-pro .ft-prose h3 {
+  font-size: 1.15rem;
+}
+
+.formation-saas.ft-course-pro .ft-prose p {
+  margin: 0 0 1.1em;
+}
+
+.formation-saas.ft-course-pro .ft-prose ul,
+.formation-saas.ft-course-pro .ft-prose ol {
+  margin: 0 0 1.15em;
+  padding-left: 1.35em;
+}
+
+.formation-saas.ft-course-pro .ft-prose li {
+  margin-bottom: 0.45em;
+}
+
+.formation-saas.ft-course-pro .ft-prose a {
+  color: var(--ft-green);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.formation-saas.ft-course-pro .ft-prose a:hover {
+  color: var(--ft-red);
+}
+
+.formation-saas.ft-course-pro .ft-prose blockquote {
+  margin: 1.25em 0;
+  padding: 14px 18px;
+  border-left: 4px solid var(--ft-gold);
+  background: var(--ft-gold-soft);
+  border-radius: 0 var(--ft-r) var(--ft-r) 0;
+  color: var(--ft-ink);
+}
+
+.formation-saas.ft-course-pro .ft-prose pre,
+.formation-saas.ft-course-pro .ft-prose code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.9em;
+}
+
+/* Blocs surlignés (highlight.js) */
+.formation-saas.ft-course-pro .ft-prose pre.hljs-code-block,
+.formation-saas.ft-course-pro .ft-pager-article.ft-prose pre.hljs-code-block {
+  margin: 1.15em 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border-radius: var(--ft-r);
+  border: 1px solid #30363d;
+  background: #0d1117;
+}
+
+.formation-saas.ft-course-pro .ft-prose pre.hljs-code-block code.hljs,
+.formation-saas.ft-course-pro .ft-pager-article.ft-prose pre.hljs-code-block code.hljs {
+  display: block;
+  padding: 0;
+  margin: 0;
+  overflow: visible;
+  font-size: 0.88em;
+  line-height: 1.55;
+  background: transparent !important;
+  border: none;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Anciens <pre> sans hljs (HTML importé, etc.) */
+.formation-saas.ft-course-pro .ft-prose pre:not(.hljs-code-block) {
+  margin: 1.15em 0;
+  padding: 16px 18px;
+  overflow-x: auto;
+  border-radius: var(--ft-r);
+  background: #0f1117;
+  color: #e8eaef;
+  border: 1px solid #252830;
+}
+
+.formation-saas.ft-course-pro .ft-prose :not(pre) > code {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: var(--ft-bg);
+  border: 1px solid var(--ft-border);
+  color: #b4232c;
+  font-weight: 500;
+}
+
+.formation-saas.ft-course-pro .tutorial-chapters-section {
+  scroll-margin-top: 88px;
+}
+
+/* Pagination intelligente du contenu à lire */
+.formation-saas .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+.formation-saas .ft-content-pager {
+  margin-top: 4px;
+}
+
+.formation-saas .ft-pager-head {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px 18px;
+  background: linear-gradient(180deg, #f8fafc 0%, var(--ft-card) 100%);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  box-shadow: var(--ft-shadow);
+}
+
+.formation-saas .ft-pager-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.formation-saas .ft-pager-label {
+  font-size: 0.875rem;
+  color: var(--ft-muted);
+}
+
+.formation-saas .ft-pager-label strong {
+  color: var(--ft-ink);
+  font-weight: 800;
+}
+
+.formation-saas .ft-pager-hint {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--ft-subtle);
+  padding: 4px 10px;
+  border-radius: var(--ft-full);
+  background: var(--ft-bg);
+  border: 1px solid var(--ft-border);
+}
+
+.formation-saas .ft-pager-track {
+  height: 6px;
+  border-radius: var(--ft-full);
+  background: var(--ft-border);
+  overflow: hidden;
+}
+
+.formation-saas .ft-pager-track-fill {
+  height: 100%;
+  border-radius: var(--ft-full);
+  background: linear-gradient(90deg, var(--ft-green) 0%, var(--ft-red) 100%);
+  transition: width 0.25s var(--ft-ease);
+}
+
+.formation-saas .ft-pager-select-wrap {
+  display: block;
+  margin: 0;
+}
+
+.formation-saas .ft-pager-select {
+  width: 100%;
+  max-width: 100%;
+  padding: 12px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--ft-ink);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r);
+  background: var(--ft-card);
+  cursor: pointer;
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2364656c' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 40px;
+}
+
+.formation-saas .ft-pager-dots {
+  display: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@media (min-width: 640px) {
+  .formation-saas .ft-pager-dots {
+    display: flex;
+  }
+
+  .formation-saas .ft-pager-select-wrap {
+    display: none;
+  }
+}
+
+.formation-saas .ft-pager-dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ft-full);
+  background: var(--ft-border);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    transform 0.2s var(--ft-ease);
+}
+
+.formation-saas .ft-pager-dot:hover {
+  background: var(--ft-muted);
+  transform: scale(1.15);
+}
+
+.formation-saas .ft-pager-dot.is-active {
+  background: var(--ft-green);
+  transform: scale(1.2);
+}
+
+.formation-saas .ft-pager-article {
+  max-width: 42rem;
+  min-height: 12rem;
+}
+
+.formation-saas .ft-pager-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding: 16px 18px;
+  flex-wrap: wrap;
+  background: var(--ft-card);
+  border: 1px solid var(--ft-border);
+  border-radius: var(--ft-r-lg);
+  box-shadow: var(--ft-shadow);
+  position: sticky;
+  bottom: max(12px, env(safe-area-inset-bottom, 0px));
+  z-index: 5;
+}
+
+.formation-saas .ft-pager-nav-title {
+  flex: 1 1 140px;
+  text-align: center;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  color: var(--ft-ink);
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.formation-saas .ft-pager-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border-radius: var(--ft-full);
+  font-size: 0.875rem;
+  font-weight: 700;
+  border: 1px solid var(--ft-border);
+  background: var(--ft-bg);
+  color: var(--ft-ink);
+  cursor: pointer;
+  transition:
+    background 0.2s,
+    border-color 0.2s,
+    opacity 0.2s;
+}
+
+.formation-saas .ft-pager-btn:hover:not(:disabled) {
+  border-color: rgba(0, 106, 78, 0.4);
+  background: var(--ft-green-soft);
+  color: var(--ft-green);
+}
+
+.formation-saas .ft-pager-btn:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.formation-saas .ft-pager-btn--next {
+  margin-left: auto;
+}
+
+@media (min-width: 1024px) {
+  .formation-saas.ft-course-pro .tutorial-sidebar {
+    top: 72px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .formation-saas .tutorial-card-youtube,
-  .formation-saas .chapter-item {
+  .formation-saas .chapter-item,
+  .formation-saas .ft-read-progress-fill,
+  .formation-saas .ft-pager-track-fill,
+  .formation-saas .ft-pager-dot,
+  .formation-saas .ft-pager-btn,
+  .formation-saas.ft-course-pro .ft-jump-link,
+  .formation-saas.ft-course-pro .ft-author-card-cta,
+  .formation-saas.ft-course-pro .ft-author-card-cta:hover {
     transition: none;
+    transform: none;
   }
 }
 
@@ -909,6 +1886,13 @@
   color: var(--fc-subtle);
   margin: -2px 0 8px;
   line-height: 1.4;
+}
+
+.formation-create-saas .fc-hint--block {
+  margin-top: 10px;
+  margin-bottom: 0;
+  max-width: 42rem;
+  line-height: 1.5;
 }
 
 .formation-create-saas .fc-input,

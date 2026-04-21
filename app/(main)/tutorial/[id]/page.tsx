@@ -9,8 +9,23 @@ import {
   buildFileUrl,
   formatDate,
   formatNumber,
+  levelLabel,
 } from '@/lib/utils'
 import { FORMATIONS_PATH } from '@/lib/routes'
+import { FormationLearnShell } from '@/components/tutorial/formation-learn-shell'
+import { markdownToHtml } from '@/lib/markdown'
+import { splitTutorialHtmlIntoSections } from '@/lib/tutorial-content-sections'
+import { FormationContentPager } from '@/components/tutorial/formation-content-pager'
+import { FormationLessonVideos } from '@/components/tutorial/formation-lesson-videos'
+import {
+  formationReadingHeading,
+  formationReadingIntro,
+  formationTypeBadge,
+  formationVideoBlockHint,
+  formationVideoBlockTitle,
+  normalizeFormationFormat,
+  readingSectionBeforeVideos,
+} from '@/lib/formation-course'
 
 interface Props {
   params: Promise<{ id: string }>
@@ -28,14 +43,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: data?.title ?? 'Formation',
     description: data?.description ?? undefined,
   }
-}
-
-const TYPE_DISPLAY: Record<string, { icon: string; label: string }> = {
-  video: { icon: 'fa-video', label: 'Vidéo' },
-  text: { icon: 'fa-align-left', label: 'Texte' },
-  pdf: { icon: 'fa-file-pdf', label: 'PDF' },
-  code: { icon: 'fa-code', label: 'Code' },
-  mixed: { icon: 'fa-layer-group', label: 'Mixte' },
 }
 
 function fileIcon(ext: string): { icon: string; color: string } {
@@ -61,7 +68,7 @@ export default async function TutorialShowPage({ params }: Props) {
   const [{ data: tuto }, { data: videos }, { data: chapters }, { data: tags }] = await Promise.all([
     supabase
       .from('tutorials')
-      .select('*, profiles!inner(id, prenom, nom, photo_path, bio, university)')
+      .select('*, profiles(id, prenom, nom, photo_path, bio, university)')
       .eq('id', tutorialId)
       .eq('status', 'active')
       .maybeSingle(),
@@ -101,7 +108,7 @@ export default async function TutorialShowPage({ params }: Props) {
     liked = !!like
   }
 
-  const author = tuto.profiles as unknown as {
+  type AuthorRow = {
     id: string
     prenom: string
     nom: string
@@ -109,9 +116,22 @@ export default async function TutorialShowPage({ params }: Props) {
     bio: string | null
     university: string | null
   }
-  const authorName = `${author.prenom} ${author.nom}`
+  const authorRow = tuto.profiles as unknown as AuthorRow | null
+  const author: AuthorRow = authorRow ?? {
+    id: (tuto.user_id as string) ?? '',
+    prenom: 'Auteur',
+    nom: '',
+    photo_path: null,
+    bio: null,
+    university: null,
+  }
+  const authorName = `${author.prenom} ${author.nom}`.trim() || 'Auteur'
   const initial = authorName.charAt(0).toUpperCase()
-  const canEdit = profile && (profile.id === author.id || profile.role === 'admin')
+  const canEdit =
+    profile &&
+    tuto.user_id &&
+    (profile.id === tuto.user_id || profile.role === 'admin')
+  const authorProfileId = authorRow?.id ?? tuto.user_id ?? ''
 
   const tagNames = ((tags ?? []) as unknown as Array<{ tags: { name: string } | null }>)
     .map(t => t.tags?.name)
@@ -126,102 +146,219 @@ export default async function TutorialShowPage({ params }: Props) {
   const isOtherFile = tuto.file_path && !isVideo && !isImage
   const fi = fileIcon(mainFileExt)
 
-  const typeInfo = TYPE_DISPLAY[tuto.type ?? 'text'] ?? {
-    icon: 'fa-book',
-    label: (tuto.type as string) ?? 'Contenu',
+  const formationType = normalizeFormationFormat(tuto.type)
+  const typeInfo = formationTypeBadge(formationType)
+  const textFirst = readingSectionBeforeVideos(formationType)
+
+  const lectureSections = tuto.content
+    ? splitTutorialHtmlIntoSections(markdownToHtml(tuto.content))
+    : []
+  const showLecture = Boolean(tuto.content && lectureSections.length > 0)
+  const showVideos = videoList.length > 0
+  const hasAttachments = Boolean(
+    (!videoList.length && tuto.file_path) || tuto.external_link
+  )
+  const readingIntro = formationReadingIntro(formationType)
+
+  const chapterHref = (targetVideo: number | null) => {
+    if (targetVideo) return `#video-${targetVideo}`
+    if (showLecture) return '#ft-lecture'
+    return null
   }
 
+  const heroCover = tuto.thumbnail ? buildFileUrl(tuto.thumbnail) : null
+  const levelKey = (tuto.level ?? 'beginner') as string
+
   return (
-    <div className="formation-saas ft-course">
-      <section className="tutorial-show-section">
-        <div className="container">
-          <nav className="breadcrumb-nav ft-breadcrumb" aria-label="Fil d&apos;Ariane">
-            <Link href="/">
-              <i className="fas fa-home" /> Accueil
-            </Link>
-            <i className="fas fa-chevron-right" aria-hidden />
-            <Link href={FORMATIONS_PATH}>Formations</Link>
-            <i className="fas fa-chevron-right" aria-hidden />
-            <span>{tuto.title}</span>
-          </nav>
+    <FormationLearnShell>
+      <div className="formation-saas ft-course ft-course-pro">
+        <header
+          className={`ft-course-hero${heroCover ? ' ft-course-hero--cover' : ''}`}
+          style={
+            heroCover
+              ? {
+                  backgroundImage: `linear-gradient(105deg, rgba(10, 11, 15, 0.93) 0%, rgba(10, 11, 15, 0.78) 42%, rgba(0, 106, 78, 0.5) 100%), url(${heroCover})`,
+                }
+              : undefined
+          }
+        >
+          <div className="ft-course-hero-shade" aria-hidden />
+          <div className="container ft-course-hero-inner">
+            <nav className="ft-course-breadcrumb" aria-label="Fil d&apos;Ariane">
+              <Link href="/">
+                <i className="fas fa-home" aria-hidden /> Accueil
+              </Link>
+              <i className="fas fa-chevron-right" aria-hidden />
+              <Link href={FORMATIONS_PATH}>Formations</Link>
+              <i className="fas fa-chevron-right" aria-hidden />
+              <span className="ft-course-breadcrumb-current">{tuto.title}</span>
+            </nav>
 
-          <div className="tutorial-layout">
-            <div className="tutorial-main">
-              <article className="tutorial-header">
-                <div className="tutorial-meta-top">
-                  <span className="ft-type-pill">
-                    <i className={`fas ${typeInfo.icon}`} aria-hidden />
-                    {typeInfo.label}
-                  </span>
-                  <span className="ft-cat-pill">
-                    <i className="fas fa-tag" aria-hidden /> {tuto.category ?? 'Général'}
-                  </span>
-                </div>
+            <div className="ft-course-hero-meta">
+              <span className="ft-hero-pill ft-hero-pill--type">
+                <i className={`fas ${typeInfo.icon}`} aria-hidden />
+                {typeInfo.label}
+              </span>
+              <span className="ft-hero-pill ft-hero-pill--cat">
+                <i className="fas fa-folder-open" aria-hidden />
+                {tuto.category ?? 'Général'}
+              </span>
+              <span className="ft-hero-pill ft-hero-pill--level">
+                <i className="fas fa-signal" aria-hidden />
+                {levelLabel(levelKey)}
+              </span>
+            </div>
 
-              <h1 className="tutorial-title">{tuto.title}</h1>
+            <h1 className="ft-course-hero-title">{tuto.title}</h1>
 
-              {tuto.description && (
-                <p className="tutorial-description">{tuto.description}</p>
+            {tuto.description && (
+              <p className="ft-course-hero-lead">{tuto.description}</p>
+            )}
+
+            <nav className="ft-course-jump" aria-label="Raccourcis dans la formation">
+              {chapterList.length > 0 && (
+                <a className="ft-jump-link" href="#sommaire-section">
+                  <i className="fas fa-list-ol" aria-hidden /> Sommaire
+                </a>
               )}
+              {textFirst ? (
+                <>
+                  {showLecture && (
+                    <a className="ft-jump-link" href="#ft-lecture">
+                      <i className="fas fa-book-open" aria-hidden /> Lecture
+                    </a>
+                  )}
+                  {showVideos && (
+                    <a className="ft-jump-link" href="#ft-videos">
+                      <i className="fas fa-play-circle" aria-hidden /> Vidéos
+                    </a>
+                  )}
+                </>
+              ) : (
+                <>
+                  {showVideos && (
+                    <a className="ft-jump-link" href="#ft-videos">
+                      <i className="fas fa-play-circle" aria-hidden /> Vidéos
+                    </a>
+                  )}
+                  {showLecture && (
+                    <a className="ft-jump-link" href="#ft-lecture">
+                      <i className="fas fa-book-open" aria-hidden /> Lecture
+                    </a>
+                  )}
+                </>
+              )}
+              {hasAttachments && (
+                <a className="ft-jump-link" href="#ft-ressources">
+                  <i className="fas fa-paperclip" aria-hidden /> Ressources
+                </a>
+              )}
+              <a className="ft-jump-link" href="#comments">
+                <i className="fas fa-comments" aria-hidden /> Discussions
+              </a>
+            </nav>
 
-              <div className="author-section">
-                <div className="author-info">
-                  <div className="author-avatar">
-                    {author.photo_path ? (
-                      <img src={buildAvatarUrl(author.photo_path)} alt={authorName} />
-                    ) : (
-                      <div className="avatar-placeholder">{initial}</div>
+            <div className="ft-course-hero-footer">
+              <div className="ft-hero-author">
+                <div className="ft-hero-avatar">
+                  {author.photo_path ? (
+                    <img src={buildAvatarUrl(author.photo_path)} alt="" />
+                  ) : (
+                    <span aria-hidden>{initial}</span>
+                  )}
+                </div>
+                <div>
+                  <div className="ft-hero-author-name">{authorName}</div>
+                  <div className="ft-hero-author-meta">
+                    <span>
+                      <i className="far fa-calendar" aria-hidden /> {formatDate(tuto.created_at)}
+                    </span>
+                    {author.university && (
+                      <span>
+                        <i className="fas fa-university" aria-hidden /> {author.university}
+                      </span>
                     )}
                   </div>
-                  <div className="author-details">
-                    <p className="author-name">
-                      Par <strong>{authorName}</strong>
-                    </p>
-                    <p className="tutorial-date">
-                      <i className="far fa-clock"></i> Publié le{' '}
-                      {formatDate(tuto.created_at)}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="tutorial-stats">
-                  <div className="stat-item">
-                    <i className="fas fa-eye"></i>
-                    <span>{formatNumber((tuto.views ?? 0) + 1)}</span>
-                  </div>
-                  <div className="stat-item">
-                    <i className="fas fa-heart"></i>
-                    <span>{formatNumber(tuto.likes_count ?? 0)}</span>
-                  </div>
-                  <div className="stat-item">
-                    <i className="fas fa-comment"></i>
-                    <span>{formatNumber(tuto.comments_count ?? 0)}</span>
-                  </div>
                 </div>
               </div>
-
-              <div className="tutorial-actions">
-                <TutorialLikeButton
-                  tutorialId={tutorialId}
-                  initialLikes={tuto.likes_count ?? 0}
-                  initialLiked={liked}
-                  isAuthenticated={!!profile}
-                />
-                <a href="#comments" className="btn-action">
-                  <i className="far fa-comment"></i>
-                  <span>Commenter</span>
-                </a>
-                {canEdit && (
-                  <Link
-                    href={`${FORMATIONS_PATH}/${tutorialId}/modifier`}
-                    className="btn-action"
-                  >
-                    <i className="fas fa-edit"></i>
-                    <span>Modifier</span>
-                  </Link>
-                )}
+              <div className="ft-hero-stats" role="group" aria-label="Statistiques">
+                <span title="Vues">
+                  <i className="fas fa-eye" aria-hidden />
+                  {formatNumber((tuto.views ?? 0) + 1)}
+                </span>
+                <span title="J&apos;aime">
+                  <i className="fas fa-heart" aria-hidden />
+                  {formatNumber(tuto.likes_count ?? 0)}
+                </span>
+                <span title="Commentaires">
+                  <i className="fas fa-comment" aria-hidden />
+                  {formatNumber(tuto.comments_count ?? 0)}
+                </span>
               </div>
-            </article>
+            </div>
+          </div>
+        </header>
+
+        <section className="tutorial-show-section ft-course-body">
+          <div className="container">
+            {chapterList.length > 0 && (
+              <details className="ft-toc-mobile">
+                <summary>
+                  <i className="fas fa-stream" aria-hidden />
+                  Plan du cours
+                  <span className="ft-toc-mobile-badge">{chapterList.length}</span>
+                </summary>
+                <ol className="ft-toc-mobile-list">
+                  {chapterList.map((ch, idx) => {
+                    const targetVideo =
+                      (ch as { video_id?: number }).video_id ??
+                      videoList[idx]?.id ??
+                      videoList[(ch.chapter_number ?? 1) - 1]?.id ??
+                      null
+                    const href = chapterHref(targetVideo)
+                    const label = (
+                      <>
+                        <span className="ft-toc-m-num">{ch.chapter_number}</span>
+                        <span className="ft-toc-m-title">{ch.title}</span>
+                      </>
+                    )
+                    return href ? (
+                      <li key={ch.id}>
+                        <a href={href}>{label}</a>
+                      </li>
+                    ) : (
+                      <li key={ch.id}>
+                        <span className="ft-toc-m-disabled">{label}</span>
+                      </li>
+                    )
+                  })}
+                </ol>
+              </details>
+            )}
+
+            <div className="tutorial-layout" id="formation-contenu-principal">
+              <div className="tutorial-main">
+                <div className="ft-course-toolbar">
+                  <TutorialLikeButton
+                    tutorialId={tutorialId}
+                    initialLikes={tuto.likes_count ?? 0}
+                    initialLiked={liked}
+                    isAuthenticated={!!profile}
+                  />
+                  <a href="#comments" className="ft-toolbar-btn ft-toolbar-btn--ghost">
+                    <i className="far fa-comment" aria-hidden />
+                    <span>Discuter</span>
+                  </a>
+                  {canEdit && (
+                    <Link
+                      href={`${FORMATIONS_PATH}/${tutorialId}/modifier`}
+                      className="ft-toolbar-btn ft-toolbar-btn--primary"
+                    >
+                      <i className="fas fa-edit" aria-hidden />
+                      <span>Modifier</span>
+                    </Link>
+                  )}
+                </div>
 
             {chapterList.length > 0 && (
               <div className="tutorial-chapters-section" id="sommaire-section">
@@ -235,6 +372,7 @@ export default async function TutorialShowPage({ params }: Props) {
                       videoList[idx]?.id ??
                       videoList[(ch.chapter_number ?? 1) - 1]?.id ??
                       null
+                    const href = chapterHref(targetVideo)
                     const item = (
                       <>
                         <div className="chapter-number">{ch.chapter_number}</div>
@@ -244,17 +382,17 @@ export default async function TutorialShowPage({ params }: Props) {
                             <p className="chapter-description">{ch.description}</p>
                           )}
                         </div>
-                        {targetVideo && (
+                        {href && (
                           <div className="btn-play-chapter">
-                            <i className="fas fa-play"></i>
+                            <i className={`fas ${targetVideo ? 'fa-play' : 'fa-book-open'}`}></i>
                           </div>
                         )}
                       </>
                     )
-                    return targetVideo ? (
+                    return href ? (
                       <a
                         key={ch.id}
-                        href={`#video-${targetVideo}`}
+                        href={href}
                         className="chapter-item chapter-link"
                       >
                         {item}
@@ -269,132 +407,115 @@ export default async function TutorialShowPage({ params }: Props) {
               </div>
             )}
 
-            {videoList.length > 0 && (
-              <div className="tutorial-videos-section">
-                <h3 className="videos-section-title">
-                  <i className="fas fa-video"></i> Vidéos de la formation ({videoList.length})
-                </h3>
-                <div className="videos-list-container">
-                  {videoList.map((v, idx) => (
-                    <div
-                      key={v.id}
-                      id={`video-${v.id}`}
-                      className="video-item-card"
-                    >
-                      <div className="video-header">
-                        <div className="video-number">{idx + 1}</div>
-                        <div className="video-info">
-                          <h4 className="video-title">{v.title}</h4>
-                          <div className="video-meta-info">
-                            {v.description && (
-                              <p className="video-description">{v.description}</p>
-                            )}
-                            <div className="video-stats">
-                              <span>
-                                <i className="fas fa-eye"></i>{' '}
-                                {formatNumber(v.views ?? 0)} vues
-                              </span>
-                              {v.file_size && (
-                                <span>
-                                  <i className="fas fa-file"></i>{' '}
-                                  {(v.file_size / 1024 / 1024).toFixed(2)} MB
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="video-player-container">
-                        <video
-                          controls
-                          className="tutorial-video-player"
-                          preload="metadata"
-                        >
+            {textFirst ? (
+              <>
+                {showLecture && (
+                  <div className="tutorial-content" id="ft-lecture">
+                    <h3 className="ft-lecture-heading">
+                      <i className="fas fa-book-reader" aria-hidden />{' '}
+                      {formationReadingHeading(formationType)}
+                    </h3>
+                    {readingIntro && <p className="ft-section-hint ft-lecture-intro">{readingIntro}</p>}
+                    <FormationContentPager tutorialId={tutorialId} sections={lectureSections} />
+                  </div>
+                )}
+                {showVideos && (
+                  <FormationLessonVideos
+                    videos={videoList}
+                    title={formationVideoBlockTitle(formationType)}
+                    hint={formationVideoBlockHint(formationType)}
+                  />
+                )}
+              </>
+            ) : (
+              <>
+                {showVideos && (
+                  <FormationLessonVideos
+                    videos={videoList}
+                    title={formationVideoBlockTitle(formationType)}
+                    hint={formationVideoBlockHint(formationType)}
+                  />
+                )}
+                {showLecture && (
+                  <div className="tutorial-content" id="ft-lecture">
+                    <h3 className="ft-lecture-heading">
+                      <i className="fas fa-book-reader" aria-hidden />{' '}
+                      {formationReadingHeading(formationType)}
+                    </h3>
+                    {readingIntro && <p className="ft-section-hint ft-lecture-intro">{readingIntro}</p>}
+                    <FormationContentPager tutorialId={tutorialId} sections={lectureSections} />
+                  </div>
+                )}
+              </>
+            )}
+
+            {hasAttachments && (
+              <section id="ft-ressources" className="ft-ressources-stack" aria-label="Ressources téléchargeables ou externes">
+                {!videoList.length && tuto.file_path && (
+                  <div className="tutorial-media">
+                    {isVideo && (
+                      <div className="video-container">
+                        <video controls className="tutorial-video">
                           <source
-                            src={buildFileUrl(v.file_path)}
-                            type="video/mp4"
+                            src={buildFileUrl(tuto.file_path)}
+                            type={`video/${mainFileExt}`}
                           />
                           Votre navigateur ne supporte pas la lecture vidéo.
                         </video>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
+                    )}
+                    {isImage && (
+                      <div className="image-container">
+                        <img
+                          src={buildFileUrl(tuto.file_path)}
+                          alt={tuto.title}
+                          className="tutorial-image"
+                        />
+                      </div>
+                    )}
+                    {isOtherFile && (
+                      <div className="file-download-box">
+                        <div className="file-icon-large">
+                          <i className={`fas ${fi.icon}`} style={{ color: fi.color }}></i>
+                        </div>
+                        <div className="file-info-large">
+                          <h3>Fichier de la formation</h3>
+                          <p>{(tuto.file_path ?? '').split('/').pop()}</p>
+                        </div>
+                        <a
+                          href={buildFileUrl(tuto.file_path)}
+                          className="btn-download"
+                          target="_blank"
+                          rel="noreferrer"
+                          download
+                        >
+                          <i className="fas fa-download"></i> Télécharger
+                        </a>
+                      </div>
+                    )}
+                  </div>
+                )}
 
-            {!videoList.length && tuto.file_path && (
-              <div className="tutorial-media">
-                {isVideo && (
-                  <div className="video-container">
-                    <video controls className="tutorial-video">
-                      <source
-                        src={buildFileUrl(tuto.file_path)}
-                        type={`video/${mainFileExt}`}
-                      />
-                      Votre navigateur ne supporte pas la lecture vidéo.
-                    </video>
-                  </div>
-                )}
-                {isImage && (
-                  <div className="image-container">
-                    <img
-                      src={buildFileUrl(tuto.file_path)}
-                      alt={tuto.title}
-                      className="tutorial-image"
-                    />
-                  </div>
-                )}
-                {isOtherFile && (
-                  <div className="file-download-box">
-                    <div className="file-icon-large">
-                      <i className={`fas ${fi.icon}`} style={{ color: fi.color }}></i>
+                {tuto.external_link && (
+                  <div className="external-link-box">
+                    <div className="external-icon">
+                      <i className="fas fa-external-link-alt" aria-hidden />
                     </div>
-                    <div className="file-info-large">
-                      <h3>Fichier de la formation</h3>
-                      <p>{tuto.file_path.split('/').pop()}</p>
+                    <div className="external-info">
+                      <h4>Ressource externe</h4>
+                      <p>{tuto.external_link}</p>
                     </div>
                     <a
-                      href={buildFileUrl(tuto.file_path)}
-                      className="btn-download"
+                      href={tuto.external_link}
+                      className="btn-external"
                       target="_blank"
-                      rel="noreferrer"
-                      download
+                      rel="noopener noreferrer"
                     >
-                      <i className="fas fa-download"></i> Télécharger
+                      <i className="fas fa-arrow-right" aria-hidden /> Ouvrir
                     </a>
                   </div>
                 )}
-              </div>
-            )}
-
-            {tuto.external_link && (
-              <div className="external-link-box">
-                <div className="external-icon">
-                  <i className="fas fa-external-link-alt"></i>
-                </div>
-                <div className="external-info">
-                  <h4>Ressource externe</h4>
-                  <p>{tuto.external_link}</p>
-                </div>
-                <a
-                  href={tuto.external_link}
-                  className="btn-external"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <i className="fas fa-arrow-right"></i> Ouvrir
-                </a>
-              </div>
-            )}
-
-            {tuto.content && (
-              <div className="tutorial-content">
-                <div
-                  className="content-wrapper"
-                  dangerouslySetInnerHTML={{ __html: tuto.content }}
-                />
-              </div>
+              </section>
             )}
 
             {tagNames.length > 0 && (
@@ -458,9 +579,12 @@ export default async function TutorialShowPage({ params }: Props) {
               </p>
             </div>
 
-            <div className="sidebar-card author-card">
-              <h4>À propos de l&apos;auteur</h4>
-              <div className="author-full-info">
+            <div className="sidebar-card author-card ft-author-card">
+              <h4 className="ft-author-card-title">
+                <i className="fas fa-user-circle" aria-hidden />
+                À propos de l&apos;auteur
+              </h4>
+              <div className="author-full-info ft-author-card-body">
                 {author.photo_path ? (
                   <img
                     src={buildAvatarUrl(author.photo_path)}
@@ -472,12 +596,16 @@ export default async function TutorialShowPage({ params }: Props) {
                 )}
                 <h5>{authorName}</h5>
                 {author.bio && <p className="author-bio">{author.bio}</p>}
-                <Link
-                  href={`/user/${author.id}`}
-                  className="btn-view-profile"
-                >
-                  Voir le profil
-                </Link>
+                {authorProfileId ? (
+                  <Link href={`/user/${authorProfileId}`} className="btn-view-profile ft-author-card-cta">
+                    <span>Voir le profil</span>
+                    <i className="fas fa-arrow-right" aria-hidden />
+                  </Link>
+                ) : (
+                  <span className="btn-view-profile ft-author-card-cta" style={{ opacity: 0.55 }} aria-disabled>
+                    Profil indisponible
+                  </span>
+                )}
               </div>
             </div>
 
@@ -492,10 +620,11 @@ export default async function TutorialShowPage({ params }: Props) {
                       (ch as { video_id?: number }).video_id ??
                       videoList[idx]?.id ??
                       null
-                    return targetVideo ? (
+                    const href = chapterHref(targetVideo)
+                    return href ? (
                       <a
                         key={ch.id}
-                        href={`#video-${targetVideo}`}
+                        href={href}
                         className="sidebar-chapter-item"
                       >
                         <span className="sidebar-chapter-number">
@@ -540,7 +669,7 @@ export default async function TutorialShowPage({ params }: Props) {
                     </div>
                     <div className="file-info-sidebar">
                       <h5 className="file-name-sidebar">
-                        {tuto.file_path.split('/').pop()}
+                        {(tuto.file_path ?? '').split('/').pop()}
                       </h5>
                       <div className="file-meta-sidebar">
                         <span className="file-type-sidebar">
@@ -560,5 +689,6 @@ export default async function TutorialShowPage({ params }: Props) {
       </div>
     </section>
     </div>
+    </FormationLearnShell>
   )
 }

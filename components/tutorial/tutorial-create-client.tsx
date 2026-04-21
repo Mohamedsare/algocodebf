@@ -264,6 +264,11 @@ export function TutorialCreateClient({ mode, tutorialId, categories, initial }: 
                           {errors.type}
                         </span>
                       )}
+                      <p className="fc-hint fc-hint--block">
+                        <strong>Vidéo</strong> : parcours avant tout en leçons filmées.{' '}
+                        <strong>Texte / PDF / lecture</strong> : contenu écrit ou documents, vidéos optionnelles en
+                        complément. <strong>Mixte</strong> : les deux au même niveau (démos vidéo + texte, code, etc.).
+                      </p>
                     </div>
 
                     <div className="fc-field">
