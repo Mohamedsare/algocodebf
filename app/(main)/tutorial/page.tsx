@@ -63,6 +63,31 @@ const TYPES = [
   { value: 'mixed', label: 'Mixte (vidéo + texte, code…)', icon: 'fa-layer-group' },
 ]
 
+/** Supabase peut typer `profiles` en objet ou en tableau selon la génération des types. */
+function normalizeCatalogProfile(raw: unknown): FormationCatalogTutorial['profiles'] {
+  if (raw == null) return null
+  type Row = { prenom?: string | null; nom?: string | null; photo_path?: string | null }
+  const pick = (o: Row): NonNullable<FormationCatalogTutorial['profiles']> => ({
+    prenom: o.prenom ?? null,
+    nom: o.nom ?? null,
+    photo_path: o.photo_path ?? null,
+  })
+  if (Array.isArray(raw)) {
+    const first = raw[0] as Row | undefined
+    return first ? pick(first) : null
+  }
+  return pick(raw as Row)
+}
+
+function normalizeCatalogVideos(raw: unknown): FormationCatalogTutorial['tutorial_videos'] {
+  if (raw == null) return null
+  if (!Array.isArray(raw)) return null
+  return raw.map(v => {
+    const o = v as { file_path?: string | null; order_index?: number | null }
+    return { file_path: o.file_path ?? null, order_index: o.order_index ?? null }
+  })
+}
+
 export default async function TutorialPage({
   searchParams,
 }: {
@@ -286,8 +311,8 @@ export default async function TutorialPage({
                     views: tuto.views ?? 0,
                     likes_count: tuto.likes_count ?? 0,
                     thumbnail: tuto.thumbnail,
-                    tutorial_videos: tuto.tutorial_videos as FormationCatalogTutorial['tutorial_videos'],
-                    profiles: tuto.profiles as FormationCatalogTutorial['profiles'],
+                    tutorial_videos: normalizeCatalogVideos(tuto.tutorial_videos),
+                    profiles: normalizeCatalogProfile(tuto.profiles),
                   }}
                 />
               ))
