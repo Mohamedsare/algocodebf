@@ -35,7 +35,8 @@ const nextConfig: NextConfig = {
   },
   experimental: {
     serverActions: {
-      bodySizeLimit: '10mb',
+      // Aligné sur les vidéos formation (500 Mo max) ; un plafond trop bas tronquait le multipart.
+      bodySizeLimit: '520mb',
     },
   },
 }

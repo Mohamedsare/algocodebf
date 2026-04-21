@@ -45,7 +45,7 @@ interface PopularTutorial {
   views: number
   likes_count: number
   thumbnail: string | null
-  tutorial_videos: { file_path: string | null; order_index: number | null }[] | null
+  tutorial_videos: { file_path: string | null; order_index: number | null; external_url: string | null }[] | null
   profiles: JoinedAuthor | null
 }
 
@@ -109,7 +109,7 @@ async function getHomeData() {
     supabase
       .from('tutorials')
       .select(
-        'id, title, description, type, views, likes_count, thumbnail, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index)'
+        'id, title, description, type, views, likes_count, thumbnail, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index, external_url)'
       )
       .eq('status', 'active')
       .order('views', { ascending: false })

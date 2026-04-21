@@ -255,13 +255,14 @@ export async function toggleLikeAction(
     .eq('likeable_id', id)
 
   if (type === 'blog') {
-    await supabase.from('blog_posts').update({ likes_count: count ?? 0 }).eq('id', id)
+    await supabase.rpc('sync_blog_likes_count', { p_id: id })
   } else if (type === 'tutorial') {
-    await supabase.from('tutorials').update({ likes_count: count ?? 0 }).eq('id', id)
+    await supabase.rpc('sync_tutorial_likes_count', { p_id: id })
   }
 
   const path = pathForType(type === 'comment' ? 'post' : type, id)
   if (path) revalidatePath(path)
+  if (type === 'blog') revalidatePath('/blog')
 
   return { ok: true, data: { liked: !existing, count: count ?? 0 } }
 }
@@ -313,6 +314,33 @@ export async function incrementPostViews(postId: number) {
   }
 }
 
+export async function incrementTutorialViews(tutorialId: number) {
+  try {
+    const supabase = await createClient()
+    await supabase.rpc('increment_tutorial_views', { p_id: tutorialId })
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function incrementJobViews(jobId: number) {
+  try {
+    const supabase = await createClient()
+    await supabase.rpc('increment_job_views', { p_id: jobId })
+  } catch {
+    /* ignore */
+  }
+}
+
+export async function incrementTutorialVideoView(videoId: number) {
+  try {
+    const supabase = await createClient()
+    await supabase.rpc('increment_tutorial_video_views', { p_id: videoId })
+  } catch {
+    /* ignore */
+  }
+}
+
 function pathForType(type: 'post' | 'tutorial' | 'blog' | 'project', id: number) {
   switch (type) {
     case 'post':
@@ -320,7 +348,7 @@ function pathForType(type: 'post' | 'tutorial' | 'blog' | 'project', id: number)
     case 'tutorial':
       return `/formations/${id}`
     case 'blog':
-      return `/blog/${id}` // revalide le slug paradoxalement via tag — approximation acceptable
+      return null
     case 'project':
       return `/project/${id}`
   }

@@ -1,10 +1,10 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { ThumbsUp } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { createClient } from '@/lib/supabase/client'
+import { toggleLikeAction } from '@/app/actions/forum'
 
 interface TutorialLikeButtonProps {
   tutorialId: number
@@ -17,42 +17,38 @@ export function TutorialLikeButton({ tutorialId, initialLikes, initialLiked, isA
   const router = useRouter()
   const [liked, setLiked] = useState(initialLiked)
   const [count, setCount] = useState(initialLikes)
-  const [loading, setLoading] = useState(false)
+  const [pending, startTransition] = useTransition()
 
-  const toggle = async () => {
-    if (!isAuthenticated) { router.push('/login'); return }
-    if (loading) return
+  const toggle = () => {
+    if (!isAuthenticated) {
+      router.push('/login')
+      return
+    }
+    if (pending) return
 
-    setLoading(true)
-    const prev = liked
+    const prevLiked = liked
     const prevCount = count
     setLiked(!liked)
-    setCount(c => liked ? c - 1 : c + 1)
+    setCount(c => (prevLiked ? c - 1 : c + 1))
 
-    try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/login'); return }
-
-      if (prev) {
-        await supabase.from('likes').delete().match({ user_id: user.id, likeable_type: 'tutorial', likeable_id: tutorialId })
-        await supabase.from('tutorials').update({ likes_count: prevCount - 1 }).eq('id', tutorialId)
+    startTransition(async () => {
+      const res = await toggleLikeAction('tutorial', tutorialId)
+      if (res.ok && res.data) {
+        setLiked(res.data.liked)
+        setCount(res.data.count)
+        router.refresh()
       } else {
-        await supabase.from('likes').insert({ user_id: user.id, likeable_type: 'tutorial', likeable_id: tutorialId })
-        await supabase.from('tutorials').update({ likes_count: prevCount + 1 }).eq('id', tutorialId)
+        setLiked(prevLiked)
+        setCount(prevCount)
       }
-    } catch {
-      setLiked(prev)
-      setCount(prevCount)
-    } finally {
-      setLoading(false)
-    }
+    })
   }
 
   return (
     <button
+      type="button"
       onClick={toggle}
-      disabled={loading}
+      disabled={pending}
       className={cn(
         'flex items-center gap-2 px-5 py-2.5 rounded-full border-2 font-semibold text-sm transition-all',
         liked
@@ -61,7 +57,9 @@ export function TutorialLikeButton({ tutorialId, initialLikes, initialLiked, isA
       )}
     >
       <ThumbsUp size={16} />
-      <span>{count} J'aime{count > 1 ? 's' : ''}</span>
+      <span>
+        {count} J&apos;aime{count > 1 ? 's' : ''}
+      </span>
     </button>
   )
 }

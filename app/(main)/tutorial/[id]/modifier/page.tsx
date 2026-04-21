@@ -37,7 +37,7 @@ export default async function TutorialEditPage({ params }: EditProps) {
     supabase.from('tutorial_tags').select('tags(name)').eq('tutorial_id', numericId),
     supabase
       .from('tutorial_videos')
-      .select('id, title, file_path, file_name, file_size, order_index')
+      .select('id, title, file_path, external_url, file_name, file_size, order_index')
       .eq('tutorial_id', numericId)
       .order('order_index'),
     supabase.from('tutorial_categories').select('name').order('name'),
@@ -54,6 +54,16 @@ export default async function TutorialEditPage({ params }: EditProps) {
 
   const dbCats = ((cats ?? []) as Array<{ name: string }>).map(c => c.name)
   const categories = Array.from(new Set([...DEFAULT_CATEGORIES, ...dbCats]))
+
+  const initialVideos = (videos ?? []).map(v => ({
+    id: Number(v.id),
+    title: v.title,
+    file_path: v.file_path,
+    external_url: v.external_url ?? null,
+    file_name: v.file_name,
+    file_size: v.file_size != null ? Number(v.file_size) : null,
+    order_index: Number(v.order_index ?? 0),
+  }))
 
   return (
     <div className="formation-create-saas">
@@ -86,11 +96,12 @@ export default async function TutorialEditPage({ params }: EditProps) {
                   Vidéos du parcours
                 </h2>
                 <p className="fc-section-desc">
-                  Ajoutez ou retirez des fichiers vidéo associés à cette formation.
+                  Téléversez des fichiers (MP4, WebM, MOV) ou collez un lien YouTube, Vimeo, ou un fichier vidéo en
+                  ligne (HTTPS).
                 </p>
               </div>
             </div>
-            <TutorialVideoManager tutorialId={numericId} initialVideos={videos ?? []} />
+            <TutorialVideoManager tutorialId={numericId} initialVideos={initialVideos} />
           </section>
         </div>
       </div>

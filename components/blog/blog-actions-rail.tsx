@@ -3,6 +3,7 @@
 import { useEffect, useState, useTransition } from 'react'
 import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
+import { toggleLikeAction } from '@/app/actions/forum'
 
 interface Props {
   postId: number
@@ -89,34 +90,12 @@ export function BlogActionsRail({
       const prevCount = count
       setLiked(!prevLiked)
       setCount(prevLiked ? prevCount - 1 : prevCount + 1)
-      try {
-        const supabase = createClient()
-        const {
-          data: { user },
-        } = await supabase.auth.getUser()
-        if (!user) {
-          router.push('/login')
-          return
-        }
-        if (prevLiked) {
-          await supabase
-            .from('likes')
-            .delete()
-            .match({ user_id: user.id, likeable_type: 'blog', likeable_id: postId })
-          await supabase
-            .from('blog_posts')
-            .update({ likes_count: prevCount - 1 })
-            .eq('id', postId)
-        } else {
-          await supabase
-            .from('likes')
-            .insert({ user_id: user.id, likeable_type: 'blog', likeable_id: postId })
-          await supabase
-            .from('blog_posts')
-            .update({ likes_count: prevCount + 1 })
-            .eq('id', postId)
-        }
-      } catch {
+      const res = await toggleLikeAction('blog', postId)
+      if (res.ok && res.data) {
+        setLiked(res.data.liked)
+        setCount(res.data.count)
+        router.refresh()
+      } else {
         setLiked(prevLiked)
         setCount(prevCount)
       }

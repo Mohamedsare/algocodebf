@@ -99,7 +99,14 @@ export function TutorialCreateClient({ mode, tutorialId, categories, initial }: 
       if (res.ok) {
         const data = (res as { data?: { id?: number } }).data
         const id = data?.id ?? tutorialId
-        router.push(id ? `${FORMATIONS_PATH}/${id}` : FORMATIONS_PATH)
+        if (mode === 'create' && id) {
+          const needsVideoStep = type === 'video' || type === 'mixed'
+          router.push(
+            needsVideoStep ? `${FORMATIONS_PATH}/${id}/modifier` : `${FORMATIONS_PATH}/${id}`
+          )
+        } else {
+          router.push(id ? `${FORMATIONS_PATH}/${id}` : FORMATIONS_PATH)
+        }
         router.refresh()
       } else {
         setErrors(res.errors ?? {})
@@ -269,6 +276,13 @@ export function TutorialCreateClient({ mode, tutorialId, categories, initial }: 
                         <strong>Texte / PDF / lecture</strong> : contenu écrit ou documents, vidéos optionnelles en
                         complément. <strong>Mixte</strong> : les deux au même niveau (démos vidéo + texte, code, etc.).
                       </p>
+                      {mode === 'create' && (type === 'video' || type === 'mixed') && (
+                        <p className="fc-hint fc-hint--video-step">
+                          <i className="fas fa-info-circle" aria-hidden /> Après publication, vous serez redirigé·e
+                          vers la page d&apos;édition pour <strong>ajouter les fichiers vidéo</strong> (le formulaire
+                          de création n&apos;enregistre que la fiche et le texte).
+                        </p>
+                      )}
                     </div>
 
                     <div className="fc-field">

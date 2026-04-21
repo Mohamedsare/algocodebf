@@ -83,8 +83,12 @@ function normalizeCatalogVideos(raw: unknown): FormationCatalogTutorial['tutoria
   if (raw == null) return null
   if (!Array.isArray(raw)) return null
   return raw.map(v => {
-    const o = v as { file_path?: string | null; order_index?: number | null }
-    return { file_path: o.file_path ?? null, order_index: o.order_index ?? null }
+    const o = v as { file_path?: string | null; order_index?: number | null; external_url?: string | null }
+    return {
+      file_path: o.file_path ?? null,
+      order_index: o.order_index ?? null,
+      external_url: o.external_url ?? null,
+    }
   })
 }
 
@@ -110,7 +114,7 @@ export default async function TutorialPage({
     .from('tutorials')
     /* Pas de `file_path` sur `tutorials` (schéma Supabase) : seulement sur `tutorial_videos`. Le demander casse toute la requête. */
     .select(
-      'id, title, description, type, level, category, views, likes_count, thumbnail, created_at, user_id, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index)',
+      'id, title, description, type, level, category, views, likes_count, thumbnail, created_at, user_id, profiles(prenom, nom, photo_path), tutorial_videos(file_path, order_index, external_url)',
       { count: 'exact' }
     )
     .eq('status', 'active')

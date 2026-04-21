@@ -1,6 +1,7 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
+import { isAllowedExternalVideoUrl } from '@/lib/video-embed'
 import { redirect } from 'next/navigation'
 import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
@@ -98,7 +99,11 @@ export async function createTutorialAction(formData: FormData): Promise<ActionRe
   }
 
   revalidateFormationRoutes(inserted.id)
-  await setFlash('success', 'Formation publiée.')
+  const flashMsg =
+    parsed.data.type === 'text'
+      ? 'Formation publiée.'
+      : 'Formation publiée. Ajoutez vos vidéos dans la section « Vidéos du parcours » sur cette page.'
+  await setFlash('success', flashMsg)
   return { ok: true, data: { id: inserted.id } }
 }
 
@@ -180,7 +185,7 @@ export async function deleteTutorialAction(id: number): Promise<ActionResult> {
 export async function addTutorialVideoAction(
   tutorialId: number,
   formData: FormData
-): Promise<ActionResult<{ id: number; path: string }>> {
+): Promise<ActionResult<{ id: number; path: string | null; external_url: string | null }>> {
   const profile = await requireLogin()
   const supabase = await createClient()
 
@@ -189,24 +194,14 @@ export async function addTutorialVideoAction(
   if (tuto.user_id !== profile.id && profile.role !== 'admin')
     return { ok: false, message: 'Action non autorisée.' }
 
+  const externalRaw = (formData.get('external_url')?.toString() ?? '').trim()
   const file = formData.get('video') as File | null
-  if (!file || file.size === 0) return { ok: false, message: 'Vidéo requise.' }
+  const hasFile = file && file.size > 0
 
-  try {
-    validateUpload(file, 'video')
-  } catch (e) {
-    return { ok: false, message: (e as Error).message }
+  if (externalRaw && hasFile) {
+    return { ok: false, message: 'Utilisez soit un fichier, soit un lien externe, pas les deux.' }
   }
 
-  let path: string
-  try {
-    const up = await uploadFile(supabase, BUCKETS.tutorials, file, `tutorials/${tutorialId}`, 'video')
-    path = up.path
-  } catch (e) {
-    return { ok: false, message: (e as Error).message }
-  }
-
-  const { data: { count } } = { data: { count: 0 } }
   const { data: maxOrder } = await supabase
     .from('tutorial_videos')
     .select('order_index')
@@ -215,16 +210,66 @@ export async function addTutorialVideoAction(
     .limit(1)
     .maybeSingle()
 
+  const nextOrder = (maxOrder?.order_index ?? 0) + 1
+  const titleFromForm = formData.get('title')?.toString()?.trim() || null
+  const description = formData.get('description')?.toString() || null
+
+  if (externalRaw) {
+    if (!isAllowedExternalVideoUrl(externalRaw)) {
+      return {
+        ok: false,
+        message:
+          'Lien non reconnu. Indiquez une URL YouTube, Vimeo, ou un lien HTTPS vers un fichier .mp4, .webm, .ogg ou .mov.',
+      }
+    }
+    const { data: video, error } = await supabase
+      .from('tutorial_videos')
+      .insert({
+        tutorial_id: tutorialId,
+        title: titleFromForm || 'Vidéo (lien externe)',
+        description,
+        file_path: null,
+        file_name: 'Lien externe',
+        file_size: null,
+        external_url: externalRaw,
+        order_index: nextOrder,
+      })
+      .select('id')
+      .single()
+    if (error || !video) {
+      return { ok: false, message: error?.message ?? 'Enregistrement impossible.' }
+    }
+    revalidateFormationRoutes(tutorialId)
+    return { ok: true, data: { id: video.id, path: null, external_url: externalRaw } }
+  }
+
+  if (!hasFile) return { ok: false, message: 'Ajoutez un fichier vidéo ou un lien externe.' }
+
+  try {
+    validateUpload(file!, 'video')
+  } catch (e) {
+    return { ok: false, message: (e as Error).message }
+  }
+
+  let path: string
+  try {
+    const up = await uploadFile(supabase, BUCKETS.tutorials, file!, `tutorials/${tutorialId}`, 'video')
+    path = up.path
+  } catch (e) {
+    return { ok: false, message: (e as Error).message }
+  }
+
   const { data: video, error } = await supabase
     .from('tutorial_videos')
     .insert({
       tutorial_id: tutorialId,
-      title: formData.get('title')?.toString() || file.name,
-      description: formData.get('description')?.toString() || null,
+      title: titleFromForm || file!.name,
+      description,
       file_path: path,
-      file_name: file.name,
-      file_size: file.size,
-      order_index: (maxOrder?.order_index ?? 0) + 1,
+      file_name: file!.name,
+      file_size: file!.size,
+      external_url: null,
+      order_index: nextOrder,
     })
     .select('id')
     .single()
@@ -235,7 +280,7 @@ export async function addTutorialVideoAction(
   }
 
   revalidateFormationRoutes(tutorialId)
-  return { ok: true, data: { id: video.id, path } }
+  return { ok: true, data: { id: video.id, path, external_url: null } }
 }
 
 export async function deleteTutorialVideoAction(videoId: number): Promise<ActionResult> {

@@ -221,6 +221,7 @@ create table if not exists tutorial_videos (
   title text,
   description text,
   file_path text,
+  external_url text,
   file_name text,
   file_size bigint,
   duration integer,
@@ -623,6 +624,86 @@ create policy "user_badges_admin_write" on user_badges for all
 create policy "tutorial_videos_public_read" on tutorial_videos for select using (true);
 create policy "tutorial_chapters_public_read" on tutorial_chapters for select using (true);
 create policy "tutorial_tags_public_read" on tutorial_tags for select using (true);
+
+-- Propriétaire de la formation (ou admin) : écriture sur médias / chapitres / tags
+create policy "tutorial_videos_owner_insert" on tutorial_videos
+  for insert
+  with check (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_videos_owner_delete" on tutorial_videos
+  for delete
+  using (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_chapters_owner_insert" on tutorial_chapters
+  for insert
+  with check (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_chapters_owner_delete" on tutorial_chapters
+  for delete
+  using (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_tags_owner_insert" on tutorial_tags
+  for insert
+  with check (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_tags_owner_update" on tutorial_tags
+  for update
+  using (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  )
+  with check (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
+create policy "tutorial_tags_owner_delete" on tutorial_tags
+  for delete
+  using (
+    exists (
+      select 1
+      from tutorials t
+      where t.id = tutorial_id
+        and (t.user_id = auth.uid() or auth.uid() in (select id from profiles where role = 'admin'))
+    )
+  );
 
 -- ============================================================
 -- UTILITY VIEWS (for leaderboard scoring)

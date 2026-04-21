@@ -17,6 +17,7 @@ import { markdownToHtml } from '@/lib/markdown'
 import { splitTutorialHtmlIntoSections } from '@/lib/tutorial-content-sections'
 import { FormationContentPager } from '@/components/tutorial/formation-content-pager'
 import { FormationLessonVideos } from '@/components/tutorial/formation-lesson-videos'
+import { TutorialViewTracker } from '@/components/tutorial/tutorial-view-tracker'
 import {
   formationReadingHeading,
   formationReadingIntro,
@@ -89,12 +90,6 @@ export default async function TutorialShowPage({ params }: Props) {
   ])
 
   if (!tuto) notFound()
-
-  void supabase
-    .from('tutorials')
-    .update({ views: (tuto.views ?? 0) + 1 })
-    .eq('id', tutorialId)
-    .then(() => {})
 
   let liked = false
   if (profile) {
@@ -171,6 +166,7 @@ export default async function TutorialShowPage({ params }: Props) {
 
   return (
     <FormationLearnShell>
+      <TutorialViewTracker tutorialId={tutorialId} />
       <div className="formation-saas ft-course ft-course-pro">
         <header
           className={`ft-course-hero${heroCover ? ' ft-course-hero--cover' : ''}`}
@@ -359,6 +355,24 @@ export default async function TutorialShowPage({ params }: Props) {
                     </Link>
                   )}
                 </div>
+
+                {canEdit &&
+                  (formationType === 'video' || formationType === 'mixed') &&
+                  !showVideos && (
+                    <div className="ft-editor-video-nudge" role="status">
+                      <p>
+                        <i className="fas fa-video" aria-hidden /> Aucune leçon vidéo n&apos;est enregistrée pour cette
+                        formation. Les vidéos s&apos;ajoutent sur la page{' '}
+                        <strong>Modifier</strong>, section « Vidéos du parcours ».
+                      </p>
+                      <Link
+                        href={`${FORMATIONS_PATH}/${tutorialId}/modifier#fc-video-heading`}
+                        className="ft-editor-video-nudge-cta"
+                      >
+                        <i className="fas fa-upload" aria-hidden /> Ajouter des vidéos
+                      </Link>
+                    </div>
+                  )}
 
             {chapterList.length > 0 && (
               <div className="tutorial-chapters-section" id="sommaire-section">

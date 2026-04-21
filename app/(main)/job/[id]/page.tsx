@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { currentProfile } from '@/lib/auth'
 import { JobApplyCard } from '@/components/job/job-apply-card'
+import { JobViewTracker } from '@/components/job/job-view-tracker'
 import { ShareJobButtons } from '@/components/job/share-job-buttons'
 import { timeAgo } from '@/lib/utils'
 
@@ -62,12 +63,6 @@ export default async function JobDetailPage({ params }: Props) {
     .maybeSingle()
 
   if (!job) notFound()
-
-  supabase
-    .from('jobs')
-    .update({ views: (job.views ?? 0) + 1 })
-    .eq('id', jobId)
-    .then(() => {})
 
   let alreadyApplied = false
   if (profile) {

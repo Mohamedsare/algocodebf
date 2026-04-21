@@ -377,6 +377,35 @@
   background: #000;
 }
 
+.formation-saas.ft-course .ft-video-embed {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  background: #000;
+}
+
+.formation-saas.ft-course .ft-video-embed iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.formation-saas.ft-course .video-stats .ft-external-lesson-link {
+  margin-left: 10px;
+  color: var(--ft-green, #006a4e);
+  font-size: 0.85em;
+  text-decoration: none;
+}
+
+.formation-saas.ft-course .video-stats .ft-external-lesson-link:hover {
+  text-decoration: underline;
+}
+
 .formation-saas.ft-course .tutorial-video-player,
 .formation-saas.ft-course .tutorial-video {
   width: 100%;
@@ -1024,6 +1053,46 @@ a.ft-skip-to-content:focus-visible {
 
 .formation-saas.ft-course-pro .ft-course-toolbar button:hover {
   border-color: var(--ft-gold) !important;
+}
+
+.formation-saas.ft-course-pro .ft-editor-video-nudge {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px 14px;
+  margin: 0 0 20px;
+  padding: 14px 16px;
+  border-radius: var(--ft-r-lg);
+  border: 1px solid rgba(200, 16, 46, 0.22);
+  background: linear-gradient(135deg, rgba(252, 228, 232, 0.55) 0%, var(--ft-card) 100%);
+  box-shadow: var(--ft-shadow);
+}
+
+.formation-saas.ft-course-pro .ft-editor-video-nudge-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-inline-start: auto;
+  padding: 8px 14px;
+  border-radius: var(--ft-full);
+  font-size: 0.8125rem;
+  font-weight: 800;
+  text-decoration: none;
+  color: #fff;
+  background: var(--ft-red);
+  border: 1px solid var(--ft-red);
+  white-space: nowrap;
+}
+
+.formation-saas.ft-course-pro .ft-editor-video-nudge-cta:hover {
+  background: #b00d23;
+  border-color: #b00d23;
+  color: #fff;
+  text-decoration: none;
+}
+
+.formation-saas.ft-course-pro .ft-editor-video-nudge-cta i {
+  font-size: 0.75rem;
 }
 
 .formation-saas.ft-course-pro .ft-toolbar-btn {
@@ -1893,6 +1962,23 @@ a.ft-skip-to-content:focus-visible {
   margin-bottom: 0;
   max-width: 42rem;
   line-height: 1.5;
+}
+
+.formation-create-saas .fc-hint--video-step {
+  margin-top: 12px;
+  padding: 12px 14px;
+  max-width: 42rem;
+  border-radius: var(--fc-r);
+  border: 1px solid rgba(200, 16, 46, 0.2);
+  background: rgba(252, 228, 232, 0.35);
+  color: var(--fc-text);
+  font-size: 0.84rem;
+  line-height: 1.5;
+}
+
+.formation-create-saas .fc-hint--video-step i {
+  color: var(--fc-red);
+  margin-right: 6px;
 }
 
 .formation-create-saas .fc-input,

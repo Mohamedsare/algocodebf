@@ -158,6 +158,8 @@ export interface TutorialVideo {
   title: string | null
   description: string | null
   file_path: string | null
+  /** Lien YouTube, Vimeo ou fichier vidéo en HTTPS (si pas d’upload). */
+  external_url: string | null
   file_name: string | null
   file_size: number | null
   duration: number | null

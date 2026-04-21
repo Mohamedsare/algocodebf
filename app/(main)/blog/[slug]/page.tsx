@@ -172,7 +172,7 @@ export default async function BlogArticlePage({ params }: Props) {
                 <i className="far fa-clock"></i> {readingTime(post.content ?? '')} min de lecture
               </span>
               <span>
-                <i className="far fa-eye"></i> {formatNumber((post.views ?? 0) + 1)}
+                <i className="far fa-eye"></i> {formatNumber(post.views ?? 0)}
               </span>
             </div>
           </div>

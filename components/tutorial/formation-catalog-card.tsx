@@ -18,7 +18,7 @@ export type FormationCatalogTutorial = {
   views: number
   likes_count: number
   thumbnail: string | null
-  tutorial_videos: { file_path: string | null; order_index: number | null }[] | null
+  tutorial_videos: { file_path: string | null; order_index: number | null; external_url: string | null }[] | null
   profiles: FormationCatalogAuthor
 }
 
