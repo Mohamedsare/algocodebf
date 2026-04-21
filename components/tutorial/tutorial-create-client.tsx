@@ -24,19 +24,18 @@ interface Props {
   }
 }
 
-const TYPES: Array<{ value: string; label: string }> = [
+/** Valeurs alignées sur `tutorials.type` / Zod (`app/actions/tutorial.ts`). */
+const TYPES: Array<{ value: 'video' | 'text' | 'mixed'; label: string }> = [
   { value: 'video', label: 'Vidéo' },
-  { value: 'text', label: 'Texte' },
-  { value: 'pdf', label: 'PDF' },
-  { value: 'code', label: 'Code / snippets' },
-  { value: 'mixed', label: 'Mixte' },
+  { value: 'text', label: 'Texte / PDF / lecture' },
+  { value: 'mixed', label: 'Mixte (vidéo + texte, code…)' },
 ]
 
-const LEVELS: Array<{ value: string; label: string }> = [
-  { value: 'Débutant', label: 'Débutant' },
-  { value: 'Intermédiaire', label: 'Intermédiaire' },
-  { value: 'Avancé', label: 'Avancé' },
-  { value: 'Expert', label: 'Expert' },
+/** Valeurs alignées sur `tutorials.level` / Zod — pas les libellés français en `value`. */
+const LEVELS: Array<{ value: 'beginner' | 'intermediate' | 'advanced'; label: string }> = [
+  { value: 'beginner', label: 'Débutant' },
+  { value: 'intermediate', label: 'Intermédiaire' },
+  { value: 'advanced', label: 'Avancé' },
 ]
 
 export function TutorialCreateClient({ mode, tutorialId, categories, initial }: Props) {
