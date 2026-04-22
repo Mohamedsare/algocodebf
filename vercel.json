@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/sync-external-jobs",
+      "schedule": "0 */6 * * *"
+    }
+  ]
+}

@@ -1,10 +1,12 @@
 import type { Metadata } from 'next'
 import Link from 'next/link'
+import { unstable_cache } from 'next/cache'
 import { createClient } from '@/lib/supabase/server'
 import { currentProfile } from '@/lib/auth'
 import { buildFileUrl, timeAgo } from '@/lib/utils'
 import { NewsletterSaas } from '@/components/blog/newsletter-saas'
 import { JobLiveSearchField } from '@/components/job/job-live-search-field'
+import { syncExternalJobOffers } from '@/lib/jobs/sync-scraped-jobs'
 
 export const metadata: Metadata = {
   title: 'Opportunités - AlgoCodeBF',
@@ -30,6 +32,13 @@ interface SearchParams {
   city?: string
   q?: string
 }
+
+/** Import EmploiBurkina (même logique que le cron), au plus une fois / 6 h — évite une page vide si le cron n’a pas encore tourné. */
+const runExternalJobsImportIfStale = unstable_cache(
+  async () => syncExternalJobOffers({ pages: 2 }),
+  ['sync-external-job-offers-page'],
+  { revalidate: 21_600 }
+)
 
 function parseSkills(raw?: string | null): string[] {
   if (!raw) return []
@@ -59,6 +68,8 @@ export default async function JobPage({
   const offset = (page - 1) * PAGE_SIZE
 
   const [supabase, profile] = await Promise.all([createClient(), currentProfile()])
+
+  await runExternalJobsImportIfStale().catch(() => null)
 
   let query = supabase
     .from('jobs')
